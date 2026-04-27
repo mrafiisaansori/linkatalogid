@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  PRODUCT_VIEW
+  WHATSAPP_CLICK
+}
+
+model User {
+  id              String           @id @default(cuid())
+  name            String
+  username        String           @unique
+  bio             String           @default("")
+  whatsapp        String           @default("")
+  profileImage    String           @default("")
+  location        String           @default("")
+  themePreference String           @default("light")
+  themeAccent     String           @default("emerald")
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  account         UserAccount?
+  products        Product[]
+  analyticsEvents AnalyticsEvent[] @relation("AnalyticsOwner")
+
+  @@index([username])
+  @@index([createdAt])
+  @@index([isActive])
+}
+
+model UserAccount {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+}
+
+model Product {
+  id              String           @id @default(cuid())
+  userId          String
+  title           String
+  price           Int
+  description     String
+  imageUrl        String
+  badge           String           @default("")
+  category        String           @default("")
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  owner           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analyticsEvents AnalyticsEvent[] @relation("AnalyticsProduct")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([isActive])
+  @@index([category])
+}
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  passwordHash String
+  role         String     @default("superadmin")
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+
+  @@index([username])
+  @@index([isActive])
+}
+
+model AnalyticsEvent {
+  id          String             @id @default(cuid())
+  eventType   AnalyticsEventType
+  ownerUserId String
+  productId   String?
+  path        String
+  referrer    String?
+  userAgent   String?
+  ipHash      String?
+  createdAt   DateTime           @default(now())
+  ownerUser   User               @relation("AnalyticsOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  product     Product?           @relation("AnalyticsProduct", fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([ownerUserId, eventType, createdAt])
+  @@index([productId, eventType, createdAt])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id          String    @id @default(cuid())
+  adminUserId String
+  action      String
+  targetType  String
+  targetId    String
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, createdAt])
+  @@index([targetType, targetId])
+  @@index([action, createdAt])
+}
+
+model AdminLoginRateLimit {
+  id          String   @id @default(cuid())
+  identifier  String   @unique
+  attempts    Int      @default(0)
+  windowStart DateTime @default(now())
+  blockedUntil DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([identifier])
+  @@index([blockedUntil])
+}

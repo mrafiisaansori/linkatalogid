@@ -1,0 +1,17 @@
+<svg width="640" height="480" viewBox="0 0 640 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="480" rx="48" fill="#ECFEFF"/>
+  <rect x="52" y="58" width="536" height="364" rx="36" fill="url(#paint0_linear_1_6)"/>
+  <rect x="104" y="104" width="432" height="244" rx="28" fill="#F8FAFC"/>
+  <rect x="134" y="138" width="154" height="180" rx="22" fill="#0F172A"/>
+  <rect x="308" y="138" width="198" height="26" rx="13" fill="#67E8F9"/>
+  <rect x="308" y="182" width="162" height="18" rx="9" fill="#CBD5E1"/>
+  <rect x="308" y="218" width="134" height="18" rx="9" fill="#CBD5E1"/>
+  <rect x="308" y="262" width="144" height="40" rx="20" fill="#0F766E"/>
+  <text x="320" y="389" text-anchor="middle" fill="#155E75" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700">Landing Page Bisnis</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_6" x1="84" y1="74" x2="552" y2="404" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A5F3FC"/>
+      <stop offset="1" stop-color="#CCFBF1"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -9,7 +9,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { THEME_STORAGE_KEY } from "@/lib/auth/session";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 import { accentOptions } from "@/lib/sample-data";
 import {
   AnalyticsSummary,

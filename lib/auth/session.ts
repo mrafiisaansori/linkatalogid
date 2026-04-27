@@ -4,7 +4,6 @@ import { jwtVerify } from "jose/jwt/verify";
 
 export const ADMIN_SESSION_COOKIE = "linkatalog_admin_session";
 export const USER_SESSION_COOKIE = "linkatalog_user_session";
-export const THEME_STORAGE_KEY = "linkatalog_theme";
 
 type SessionScope = "admin" | "user";
 
@@ -21,6 +20,15 @@ function resolveSessionSecret() {
     return secret;
   }
 
+  const vercelSeed = process.env.VERCEL_URL?.trim() || process.env.VERCEL_GIT_COMMIT_SHA?.trim();
+  if (vercelSeed) {
+    return `linkatalog-vercel-demo-session-${vercelSeed}`;
+  }
+
+  if (process.env.VERCEL === "1") {
+    return "linkatalog-vercel-demo-session-change-me";
+  }
+
   if (process.env.NODE_ENV !== "production") {
     return "linkatalog-local-session-secret-2026-04-27-change-before-production";
   }
@@ -28,7 +36,9 @@ function resolveSessionSecret() {
   throw new Error("LINKATALOG_SESSION_SECRET is required in production.");
 }
 
-const sessionSecret = new TextEncoder().encode(resolveSessionSecret());
+function getSessionSecret() {
+  return new TextEncoder().encode(resolveSessionSecret());
+}
 
 export async function createSessionToken({
   sub,
@@ -48,12 +58,12 @@ export async function createSessionToken({
     .setSubject(sub)
     .setIssuedAt()
     .setExpirationTime(expiresIn)
-    .sign(sessionSecret);
+    .sign(getSessionSecret());
 }
 
 export async function verifySessionToken(token: string, scope: SessionScope) {
   try {
-    const verified = await jwtVerify(token, sessionSecret, {
+    const verified = await jwtVerify(token, getSessionSecret(), {
       algorithms: ["HS256"]
     });
 

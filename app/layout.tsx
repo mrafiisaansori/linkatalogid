@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { THEME_STORAGE_KEY } from "@/lib/auth/session";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 import { AppProvider } from "@/components/app-provider";
 import "@/app/globals.css";
 

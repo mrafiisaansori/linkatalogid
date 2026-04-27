@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node scripts/next-dist.mjs dev",
     "build": "node scripts/next-dist.mjs build",
+    "vercel-build": "npm run build",
     "start": "node scripts/next-dist.mjs start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",

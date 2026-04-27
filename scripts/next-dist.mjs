@@ -3,6 +3,7 @@ import path from "node:path";
 
 const command = process.argv[2];
 const extraArgs = process.argv.slice(3);
+const isVercel = process.env.VERCEL === "1";
 
 if (!command || !["dev", "build", "start"].includes(command)) {
   console.error("Usage: node scripts/next-dist.mjs <dev|build|start> [...args]");
@@ -11,8 +12,8 @@ if (!command || !["dev", "build", "start"].includes(command)) {
 
 const distDirMap = {
   dev: ".next-dev",
-  build: ".next-build",
-  start: ".next-build"
+  build: isVercel ? ".next" : ".next-build",
+  start: isVercel ? ".next" : ".next-build"
 };
 
 const nextBin = path.join(process.cwd(), "node_modules", "next", "dist", "bin", "next");

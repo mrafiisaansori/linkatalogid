@@ -248,3 +248,29 @@ export function CheckIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function CartIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={base(className)}>
+      <path d="M2.75 3.75h1.5l2 9.5h10.5l2-7H6.5" />
+      <circle cx="9.5" cy="18.5" r="1.25" />
+      <circle cx="16.5" cy="18.5" r="1.25" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={base(className)}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function MinusIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={base(className)}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}

@@ -26,6 +26,7 @@ type ProfileFormState = {
 export default function DashboardProfilePage() {
   const { currentProducts, currentUser, updateProfile } = useAppState();
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState<ProfileFormState>({
     name: "",
@@ -54,18 +55,35 @@ export default function DashboardProfilePage() {
 
   const accent = getAccentPalette(form.themeAccent);
 
-  function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
+  async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        const nextImage = reader.result;
-        setForm((current) => ({ ...current, profileImage: nextImage }));
+    setUploadingImage(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch("/api/upload/image", {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data?.success || !data.url) {
+        setError(data?.message ?? "Upload foto gagal.");
+        return;
       }
-    };
-    reader.readAsDataURL(file);
+
+      setForm((current) => ({ ...current, profileImage: data.url as string }));
+    } catch {
+      setError("Tidak bisa upload foto. Coba lagi.");
+    } finally {
+      setUploadingImage(false);
+      event.target.value = "";
+    }
   }
 
   async function handleSave() {
@@ -112,10 +130,10 @@ export default function DashboardProfilePage() {
                 </p>
               </div>
 
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft">
+              <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft ${uploadingImage ? "pointer-events-none opacity-60" : ""}`}>
                 <CameraIcon className="h-4 w-4" />
-                Upload foto
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                {uploadingImage ? "Mengupload..." : "Upload foto"}
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
               </label>
             </div>
 
@@ -229,7 +247,7 @@ export default function DashboardProfilePage() {
             <p className="mt-1 text-sm text-muted">Perubahan profil akan terasa seperti ini di katalog kamu.</p>
           </div>
           <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: accent.soft, color: accent.primary }}>
-            Tema {form.themeAccent}
+            {accentOptions.find((o) => o.id === form.themeAccent)?.name ?? form.themeAccent}
           </span>
         </div>
 

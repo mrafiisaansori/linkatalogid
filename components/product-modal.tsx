@@ -32,6 +32,7 @@ const initialForm: ProductInput = {
 export function ProductModal({ open, onClose, onSubmit, product }: ProductModalProps) {
   const [form, setForm] = useState<ProductInput>(initialForm);
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
 
   const mode = product ? "edit" : "create";
@@ -59,18 +60,36 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
+  async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        const nextImage = reader.result;
-        updateField("imageUrl", nextImage);
+    setUploadingImage(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch("/api/upload/image", {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data?.success || !data.url) {
+        setError(data?.message ?? "Upload gambar gagal.");
+        return;
       }
-    };
-    reader.readAsDataURL(file);
+
+      updateField("imageUrl", data.url as string);
+    } catch {
+      setError("Tidak bisa upload gambar. Coba lagi.");
+    } finally {
+      setUploadingImage(false);
+      // Reset input agar file yang sama bisa di-upload ulang jika perlu
+      event.target.value = "";
+    }
   }
 
   async function handleSubmit() {
@@ -167,10 +186,10 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
                 <p className="text-sm font-medium text-foreground">Gambar produk</p>
                 <p className="text-sm text-muted">Upload gambar sendiri atau pilih cover demo.</p>
               </div>
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft">
+              <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft ${uploadingImage ? "pointer-events-none opacity-60" : ""}`}>
                 <CameraIcon className="h-4 w-4" />
-                Upload
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                {uploadingImage ? "Mengupload..." : "Upload"}
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
               </label>
             </div>
 

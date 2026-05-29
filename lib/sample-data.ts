@@ -14,11 +14,11 @@ export const accentOptions: {
 ];
 
 export const demoUser: User = {
-  id: "user-demo-rara",
-  name: "Rara Commerce Lab",
-  username: "raracommerce",
+  id: "user-demo-kopi-arunika",
+  name: "Kopi Arunika Roastery",
+  username: "kopiarunika",
   email: "demo@linkatalog.id",
-  bio: "Katalog jualan praktis untuk produk fisik, digital, dan jasa custom. Semua order masuk langsung ke WhatsApp tanpa ribet.",
+  bio: "Roastery kopi lokal dengan pilihan single origin, house blend, dan paket langganan mingguan. Cocok untuk rumahan, kantor, dan coffee corner kecil.",
   whatsapp: "6281234567890",
   profileImage: "/demo/avatar-rara.svg",
   location: "Bandung, Jawa Barat",
@@ -31,61 +31,61 @@ export const demoUser: User = {
 
 export const demoProducts: Product[] = [
   {
-    id: "raracommerce-nasi-box-premium-nusantara",
+    id: "kopiarunika-gayo-washed-250gr",
     userId: demoUser.id,
     ownerName: demoUser.name,
     ownerUsername: demoUser.username,
-    title: "Nasi Box Premium Nusantara",
-    price: 35000,
-    description: "Paket makan siap kirim untuk meeting, acara kantor, dan hampers komunitas. Minimal order 20 box.",
+    title: "Gayo Washed 250gr",
+    price: 85000,
+    description: "Biji kopi arabica dengan karakter citrus, brown sugar, dan body ringan. Fresh roast setiap minggu.",
     imageUrl: "/demo/nasi-box.svg",
     badge: "Best Seller",
-    category: "Makanan",
+    category: "Coffee beans",
     isActive: true,
     createdAt: "2026-04-02T09:00:00.000Z",
     updatedAt: "2026-04-02T09:00:00.000Z"
   },
   {
-    id: "raracommerce-glow-serum-booster-15ml",
+    id: "kopiarunika-flores-bajawa-natural-250gr",
     userId: demoUser.id,
     ownerName: demoUser.name,
     ownerUsername: demoUser.username,
-    title: "Glow Serum Booster 15ml",
-    price: 129000,
-    description: "Serum harian dengan tekstur ringan, aman untuk kulit sensitif, dan cocok untuk reseller kecil.",
+    title: "Flores Bajawa Natural 250gr",
+    price: 98000,
+    description: "Profil rasa red berries dan dark chocolate untuk manual brew atau espresso rumahan.",
     imageUrl: "/demo/serum.svg",
     badge: "Promo",
-    category: "Skincare",
+    category: "Single origin",
     isActive: true,
     createdAt: "2026-04-08T09:00:00.000Z",
     updatedAt: "2026-04-08T09:00:00.000Z"
   },
   {
-    id: "raracommerce-desain-feed-instagram-9-post",
+    id: "kopiarunika-house-blend-espresso-1kg",
     userId: demoUser.id,
     ownerName: demoUser.name,
     ownerUsername: demoUser.username,
-    title: "Desain Feed Instagram 9 Post",
-    price: 450000,
-    description: "Paket desain konten promo untuk brand UMKM, lengkap dengan revisi ringan dan file siap upload.",
+    title: "House Blend Espresso 1kg",
+    price: 285000,
+    description: "Blend cokelat, karamel, dan hint spice yang stabil untuk kebutuhan cafe kecil dan kantor.",
     imageUrl: "/demo/design-service.svg",
     badge: "Baru",
-    category: "Jasa desain",
+    category: "Blend espresso",
     isActive: true,
     createdAt: "2026-04-12T09:00:00.000Z",
     updatedAt: "2026-04-12T09:00:00.000Z"
   },
   {
-    id: "raracommerce-landing-page-bisnis-kilat",
+    id: "kopiarunika-subscription-weekly-brews",
     userId: demoUser.id,
     ownerName: demoUser.name,
     ownerUsername: demoUser.username,
-    title: "Landing Page Bisnis Kilat",
-    price: 2500000,
-    description: "Jasa pembuatan landing page ringan untuk promosi produk, event, atau katalog bisnis kecil.",
+    title: "Weekly Brew Subscription",
+    price: 320000,
+    description: "Langganan 4 pack coffee beans pilihan roaster per bulan untuk rumah, studio, atau kantor tim kecil.",
     imageUrl: "/demo/web-service.svg",
     badge: "",
-    category: "Jasa pembuatan website",
+    category: "Subscription",
     isActive: true,
     createdAt: "2026-04-18T09:00:00.000Z",
     updatedAt: "2026-04-18T09:00:00.000Z"
@@ -94,13 +94,13 @@ export const demoProducts: Product[] = [
 
 export const productBadgeOptions = ["", "Best Seller", "Promo", "Baru"] as const;
 export const productCategorySuggestions = [
-  "Makanan",
-  "Skincare",
-  "Jasa desain",
-  "Jasa pembuatan website",
-  "Kopi literan",
-  "Kue rumahan",
-  "Jasa foto produk"
+  "Coffee beans",
+  "Single origin",
+  "Blend espresso",
+  "Subscription",
+  "Cold brew",
+  "Drip bag",
+  "Alat seduh"
 ];
 
 export const demoImageOptions = [

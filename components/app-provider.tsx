@@ -9,10 +9,12 @@ import {
   useMemo,
   useState
 } from "react";
+import { DEMO_DRAFT_STORAGE_KEY, DemoDraftState, parseDemoDraft } from "@/lib/demo-draft";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 import { accentOptions } from "@/lib/sample-data";
 import {
   AnalyticsSummary,
+  AuthActionResult,
   Product,
   ProductInput,
   SellerSessionPayload,
@@ -21,23 +23,32 @@ import {
   User,
   UsernameAvailability
 } from "@/lib/types";
-import { calculateProfileCompletion, generateId } from "@/lib/utils";
+import {
+  calculateProfileCompletion,
+  generateId,
+  isReservedPublicUsername,
+  normalizePublicUsername,
+  sanitizeWhatsappNumber
+} from "@/lib/utils";
 
 interface AppContextValue {
   theme: ThemeMode;
   currentUser: User | null;
   currentProducts: Product[];
   currentAnalytics: AnalyticsSummary;
+  isDemoMode: boolean;
   isHydrated: boolean;
   toasts: ToastMessage[];
   setTheme: (theme: ThemeMode) => void;
-  signIn: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signIn: (email: string, password: string) => Promise<AuthActionResult>;
   signUp: (input: {
     name: string;
     username: string;
     email: string;
     password: string;
-  }) => Promise<{ success: boolean; message: string }>;
+  }) => Promise<AuthActionResult>;
+  verifyEmailCode: (email: string, code: string, password?: string) => Promise<AuthActionResult>;
+  resendVerificationCode: (email: string) => Promise<AuthActionResult>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<{ success: boolean; message: string }>;
   saveProduct: (input: ProductInput) => Promise<{ success: boolean; message: string }>;
@@ -67,10 +78,58 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
   const [currentAnalytics, setCurrentAnalytics] = useState<AnalyticsSummary>(emptyAnalytics);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
+  const readDemoDraft = useCallback((): DemoDraftState | null => {
+    if (typeof window === "undefined") return null;
+    return parseDemoDraft(localStorage.getItem(DEMO_DRAFT_STORAGE_KEY));
+  }, []);
+
+  const persistDemoDraft = useCallback((draft: DemoDraftState | null) => {
+    if (typeof window === "undefined") return;
+
+    try {
+      if (!draft) {
+        localStorage.removeItem(DEMO_DRAFT_STORAGE_KEY);
+        return;
+      }
+
+      localStorage.setItem(DEMO_DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // Demo draft persistence should not block the UI.
+    }
+  }, []);
+
+  const commitDemoState = useCallback(
+    ({
+      user,
+      products,
+      analytics
+    }: {
+      user: User;
+      products: Product[];
+      analytics: AnalyticsSummary;
+    }) => {
+      setCurrentUser(user);
+      setCurrentProducts(products);
+      setCurrentAnalytics(analytics);
+      setThemeState(user.themePreference);
+      localStorage.setItem(THEME_STORAGE_KEY, user.themePreference);
+      persistDemoDraft({
+        user,
+        products,
+        analytics,
+        updatedAt: new Date().toISOString()
+      });
+    },
+    [persistDemoDraft]
+  );
+
   const applySessionPayload = useCallback((payload: SellerSessionPayload | null) => {
+    setIsDemoMode(Boolean(payload?.demoMode));
+
     if (!payload?.authenticated || !payload.user) {
       setCurrentUser(null);
       setCurrentProducts([]);
@@ -78,12 +137,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    setCurrentUser(payload.user);
-    setCurrentProducts(payload.products);
-    setCurrentAnalytics(payload.analytics);
-    setThemeState(payload.user.themePreference);
-    localStorage.setItem(THEME_STORAGE_KEY, payload.user.themePreference);
-  }, []);
+    let nextUser = payload.user;
+    let nextProducts = payload.products;
+    let nextAnalytics = payload.analytics;
+
+    if (payload.demoMode) {
+      const draft = readDemoDraft();
+      if (draft && draft.user.id === payload.user.id) {
+        nextUser = draft.user;
+        nextProducts = draft.products;
+        nextAnalytics = draft.analytics;
+      } else {
+        persistDemoDraft({
+          user: payload.user,
+          products: payload.products,
+          analytics: payload.analytics,
+          updatedAt: new Date().toISOString()
+        });
+      }
+    }
+
+    setCurrentUser(nextUser);
+    setCurrentProducts(nextProducts);
+    setCurrentAnalytics(nextAnalytics);
+    setThemeState(nextUser.themePreference);
+    localStorage.setItem(THEME_STORAGE_KEY, nextUser.themePreference);
+  }, [persistDemoDraft, readDemoDraft]);
 
   const refreshSession = useCallback(async () => {
     const response = await fetch("/api/me", {
@@ -127,6 +206,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (nextTheme: ThemeMode) => {
       setThemeState(nextTheme);
 
+      if (isDemoMode && currentUser) {
+        commitDemoState({
+          user: {
+            ...currentUser,
+            themePreference: nextTheme,
+            updatedAt: new Date().toISOString()
+          },
+          products: currentProducts,
+          analytics: currentAnalytics
+        });
+        return;
+      }
+
       if (currentUser) {
         void fetch("/api/me/profile", {
           method: "PATCH",
@@ -144,7 +236,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         });
       }
     },
-    [currentUser]
+    [commitDemoState, currentAnalytics, currentProducts, currentUser, isDemoMode]
   );
 
   const signIn = useCallback(
@@ -161,10 +253,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
         success?: boolean;
         message?: string;
         data?: SellerSessionPayload;
+        requiresVerification?: boolean;
+        email?: string;
       }>(response);
 
       if (!response.ok || !data?.success || !data.data) {
-        return { success: false, message: data?.message ?? "Email atau password belum cocok." };
+        return {
+          success: false,
+          message: data?.message ?? "Email atau password belum cocok.",
+          requiresVerification: data?.requiresVerification,
+          email: data?.email
+        };
       }
 
       applySessionPayload(data.data);
@@ -188,7 +287,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
         success?: boolean;
         message?: string;
         data?: SellerSessionPayload;
+        requiresVerification?: boolean;
+        email?: string;
       }>(response);
+
+      if (data?.requiresVerification) {
+        return {
+          success: false,
+          message: data.message ?? "Kode verifikasi sudah dikirim ke email kamu.",
+          requiresVerification: true,
+          email: data.email ?? email
+        };
+      }
 
       if (!response.ok || !data?.success || !data.data) {
         return { success: false, message: data?.message ?? "Akun belum bisa dibuat." };
@@ -205,6 +315,60 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [applySessionPayload, pushToast]
   );
 
+  const verifyEmailCode = useCallback(
+    async (email: string, code: string, password?: string) => {
+      const response = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({ email, code })
+      });
+
+      const data = await readJson<{ success?: boolean; message?: string }>(response);
+      if (!response.ok || !data?.success) {
+        return { success: false, message: data?.message ?? "Kode verifikasi belum cocok." };
+      }
+
+      pushToast({
+        title: "Email terverifikasi",
+        description: "Akun kamu sudah aktif dan siap dipakai.",
+        tone: "success"
+      });
+
+      if (password) {
+        return signIn(email, password);
+      }
+
+      return { success: true, message: data.message ?? "Verifikasi email berhasil." };
+    },
+    [pushToast, signIn]
+  );
+
+  const resendVerificationCode = useCallback(async (email: string) => {
+    const response = await fetch("/api/auth/resend-verification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ email })
+    });
+    const data = await readJson<{ success?: boolean; message?: string }>(response);
+
+    if (!response.ok || !data?.success) {
+      return { success: false, message: data?.message ?? "Kode verifikasi belum bisa dikirim ulang." };
+    }
+
+    pushToast({
+      title: "Kode dikirim ulang",
+      description: "Cek inbox email kamu untuk kode terbaru.",
+      tone: "success"
+    });
+    return { success: true, message: data.message ?? "Kode verifikasi berhasil dikirim ulang." };
+  }, [pushToast]);
+
   const signOut = useCallback(async () => {
     await fetch("/api/auth/sign-out", {
       method: "POST",
@@ -219,6 +383,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const updateProfile = useCallback(
     async (updates: Partial<User>) => {
       if (!currentUser) return { success: false, message: "Sesi belum aktif." };
+
+      if (isDemoMode) {
+        const nextUsername =
+          typeof updates.username === "string" ? normalizePublicUsername(updates.username) : currentUser.username;
+
+        if (!nextUsername) {
+          return { success: false, message: "Link anda wajib diisi." };
+        }
+
+        if (isReservedPublicUsername(nextUsername)) {
+          return { success: false, message: "Link ini tidak tersedia. Coba pakai nama lain." };
+        }
+
+        const nextThemePreference =
+          updates.themePreference === "dark" || updates.themePreference === "light"
+            ? updates.themePreference
+            : currentUser.themePreference;
+
+        const nextUser: User = {
+          ...currentUser,
+          ...updates,
+          username: nextUsername,
+          whatsapp:
+            typeof updates.whatsapp === "string" ? sanitizeWhatsappNumber(updates.whatsapp) : currentUser.whatsapp,
+          themePreference: nextThemePreference,
+          updatedAt: new Date().toISOString()
+        };
+
+        commitDemoState({
+          user: nextUser,
+          products: currentProducts,
+          analytics: currentAnalytics
+        });
+        pushToast({
+          title: "Draft profil tersimpan",
+          description: "Mode demo Vercel: perubahan hanya tersimpan di browser ini.",
+          tone: "success"
+        });
+        return { success: true, message: "Draft profil berhasil diperbarui." };
+      }
 
       const response = await fetch("/api/me/profile", {
         method: "PATCH",
@@ -241,12 +445,57 @@ export function AppProvider({ children }: { children: ReactNode }) {
       pushToast({ title: "Profil diperbarui", description: "Perubahan profil sudah tersimpan.", tone: "success" });
       return { success: true, message: data.message ?? "Profil berhasil diperbarui." };
     },
-    [currentUser, pushToast]
+    [commitDemoState, currentAnalytics, currentProducts, currentUser, isDemoMode, pushToast]
   );
 
   const saveProduct = useCallback(
     async (input: ProductInput) => {
       if (!currentUser) return { success: false, message: "Sesi belum aktif." };
+
+      if (isDemoMode) {
+        const title = input.title.trim();
+        const description = input.description.trim();
+        const category = input.category.trim();
+        const imageUrl = input.imageUrl.trim();
+
+        if (!title || !description || !category || !imageUrl) {
+          return { success: false, message: "Judul, deskripsi, kategori, dan gambar wajib diisi." };
+        }
+
+        const existing = input.id ? currentProducts.find((item) => item.id === input.id) : null;
+        const now = new Date().toISOString();
+        const nextProduct: Product = {
+          id: existing?.id ?? generateId("demo-product"),
+          userId: currentUser.id,
+          ownerName: currentUser.name,
+          ownerUsername: currentUser.username,
+          title,
+          price: Number(input.price) || 0,
+          description,
+          imageUrl,
+          badge: input.badge,
+          category,
+          isActive: input.isActive,
+          createdAt: existing?.createdAt ?? now,
+          updatedAt: now
+        };
+
+        const nextProducts = existing
+          ? currentProducts.map((item) => (item.id === existing.id ? nextProduct : item))
+          : [nextProduct, ...currentProducts];
+
+        commitDemoState({
+          user: currentUser,
+          products: nextProducts,
+          analytics: currentAnalytics
+        });
+        pushToast({
+          title: input.id ? "Draft produk diperbarui" : "Draft produk ditambahkan",
+          description: "Mode demo Vercel: perubahan hanya tersimpan di browser ini.",
+          tone: "success"
+        });
+        return { success: true, message: "Draft produk berhasil disimpan." };
+      }
 
       const response = await fetch(input.id ? `/api/me/products/${input.id}` : "/api/me/products", {
         method: input.id ? "PATCH" : "POST",
@@ -272,11 +521,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
       });
       return { success: true, message: data.message ?? "Produk berhasil disimpan." };
     },
-    [currentUser, pushToast, refreshSession]
+    [commitDemoState, currentAnalytics, currentProducts, currentUser, isDemoMode, pushToast, refreshSession]
   );
 
   const deleteProduct = useCallback(
     (productId: string) => {
+      if (isDemoMode && currentUser) {
+        const nextProducts = currentProducts.filter((item) => item.id !== productId);
+        commitDemoState({
+          user: currentUser,
+          products: nextProducts,
+          analytics: currentAnalytics
+        });
+        pushToast({
+          title: "Draft produk dihapus",
+          description: "Mode demo Vercel: perubahan hanya tersimpan di browser ini.",
+          tone: "warning"
+        });
+        return;
+      }
+
       void (async () => {
         const response = await fetch(`/api/me/products/${productId}`, {
           method: "DELETE",
@@ -289,11 +553,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
         pushToast({ title: "Produk dihapus", description: "Item sudah keluar dari katalog.", tone: "warning" });
       })();
     },
-    [pushToast, refreshSession]
+    [commitDemoState, currentAnalytics, currentProducts, currentUser, isDemoMode, pushToast, refreshSession]
   );
 
   const toggleProduct = useCallback(
     (productId: string) => {
+      if (isDemoMode && currentUser) {
+        const nextProducts = currentProducts.map((item) =>
+          item.id === productId ? { ...item, isActive: !item.isActive, updatedAt: new Date().toISOString() } : item
+        );
+        commitDemoState({
+          user: currentUser,
+          products: nextProducts,
+          analytics: currentAnalytics
+        });
+        return;
+      }
+
       void (async () => {
         const response = await fetch(`/api/me/products/${productId}/toggle`, {
           method: "POST",
@@ -304,7 +580,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         await refreshSession();
       })();
     },
-    [refreshSession]
+    [commitDemoState, currentAnalytics, currentProducts, currentUser, isDemoMode, refreshSession]
   );
 
   const copyPublicLink = useCallback(
@@ -359,11 +635,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       currentUser,
       currentProducts,
       currentAnalytics,
+      isDemoMode,
       isHydrated,
       toasts,
       setTheme,
       signIn,
       signUp,
+      verifyEmailCode,
+      resendVerificationCode,
       signOut,
       updateProfile,
       saveProduct,
@@ -380,11 +659,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       currentUser,
       currentProducts,
       currentAnalytics,
+      isDemoMode,
       isHydrated,
       toasts,
       setTheme,
       signIn,
       signUp,
+      verifyEmailCode,
+      resendVerificationCode,
       signOut,
       updateProfile,
       saveProduct,

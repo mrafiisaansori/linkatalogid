@@ -14,13 +14,26 @@ import { UsernameAvailability } from "@/lib/types";
 import { isReservedPublicUsername, normalizePublicUsername } from "@/lib/utils";
 
 type AuthTab = "signin" | "signup";
+type AuthStep = "form" | "verify";
 
 export default function AuthPage() {
   const router = useRouter();
-  const { currentUser, isHydrated, signIn, signUp, checkUsernameAvailability } = useAppState();
+  const {
+    currentUser,
+    isHydrated,
+    signIn,
+    signUp,
+    verifyEmailCode,
+    resendVerificationCode,
+    checkUsernameAvailability
+  } = useAppState();
   const [tab, setTab] = useState<AuthTab>("signin");
+  const [step, setStep] = useState<AuthStep>("form");
   const [loading, setLoading] = useState(false);
+  const [resendingCode, setResendingCode] = useState(false);
   const [error, setError] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationEmail, setVerificationEmail] = useState("");
   const [linkEdited, setLinkEdited] = useState(false);
   const [linkStatus, setLinkStatus] = useState<UsernameAvailability>({
     available: false,
@@ -30,8 +43,8 @@ export default function AuthPage() {
   const [form, setForm] = useState({
     name: "",
     username: "",
-    email: "demo@linkatalog.id",
-    password: "demo12345"
+    email: "",
+    password: ""
   });
 
   useEffect(() => {
@@ -118,6 +131,10 @@ export default function AuthPage() {
     setLoading(false);
 
     if (!result.success) {
+      if (result.requiresVerification && result.email) {
+        setVerificationEmail(result.email);
+        setStep("verify");
+      }
       setError(result.message);
       return;
     }
@@ -125,18 +142,20 @@ export default function AuthPage() {
     router.push("/dashboard");
   }
 
-  async function handleDemoLogin() {
+  async function handleVerify(event: FormEvent) {
+    event.preventDefault();
     setLoading(true);
     setError("");
-    const result = await signIn("demo@linkatalog.id", "demo12345");
+
+    const result = await verifyEmailCode(verificationEmail || form.email, verificationCode, form.password);
     setLoading(false);
 
-    if (result.success) {
-      router.push("/dashboard");
+    if (!result.success) {
+      setError(result.message);
       return;
     }
 
-    setError(result.message);
+    router.push("/dashboard");
   }
 
   if (!isHydrated) {
@@ -189,17 +208,11 @@ export default function AuthPage() {
             </div>
 
             <div className="mt-8 rounded-[1.75rem] border border-line bg-background/80 p-5 dark:border-white/10 dark:bg-slate-950/20">
-              <p className="text-sm font-semibold text-foreground dark:text-white">Akun demo</p>
-              <p className="mt-2 text-sm text-muted dark:text-white/80">Email: demo@linkatalog.id</p>
-              <p className="text-sm text-muted dark:text-white/80">Password: demo12345</p>
-              <Button
-                variant="secondary"
-                className="mt-5 dark:bg-white dark:text-slate-900 dark:hover:bg-white/90"
-                onClick={handleDemoLogin}
-                loading={loading}
-              >
-                Masuk dengan akun demo
-              </Button>
+              <p className="text-sm font-semibold text-foreground dark:text-white">Belum punya akun?</p>
+              <p className="mt-2 text-sm text-muted dark:text-white/80">
+                Daftar gratis dengan tab Sign up di samping. Pilih link katalog kamu sendiri, lalu mulai tambahkan
+                produk pertama.
+              </p>
             </div>
           </Card>
 
@@ -208,14 +221,22 @@ export default function AuthPage() {
               <button
                 type="button"
                 className={`flex-1 rounded-full px-4 py-3 text-sm font-medium transition ${tab === "signin" ? "bg-surface text-foreground shadow-card" : "text-muted"}`}
-                onClick={() => setTab("signin")}
+                onClick={() => {
+                  setTab("signin");
+                  setStep("form");
+                  setError("");
+                }}
               >
                 Sign in
               </button>
               <button
                 type="button"
                 className={`flex-1 rounded-full px-4 py-3 text-sm font-medium transition ${tab === "signup" ? "bg-surface text-foreground shadow-card" : "text-muted"}`}
-                onClick={() => setTab("signup")}
+                onClick={() => {
+                  setTab("signup");
+                  setStep("form");
+                  setError("");
+                }}
               >
                 Sign up
               </button>
@@ -223,21 +244,84 @@ export default function AuthPage() {
 
             <div className="mt-8">
               <h2 className="text-2xl font-semibold text-foreground">
-                {tab === "signin" ? "Masuk ke dashboard kamu" : "Buat akun baru"}
+                {step === "verify"
+                  ? "Verifikasi email kamu"
+                  : tab === "signin"
+                    ? "Masuk ke dashboard kamu"
+                    : "Buat akun baru"}
               </h2>
               <p className="mt-2 text-sm leading-6 text-muted">
-                {tab === "signin"
-                  ? "Lanjutkan edit katalog, cek klik WhatsApp, dan bagikan link kamu."
-                  : "Pilih link katalog sendiri, atur profil sederhana, lalu tambahkan produk atau jasa pertama kamu."}
+                {step === "verify"
+                  ? `Masukkan kode 6 digit yang dikirim ke ${verificationEmail || form.email}.`
+                  : tab === "signin"
+                    ? "Lanjutkan edit katalog, cek klik WhatsApp, dan bagikan link kamu."
+                    : "Pilih link katalog sendiri, atur profil sederhana, lalu tambahkan produk atau jasa pertama kamu."}
               </p>
             </div>
 
+            {step === "verify" ? (
+              <form className="mt-8 space-y-5" onSubmit={handleVerify}>
+                <label className="space-y-2 text-sm">
+                  <span className="font-medium text-foreground">Kode verifikasi</span>
+                  <Input
+                    inputMode="numeric"
+                    placeholder="Contoh: 482913"
+                    value={verificationCode}
+                    onChange={(event) =>
+                      setVerificationCode(event.target.value.replace(/[^\d]/g, "").slice(0, 6))
+                    }
+                  />
+                </label>
+
+                {error ? (
+                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                    {error}
+                  </div>
+                ) : null}
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button type="submit" className="flex-1" size="lg" loading={loading}>
+                    Verifikasi & masuk
+                    {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="lg"
+                    loading={resendingCode}
+                    onClick={async () => {
+                      setResendingCode(true);
+                      setError("");
+                      const result = await resendVerificationCode(verificationEmail || form.email);
+                      setResendingCode(false);
+                      if (!result.success) {
+                        setError(result.message);
+                      }
+                    }}
+                  >
+                    Kirim ulang kode
+                  </Button>
+                </div>
+
+                <button
+                  type="button"
+                  className="text-sm text-muted transition hover:text-foreground"
+                  onClick={() => {
+                    setStep("form");
+                    setError("");
+                    setVerificationCode("");
+                  }}
+                >
+                  Kembali ke form
+                </button>
+              </form>
+            ) : (
             <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
               {tab === "signup" ? (
                 <label className="space-y-2 text-sm">
                   <span className="font-medium text-foreground">Nama brand atau nama kamu</span>
                   <Input
-                    placeholder="Contoh: Ayam Geprek Nala"
+                    placeholder="Contoh: Kopi Arunika"
                     value={form.name}
                     onChange={(event) => updateName(event.target.value)}
                   />
@@ -261,7 +345,7 @@ export default function AuthPage() {
                           username: normalizePublicUsername(event.target.value)
                         }));
                       }}
-                      placeholder="ayam-geprek-nala"
+                      placeholder="kopi-arunika"
                       className="min-h-12 w-full bg-transparent px-4 py-3 outline-none placeholder:text-muted"
                     />
                   </div>
@@ -310,6 +394,7 @@ export default function AuthPage() {
                 {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
               </Button>
             </form>
+            )}
 
             <div className="mt-6 rounded-[1.75rem] border border-line bg-surface-soft p-5 text-sm leading-6 text-muted">
               Linkatalog.id fokus untuk bikin katalog jualan personal, bukan marketplace. Kamu pegang link sendiri,

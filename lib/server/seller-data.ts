@@ -1,75 +1,40 @@
-import { prisma } from "@/lib/db";
-import { getUserAnalyticsSummary } from "@/lib/server/analytics";
-import { serializeProduct, serializeUser } from "@/lib/server/serializers";
+import { backendFetch } from "@/lib/server/backend-client";
 import { PublicCatalogPayload, SellerSessionPayload } from "@/lib/types";
 
+const EMPTY_PAYLOAD: SellerSessionPayload = {
+  authenticated: false,
+  user: null,
+  products: [],
+  analytics: { views: 0, whatsappClicks: 0, productViews: 0 }
+};
+
 export async function buildSellerSessionPayload(userId: string): Promise<SellerSessionPayload> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      account: {
-        select: {
-          email: true
-        }
-      }
-    }
-  });
-
-  if (!user || !user.isActive) {
-    return {
-      authenticated: false,
-      user: null,
-      products: [],
-      analytics: { views: 0, whatsappClicks: 0, productViews: 0 }
-    };
+  const result = await backendFetch<SellerSessionPayload>("/me", { query: { userId } });
+  if (!result.ok || !result.data) {
+    return EMPTY_PAYLOAD;
   }
-
-  const [products, analytics] = await Promise.all([
-    prisma.product.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" }
-    }),
-    getUserAnalyticsSummary(userId)
-  ]);
-
   return {
-    authenticated: true,
-    user: serializeUser(user),
-    products: products.map((item) => serializeProduct(item)),
-    analytics
+    authenticated: Boolean(result.data.authenticated),
+    user: result.data.user ?? null,
+    products: result.data.products ?? [],
+    analytics: result.data.analytics ?? EMPTY_PAYLOAD.analytics
   };
 }
 
 export async function getPublicCatalogPayload(username: string): Promise<PublicCatalogPayload | null> {
-  const user = await prisma.user.findUnique({
-    where: { username },
-    include: {
-      account: {
-        select: {
-          email: true
-        }
-      }
-    }
-  });
+  const result = await backendFetch<{
+    success: boolean;
+    user: PublicCatalogPayload["user"];
+    products: PublicCatalogPayload["products"];
+    analytics: PublicCatalogPayload["analytics"];
+  }>(`/public/catalog/${encodeURIComponent(username)}`, { revalidate: 30 });
 
-  if (!user || !user.isActive) {
+  if (!result.ok || !result.data?.success || !result.data.user) {
     return null;
   }
-
-  const [products, analytics] = await Promise.all([
-    prisma.product.findMany({
-      where: {
-        userId: user.id,
-        isActive: true
-      },
-      orderBy: { createdAt: "desc" }
-    }),
-    getUserAnalyticsSummary(user.id)
-  ]);
-
   return {
-    user: serializeUser(user),
-    products: products.map((item) => serializeProduct(item)),
-    analytics
+    user: result.data.user,
+    products: result.data.products ?? [],
+    analytics: result.data.analytics ?? { views: 0, whatsappClicks: 0, productViews: 0 }
   };
 }

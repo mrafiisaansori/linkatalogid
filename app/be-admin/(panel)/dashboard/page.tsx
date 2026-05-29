@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getAdminDashboardData, getRecentAuditLogs } from "@/lib/server/admin-data";
+import { getAdminDashboardData } from "@/lib/server/admin-data";
+import { getRecentAuditLogs } from "@/lib/server/audit";
 import { formatCompactNumber, formatCurrency, formatDateTime } from "@/lib/utils";
 import {
   ActivityIcon,

@@ -1,27 +1,9 @@
-import { AnalyticsEventType } from "@prisma/client";
-import { prisma } from "@/lib/db";
+import { backendFetch } from "@/lib/server/backend-client";
+import { SellerSessionPayload } from "@/lib/types";
 
 export async function getUserAnalyticsSummary(userId: string) {
-  const [views, whatsappClicks, productViews] = await Promise.all([
-    prisma.analyticsEvent.count({
-      where: {
-        ownerUserId: userId,
-        eventType: AnalyticsEventType.PAGE_VIEW
-      }
-    }),
-    prisma.analyticsEvent.count({
-      where: {
-        ownerUserId: userId,
-        eventType: AnalyticsEventType.WHATSAPP_CLICK
-      }
-    }),
-    prisma.analyticsEvent.count({
-      where: {
-        ownerUserId: userId,
-        eventType: AnalyticsEventType.PRODUCT_VIEW
-      }
-    })
-  ]);
-
-  return { views, whatsappClicks, productViews };
+  // Analytics di-include di /me payload. Helper ini di-pertahankan untuk
+  // backwards compatibility kalau ada caller lain di repo.
+  const result = await backendFetch<SellerSessionPayload>("/me", { query: { userId } });
+  return result.data?.analytics ?? { views: 0, whatsappClicks: 0, productViews: 0 };
 }

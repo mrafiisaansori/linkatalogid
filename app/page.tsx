@@ -104,7 +104,7 @@ export default function HomePage() {
           <div id="demo" className="landing-reveal landing-reveal-delay-2 relative flex justify-center lg:justify-end">
             <div className="landing-orb landing-orb-slow absolute left-1/2 top-8 h-44 w-44 -translate-x-[90%] rounded-full bg-brand/18 blur-3xl" />
             <div className="landing-orb absolute bottom-10 right-4 h-52 w-52 rounded-full bg-sky-500/12 blur-3xl" />
-            <div className="relative w-full max-w-[460px]">
+            <div className="pointer-events-none relative w-full max-w-[460px]">
               <div className="mb-4 flex items-center justify-center lg:justify-start">
                 <div className="inline-flex items-center gap-2 rounded-full border border-line/80 bg-surface/88 px-4 py-2 text-xs font-medium text-muted shadow-soft backdrop-blur">
                   <SparkIcon className="h-3.5 w-3.5 text-brand" />
@@ -425,11 +425,11 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <LandingSessionButton guestLabel="Mulai Gratis" userLabel="Buka Dashboard" size="lg" />
-              <Link href="/raracommerce">
+              <a href="#demo">
                 <Button variant="secondary" size="lg">
-                  Lihat Demo Publik
+                  Lihat Preview Demo
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </Card>

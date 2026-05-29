@@ -27,8 +27,18 @@ export function formatCompactNumber(value: number) {
   }).format(value);
 }
 
+function parseDateValue(value: string | Date) {
+  if (value instanceof Date) return value;
+
+  const normalized = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(value)
+    ? value.replace(" ", "T")
+    : value;
+
+  return new Date(normalized);
+}
+
 export function formatDateTime(value: string | Date) {
-  const date = typeof value === "string" ? new Date(value) : value;
+  const date = parseDateValue(value);
 
   return new Intl.DateTimeFormat("id-ID", {
     dateStyle: "medium",
@@ -37,7 +47,7 @@ export function formatDateTime(value: string | Date) {
 }
 
 export function formatDateLabel(value: string | Date) {
-  const date = typeof value === "string" ? new Date(value) : value;
+  const date = parseDateValue(value);
 
   return new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",

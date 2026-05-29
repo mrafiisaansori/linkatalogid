@@ -27,7 +27,7 @@ const navItems = [
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { currentUser, isHydrated, copyPublicLink, profileCompletion, signOut } = useAppState();
+  const { currentUser, isDemoMode, isHydrated, copyPublicLink, profileCompletion, signOut } = useAppState();
 
   const activeLabel = useMemo(
     () => navItems.find((item) => pathname === item.href)?.label ?? "Dashboard",
@@ -141,6 +141,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </aside>
 
         <div className="space-y-6 pb-24 lg:pb-8">
+          {isDemoMode ? (
+            <Card className="rounded-[1.75rem] border-brand/20 bg-brand/5 px-5 py-4">
+              <p className="text-sm font-semibold text-foreground">Mode demo Vercel aktif</p>
+              <p className="mt-1 text-sm leading-6 text-muted">
+                Perubahan profil dan produk disimpan sementara di browser ini agar flow demo tetap terasa hidup.
+              </p>
+            </Card>
+          ) : null}
+
           <header className="sticky top-4 z-30 flex flex-wrap items-center justify-between gap-3 rounded-[2rem] border border-line bg-surface/85 p-4 shadow-soft backdrop-blur-xl">
             <div>
               <p className="text-sm text-muted">Dashboard</p>

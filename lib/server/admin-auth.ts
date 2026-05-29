@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/db";
 import {
   ADMIN_SESSION_COOKIE,
   LinkatalogSessionClaims,
   getExpiredCookieOptions,
   verifySessionToken
 } from "@/lib/auth/session";
+import { backendFetch } from "@/lib/server/backend-client";
+import { AdminUser } from "@/lib/types";
 
 export async function getCurrentAdminSession() {
   const cookieStore = await cookies();
@@ -16,25 +17,14 @@ export async function getCurrentAdminSession() {
   const claims = await verifySessionToken(token, "admin");
   if (!claims) return null;
 
-  const admin = await prisma.adminUser.findUnique({
-    where: { id: claims.sub },
-    select: {
-      id: true,
-      username: true,
-      role: true,
-      isActive: true,
-      createdAt: true,
-      updatedAt: true
-    }
-  });
-
-  if (!admin || !admin.isActive) {
+  const result = await backendFetch<{ success: boolean; admin: AdminUser }>(`/admin/${encodeURIComponent(claims.sub)}`);
+  if (!result.ok || !result.data?.success || !result.data.admin?.isActive) {
     cookieStore.set(ADMIN_SESSION_COOKIE, "", getExpiredCookieOptions());
     return null;
   }
 
   return {
-    admin,
+    admin: result.data.admin,
     claims
   };
 }
@@ -44,7 +34,6 @@ export async function requireAdminSession() {
   if (!session) {
     redirect("/be-admin");
   }
-
   return session;
 }
 

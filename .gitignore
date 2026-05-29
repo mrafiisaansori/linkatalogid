@@ -6,6 +6,7 @@ node_modules/
 .next-dev/
 .next-build/
 .next-verify/
+.next-verify-*/
 .verify-build-*/
 
 # local env files
@@ -16,7 +17,7 @@ node_modules/
 .env.production.local
 !.env.example
 
-# local database files
+# legacy SQLite (sudah tidak dipakai)
 prisma/dev.db
 prisma/dev.db-journal
 
@@ -32,3 +33,6 @@ npm-debug.log*
 
 # misc
 .DS_Store
+
+# PHP backend — di-host terpisah, tidak di-push ke git
+backend/

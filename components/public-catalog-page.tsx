@@ -29,8 +29,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { DEMO_DRAFT_STORAGE_KEY, parseDemoDraft, toPublicCatalogPayload } from "@/lib/demo-draft";
 import { PublicCatalogPayload, Product, User } from "@/lib/types";
-import { formatCurrency, getAccentPalette, getWhatsappLink } from "@/lib/utils";
+import { formatCurrency, getAccentPalette, getWhatsappLink, normalizePublicUsername } from "@/lib/utils";
 
 interface PublicCatalogPageProps {
   username: string;
@@ -159,10 +160,33 @@ function CatalogProductCard({
 export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPageProps) {
   const [query, setQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("Semua");
+  const [draftCatalog, setDraftCatalog] = React.useState<PublicCatalogPayload | null>(null);
+  const [draftResolved, setDraftResolved] = React.useState(Boolean(initialCatalog));
   const deferredQuery = useDeferredValue(query);
   const trackedProductsRef = useRef(new Set<string>());
-  const user = initialCatalog?.user ?? null;
-  const products = initialCatalog?.products ?? [];
+
+  useEffect(() => {
+    setDraftResolved(Boolean(initialCatalog));
+
+    if (typeof window === "undefined") return;
+
+    const draft = parseDemoDraft(localStorage.getItem(DEMO_DRAFT_STORAGE_KEY));
+    if (draft && normalizePublicUsername(draft.user.username) === normalizePublicUsername(username)) {
+      setDraftCatalog({
+        ...toPublicCatalogPayload(draft),
+        products: draft.products.filter((item) => item.isActive)
+      });
+    } else {
+      setDraftCatalog(null);
+    }
+
+    setDraftResolved(true);
+  }, [initialCatalog, username]);
+
+  const catalog = draftCatalog ?? initialCatalog;
+  const isDraftPreview = Boolean(draftCatalog);
+  const user = catalog?.user ?? null;
+  const products = (catalog?.products ?? []).filter((item) => item.isActive);
 
   useEffect(() => {
     setQuery("");
@@ -240,6 +264,17 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
     },
     [user]
   );
+
+  if (!user && !draftResolved) {
+    return (
+      <main className="page-shell flex min-h-screen items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-xl rounded-[2rem] p-8 text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+          <p className="mt-4 text-sm text-muted">Menyiapkan preview katalog...</p>
+        </Card>
+      </main>
+    );
+  }
 
   if (!user) {
     return (
@@ -326,9 +361,16 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
             />
 
             <div className="relative max-w-4xl space-y-5">
-              <Badge className="w-fit border-0 bg-white/85 text-slate-700 shadow-sm ring-0">
-                Katalog personal siap order
-              </Badge>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="w-fit border-0 bg-white/85 text-slate-700 shadow-sm ring-0">
+                  Katalog personal siap order
+                </Badge>
+                {isDraftPreview ? (
+                  <Badge className="w-fit border-0 bg-slate-900 text-white shadow-sm ring-0">
+                    Preview draft browser ini
+                  </Badge>
+                ) : null}
+              </div>
 
               <div className="flex flex-col gap-4 text-center sm:flex-row sm:text-left">
                 {user.profileImage ? (

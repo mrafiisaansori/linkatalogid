@@ -1,12 +1,12 @@
 import { requireAdminSession } from "@/lib/server/admin-auth";
-import { getRecentAuditLogs } from "@/lib/server/admin-data";
+import { getRecentAuditLogs } from "@/lib/server/audit";
 import { formatDateTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ActivityIcon, LockIcon, SettingsIcon, ShieldIcon } from "@/components/icons";
 
 const securityRules = [
-  "Password admin disimpan dalam database dengan bcrypt hash.",
+  "Password admin di-hash dengan bcrypt (PASSWORD_BCRYPT) sebelum disimpan di database backend.",
   "Session admin memakai JWT di httpOnly cookie dengan masa hidup terbatas.",
   "Semua route `/be-admin/*` diproteksi middleware dan redirect ke login jika sesi hilang.",
   "Login admin dijaga rate limit dan aksi penting dicatat ke audit log."

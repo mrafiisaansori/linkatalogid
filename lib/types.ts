@@ -57,6 +57,7 @@ export interface SellerSessionPayload {
   user: User | null;
   products: Product[];
   analytics: AnalyticsSummary;
+  demoMode?: boolean;
 }
 
 export interface PublicCatalogPayload {
@@ -69,6 +70,13 @@ export interface UsernameAvailability {
   available: boolean;
   normalized: string;
   message: string;
+}
+
+export interface AuthActionResult {
+  success: boolean;
+  message: string;
+  requiresVerification?: boolean;
+  email?: string;
 }
 
 export interface AdminUser {

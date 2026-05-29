@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
 import {
   USER_SESSION_COOKIE,
   getExpiredCookieOptions,
   verifySessionToken
 } from "@/lib/auth/session";
+import { backendFetch } from "@/lib/server/backend-client";
+import { SellerSessionPayload } from "@/lib/types";
 
 export async function getCurrentUserSession() {
   const cookieStore = await cookies();
@@ -14,24 +15,16 @@ export async function getCurrentUserSession() {
   const claims = await verifySessionToken(token, "user");
   if (!claims) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: claims.sub },
-    include: {
-      account: {
-        select: {
-          email: true
-        }
-      }
-    }
-  });
-
-  if (!user || !user.isActive) {
+  const result = await backendFetch<SellerSessionPayload>("/me", { query: { userId: claims.sub } });
+  if (!result.ok || !result.data?.authenticated || !result.data.user) {
     cookieStore.set(USER_SESSION_COOKIE, "", getExpiredCookieOptions());
     return null;
   }
 
   return {
-    user,
+    user: result.data.user,
+    products: result.data.products,
+    analytics: result.data.analytics,
     claims
   };
 }

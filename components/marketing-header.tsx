@@ -64,7 +64,7 @@ export function MarketingHeader() {
 
       <div
         className={cn(
-          "fixed inset-x-4 top-[76px] z-30 rounded-[2rem] border border-line bg-surface/95 p-4 shadow-soft transition md:hidden",
+          "fixed inset-x-4 top-[76px] z-50 rounded-[2rem] border border-line bg-surface/95 p-4 shadow-soft transition md:hidden",
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-4 opacity-0"
         )}
       >

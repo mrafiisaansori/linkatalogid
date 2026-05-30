@@ -186,8 +186,15 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
                 <p className="text-sm font-medium text-foreground">Gambar produk</p>
                 <p className="text-sm text-muted">Upload gambar sendiri atau pilih cover demo.</p>
               </div>
-              <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft ${uploadingImage ? "pointer-events-none opacity-60" : ""}`}>
-                <CameraIcon className="h-4 w-4" />
+              <label className={`relative inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft ${uploadingImage ? "pointer-events-none opacity-70" : ""}`}>
+                {uploadingImage ? (
+                  <svg className="h-4 w-4 animate-spin text-brand" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                ) : (
+                  <CameraIcon className="h-4 w-4" />
+                )}
                 {uploadingImage ? "Mengupload..." : "Upload"}
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
               </label>
@@ -249,12 +256,21 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
           </div>
 
           <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-card">
-            <div className="aspect-[4/3] bg-surface-soft">
+            <div className="relative aspect-[4/3] bg-surface-soft">
               {form.imageUrl ? (
                 <img src={form.imageUrl} alt={form.title || "Preview produk"} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center text-muted">
                   <CameraIcon className="h-8 w-8" />
+                </div>
+              )}
+              {uploadingImage && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/70 backdrop-blur-sm">
+                  <svg className="h-8 w-8 animate-spin text-brand" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                  <p className="text-xs font-medium text-brand">Mengupload gambar...</p>
                 </div>
               )}
             </div>

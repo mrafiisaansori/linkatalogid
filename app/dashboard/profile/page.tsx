@@ -115,13 +115,23 @@ export default function DashboardProfilePage() {
         <div className="mt-6 space-y-5">
           <div className="rounded-[1.75rem] border border-dashed border-line bg-background p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              {form.profileImage ? (
-                <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-[1.5rem] object-cover" />
-              ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-surface-soft text-muted">
-                  <UserIcon className="h-8 w-8" />
-                </div>
-              )}
+              <div className="relative h-20 w-20 shrink-0">
+                {form.profileImage ? (
+                  <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-[1.5rem] object-cover" />
+                ) : (
+                  <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-surface-soft text-muted">
+                    <UserIcon className="h-8 w-8" />
+                  </div>
+                )}
+                {uploadingImage && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-[1.5rem] bg-background/70 backdrop-blur-sm">
+                    <svg className="h-7 w-7 animate-spin text-brand" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
 
               <div className="flex-1">
                 <p className="font-medium text-foreground">Foto profil</p>
@@ -131,7 +141,14 @@ export default function DashboardProfilePage() {
               </div>
 
               <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-foreground transition hover:bg-surface-soft ${uploadingImage ? "pointer-events-none opacity-60" : ""}`}>
-                <CameraIcon className="h-4 w-4" />
+                {uploadingImage ? (
+                  <svg className="h-4 w-4 animate-spin text-brand" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                ) : (
+                  <CameraIcon className="h-4 w-4" />
+                )}
                 {uploadingImage ? "Mengupload..." : "Upload foto"}
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
               </label>

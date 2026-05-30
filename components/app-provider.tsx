@@ -25,6 +25,7 @@ import {
 } from "@/lib/types";
 import {
   calculateProfileCompletion,
+  cn,
   generateId,
   isReservedPublicUsername,
   normalizePublicUsername,
@@ -192,6 +193,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     root.classList.toggle("dark", theme === "dark");
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
+
+  const dismissToast = useCallback((id: string) => {
+    setToasts((current) => current.filter((item) => item.id !== id));
+  }, []);
 
   const pushToast = useCallback((toast: Omit<ToastMessage, "id">) => {
     const nextToast = { id: generateId("toast"), ...toast };
@@ -682,14 +687,47 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppContext.Provider value={value}>
       {children}
-      <div className="pointer-events-none fixed right-4 top-4 z-[60] flex w-full max-w-sm flex-col gap-3">
+      <div
+        className="pointer-events-none fixed inset-x-3 top-3 z-[60] flex flex-col gap-2 pt-[env(safe-area-inset-top)] sm:left-auto sm:right-4 sm:top-4 sm:w-full sm:max-w-sm sm:pt-0"
+        role="region"
+        aria-label="Notifikasi"
+        aria-live="polite"
+      >
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="pointer-events-auto rounded-3xl border border-line bg-surface/95 p-4 shadow-soft backdrop-blur"
+            className={cn(
+              "toast-item pointer-events-auto flex items-start gap-3 rounded-[1.5rem] border p-3.5 shadow-lg backdrop-blur-md sm:p-4",
+              toast.tone === "success"
+                ? "border-success/30 bg-success/10 text-success"
+                : toast.tone === "warning"
+                ? "border-warning/30 bg-warning/10 text-warning"
+                : "border-line bg-surface/95"
+            )}
           >
-            <p className="text-sm font-semibold text-foreground">{toast.title}</p>
-            {toast.description ? <p className="mt-1 text-sm text-muted">{toast.description}</p> : null}
+            <span className={cn(
+              "mt-0.5 flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-bold",
+              toast.tone === "success" ? "bg-success text-white" :
+              toast.tone === "warning" ? "bg-warning text-white" :
+              "bg-brand text-white"
+            )}>
+              {toast.tone === "success" ? "✓" : toast.tone === "warning" ? "!" : "i"}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className={cn("text-sm font-semibold", toast.tone ? "" : "text-foreground")}>{toast.title}</p>
+              {toast.description ? <p className={cn("mt-0.5 break-words text-xs leading-5", toast.tone ? "opacity-80" : "text-muted")}>{toast.description}</p> : null}
+            </div>
+            <button
+              type="button"
+              onClick={() => dismissToast(toast.id)}
+              aria-label="Tutup notifikasi"
+              className={cn(
+                "-mr-1 -mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base leading-none transition hover:bg-foreground/10",
+                toast.tone ? "opacity-70 hover:opacity-100" : "text-muted hover:text-foreground"
+              )}
+            >
+              ×
+            </button>
           </div>
         ))}
       </div>
@@ -697,6 +735,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Hook akses state aplikasi.
 export function useAppState() {
   const context = useContext(AppContext);
   if (!context) {

@@ -77,6 +77,59 @@ body {
   }
 }
 
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (min-width: 640px) {
+  @keyframes toastIn {
+    from {
+      opacity: 0;
+      transform: translate3d(24px, 0, 0) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+}
+
+.toast-item {
+  animation: toastIn 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes detailIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.detail-animate {
+  animation: detailIn 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-item,
+  .detail-animate {
+    animation: none;
+  }
+}
+
 @keyframes landingReveal {
   from {
     opacity: 0;

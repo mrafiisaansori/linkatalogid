@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useDeferredValue, useMemo, useState } from "react";
+// Filter status produk dihilangkan sesuai permintaan; pencarian tetap tersedia.
 import { BoxIcon, PencilIcon, TrashIcon } from "@/components/icons";
 import { ProductModal } from "@/components/product-modal";
 import { Badge } from "@/components/ui/badge";
@@ -12,8 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/components/app-provider";
 import { Product } from "@/lib/types";
 import { cn, formatCurrency } from "@/lib/utils";
-
-type FilterMode = "all" | "active" | "inactive";
 
 function SearchIconInline() {
   return (
@@ -27,43 +26,20 @@ function SearchIconInline() {
 export default function DashboardProductsPage() {
   const { currentProducts, deleteProduct, saveProduct, toggleProduct } = useAppState();
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<FilterMode>("all");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const deferredQuery = useDeferredValue(query);
 
-  const activeCount = useMemo(() => currentProducts.filter((p) => p.isActive).length, [currentProducts]);
-  const inactiveCount = currentProducts.length - activeCount;
-
-  const allCategories = useMemo(() => {
-    const cats = new Set<string>();
-    currentProducts.forEach((p) => { if (p.category) cats.add(p.category.trim()); });
-    return Array.from(cats).sort();
-  }, [currentProducts]);
-
   const filteredProducts = useMemo(() => {
     return currentProducts.filter((product) => {
-      const matchesQuery =
+      return (
         !deferredQuery ||
         `${product.title} ${product.description} ${product.category}`
           .toLowerCase()
-          .includes(deferredQuery.toLowerCase());
-      const matchesFilter =
-        filter === "all" || (filter === "active" ? product.isActive : !product.isActive);
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes((product.category ?? "").trim());
-
-      return matchesQuery && matchesFilter && matchesCategory;
+          .includes(deferredQuery.toLowerCase())
+      );
     });
-  }, [currentProducts, deferredQuery, filter, selectedCategories]);
-
-  function toggleCategory(cat: string) {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
-  }
+  }, [currentProducts, deferredQuery]);
 
   function handleCreate() {
     setSelectedProduct(null);
@@ -74,12 +50,6 @@ export default function DashboardProductsPage() {
     setSelectedProduct(product);
     setModalOpen(true);
   }
-
-  const filters: { id: FilterMode; label: string; count: number }[] = [
-    { id: "all", label: "Semua", count: currentProducts.length },
-    { id: "active", label: "Aktif", count: activeCount },
-    { id: "inactive", label: "Nonaktif", count: inactiveCount }
-  ];
 
   return (
     <>
@@ -98,7 +68,7 @@ export default function DashboardProductsPage() {
             <Button onClick={handleCreate} className="w-full sm:w-auto">Tambah produk</Button>
           </div>
 
-          <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
+          <div className="mt-5">
             <div className="relative">
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted">
                 <SearchIconInline />
@@ -114,71 +84,8 @@ export default function DashboardProductsPage() {
                 }}
               />
             </div>
-            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:pb-0" role="tablist" aria-label="Filter status produk">
-              {filters.map((item) => {
-                const active = filter === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    className={cn(
-                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
-                      active
-                        ? "border-brand bg-brand text-white shadow-card"
-                        : "border-line bg-background text-muted hover:text-foreground"
-                    )}
-                    onClick={() => setFilter(item.id)}
-                  >
-                    {item.label}
-                    <span
-                      className={cn(
-                        "rounded-full px-2 py-0.5 text-xs font-semibold",
-                        active ? "bg-white/20 text-white" : "bg-surface-soft text-muted"
-                      )}
-                    >
-                      {item.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
-          {allCategories.length > 0 && (
-            <div className="mt-3 -mx-1 flex flex-wrap gap-2 px-1">
-              {allCategories.map((cat) => {
-                const active = selectedCategories.includes(cat);
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    aria-pressed={active}
-                    className={cn(
-                      "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
-                      active
-                        ? "border-brand bg-brand/10 text-brand"
-                        : "border-line bg-background text-muted hover:text-foreground"
-                    )}
-                    onClick={() => toggleCategory(cat)}
-                  >
-                    {active && <span className="h-1.5 w-1.5 rounded-full bg-brand" />}
-                    {cat}
-                  </button>
-                );
-              })}
-              {selectedCategories.length > 0 && (
-                <button
-                  type="button"
-                  className="inline-flex shrink-0 items-center rounded-full border border-line px-3 py-1.5 text-xs font-medium text-muted transition hover:text-foreground"
-                  onClick={() => setSelectedCategories([])}
-                >
-                  Reset kategori
-                </button>
-              )}
-            </div>
-          )}
         </Card>
 
         {filteredProducts.length === 0 ? (
@@ -188,7 +95,7 @@ export default function DashboardProductsPage() {
             description={
               currentProducts.length === 0
                 ? "Mulai isi katalog dengan produk atau jasa pertama kamu."
-                : "Coba ubah kata kunci pencarian atau filter status produk."
+                : "Coba ubah kata kunci pencarian."
             }
             action={<Button onClick={handleCreate}>Tambah produk</Button>}
           />

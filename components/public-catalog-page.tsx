@@ -433,14 +433,15 @@ function ProductDetailSheet({
       {/* Sheet */}
       <div
         className={cn(
-          "fixed z-50 overflow-hidden bg-background shadow-2xl transition-all duration-300",
+          "fixed z-50 overflow-hidden bg-background shadow-2xl",
+          "transition-[transform,opacity] duration-[380ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
           // Mobile: full-width bottom sheet
           "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-[2rem]",
           // Desktop: centered modal
           "sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-full sm:max-w-md sm:-translate-x-1/2 sm:rounded-2xl",
           open
-            ? "translate-y-0 sm:-translate-y-1/2"
-            : "translate-y-full sm:translate-y-[-45%] sm:opacity-0 sm:pointer-events-none"
+            ? "translate-y-0 opacity-100 sm:-translate-y-1/2"
+            : "translate-y-full opacity-0 pointer-events-none sm:translate-y-[-48%]"
         )}
       >
         {/* Handle — mobile only */}
@@ -448,14 +449,14 @@ function ProductDetailSheet({
           <div className="h-1 w-10 rounded-full bg-slate-300 dark:bg-slate-600" />
         </div>
 
-        {/* Scrollable content */}
-        <div className="overflow-y-auto">
+        {/* Scrollable content — di-key per produk supaya animasi reveal main ulang tiap buka */}
+        <div key={product.id} className="detail-animate overflow-y-auto">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <img
               src={product.imageUrl}
               alt={product.title}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform"
             />
             {/* Close button */}
             <button
@@ -610,7 +611,7 @@ function CatalogProductCard({
         tabIndex={0}
         onClick={() => onOpenDetail(product)}
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onOpenDetail(product); }}
-        className="block h-full w-full cursor-pointer"
+        className="block h-full w-full cursor-pointer transition-transform duration-150 active:scale-[0.97]"
       >
         <Card className="group flex h-full overflow-hidden rounded-2xl p-0 transition-all duration-300 hover:shadow-lg hover:ring-2 sm:rounded-[1.75rem]"
           style={{ ["--tw-ring-color" as string]: `${accentPrimary}40` }}

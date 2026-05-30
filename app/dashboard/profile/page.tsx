@@ -210,7 +210,8 @@ export default function DashboardProfilePage() {
                 <button
                   key={option.id}
                   type="button"
-                  className={`rounded-[1.5rem] border p-3 text-left transition ${form.themeAccent === option.id ? "border-brand shadow-card" : "border-line"}`}
+                  aria-pressed={form.themeAccent === option.id}
+                  className={`rounded-[1.5rem] border p-3 text-left transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 ${form.themeAccent === option.id ? "border-brand shadow-card ring-2 ring-brand/30" : "border-line hover:border-brand/40"}`}
                   onClick={() => setForm((current) => ({ ...current, themeAccent: option.id }))}
                 >
                   <div className="h-12 rounded-2xl" style={{ backgroundColor: option.color }} />
@@ -221,8 +222,12 @@ export default function DashboardProfilePage() {
           </div>
 
           {error ? (
-            <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
-              {error}
+            <div
+              role="alert"
+              className="flex items-start gap-3 rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm font-medium text-warning"
+            >
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-warning/20 text-[12px] font-bold">!</span>
+              <span>{error}</span>
             </div>
           ) : null}
 

@@ -28,9 +28,19 @@ export default function DashboardProductsPage() {
   const { currentProducts, deleteProduct, saveProduct, toggleProduct } = useAppState();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FilterMode>("all");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  const activeCount = useMemo(() => currentProducts.filter((p) => p.isActive).length, [currentProducts]);
+  const inactiveCount = currentProducts.length - activeCount;
+
+  const allCategories = useMemo(() => {
+    const cats = new Set<string>();
+    currentProducts.forEach((p) => { if (p.category) cats.add(p.category.trim()); });
+    return Array.from(cats).sort();
+  }, [currentProducts]);
 
   const filteredProducts = useMemo(() => {
     return currentProducts.filter((product) => {
@@ -41,10 +51,19 @@ export default function DashboardProductsPage() {
           .includes(deferredQuery.toLowerCase());
       const matchesFilter =
         filter === "all" || (filter === "active" ? product.isActive : !product.isActive);
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes((product.category ?? "").trim());
 
-      return matchesQuery && matchesFilter;
+      return matchesQuery && matchesFilter && matchesCategory;
     });
-  }, [currentProducts, deferredQuery, filter]);
+  }, [currentProducts, deferredQuery, filter, selectedCategories]);
+
+  function toggleCategory(cat: string) {
+    setSelectedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+    );
+  }
 
   function handleCreate() {
     setSelectedProduct(null);
@@ -56,18 +75,27 @@ export default function DashboardProductsPage() {
     setModalOpen(true);
   }
 
+  const filters: { id: FilterMode; label: string; count: number }[] = [
+    { id: "all", label: "Semua", count: currentProducts.length },
+    { id: "active", label: "Aktif", count: activeCount },
+    { id: "inactive", label: "Nonaktif", count: inactiveCount }
+  ];
+
   return (
     <>
       <section className="space-y-4">
         <Card className="rounded-[2rem] p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-lg font-semibold text-foreground">Kelola produk & jasa</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-lg font-semibold text-foreground">Kelola produk & jasa</p>
+                <Badge tone="neutral">{currentProducts.length} item</Badge>
+              </div>
               <p className="mt-1 text-sm text-muted">
                 Atur katalog publik kamu, edit detail item, atau matikan produk sementara.
               </p>
             </div>
-            <Button onClick={handleCreate}>Tambah produk</Button>
+            <Button onClick={handleCreate} className="w-full sm:w-auto">Tambah produk</Button>
           </div>
 
           <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
@@ -79,34 +107,78 @@ export default function DashboardProductsPage() {
                 className="pl-11"
                 placeholder="Cari produk, jasa, atau kategori"
                 value={query}
+                aria-label="Cari produk"
                 onChange={(event) => {
                   const value = event.target.value;
                   startTransition(() => setQuery(value));
                 }}
               />
             </div>
-            <div className="flex gap-2 overflow-x-auto">
-              {[
-                { id: "all", label: "Semua" },
-                { id: "active", label: "Aktif" },
-                { id: "inactive", label: "Nonaktif" }
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={cn(
-                    "rounded-full border px-4 py-3 text-sm font-medium transition",
-                    filter === item.id
-                      ? "border-brand bg-brand text-white"
-                      : "border-line bg-background text-muted hover:text-foreground"
-                  )}
-                  onClick={() => setFilter(item.id as FilterMode)}
-                >
-                  {item.label}
-                </button>
-              ))}
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:pb-0" role="tablist" aria-label="Filter status produk">
+              {filters.map((item) => {
+                const active = filter === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    className={cn(
+                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                      active
+                        ? "border-brand bg-brand text-white shadow-card"
+                        : "border-line bg-background text-muted hover:text-foreground"
+                    )}
+                    onClick={() => setFilter(item.id)}
+                  >
+                    {item.label}
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-xs font-semibold",
+                        active ? "bg-white/20 text-white" : "bg-surface-soft text-muted"
+                      )}
+                    >
+                      {item.count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
+
+          {allCategories.length > 0 && (
+            <div className="mt-3 -mx-1 flex flex-wrap gap-2 px-1">
+              {allCategories.map((cat) => {
+                const active = selectedCategories.includes(cat);
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    aria-pressed={active}
+                    className={cn(
+                      "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                      active
+                        ? "border-brand bg-brand/10 text-brand"
+                        : "border-line bg-background text-muted hover:text-foreground"
+                    )}
+                    onClick={() => toggleCategory(cat)}
+                  >
+                    {active && <span className="h-1.5 w-1.5 rounded-full bg-brand" />}
+                    {cat}
+                  </button>
+                );
+              })}
+              {selectedCategories.length > 0 && (
+                <button
+                  type="button"
+                  className="inline-flex shrink-0 items-center rounded-full border border-line px-3 py-1.5 text-xs font-medium text-muted transition hover:text-foreground"
+                  onClick={() => setSelectedCategories([])}
+                >
+                  Reset kategori
+                </button>
+              )}
+            </div>
+          )}
         </Card>
 
         {filteredProducts.length === 0 ? (
@@ -123,19 +195,33 @@ export default function DashboardProductsPage() {
         ) : (
           <div className="grid gap-4 xl:grid-cols-2">
             {filteredProducts.map((product) => (
-              <Card key={product.id} className="rounded-[2rem] p-4">
+              <Card key={product.id} className="rounded-[2rem] p-4 transition hover:shadow-card">
                 <div className="flex flex-col gap-4 sm:flex-row">
-                  <img src={product.imageUrl} alt={product.title} className="h-40 w-full rounded-[1.5rem] object-cover sm:h-36 sm:w-36" />
+                  <div className="relative">
+                    <img src={product.imageUrl} alt={product.title} className="h-44 w-full rounded-[1.5rem] object-cover sm:h-36 sm:w-36" />
+                    <span className="absolute left-3 top-3 sm:hidden">
+                      <Badge tone={product.isActive ? "success" : "warning"} className="gap-1.5">
+                        <span className={cn("h-1.5 w-1.5 rounded-full", product.isActive ? "bg-success" : "bg-warning")} />
+                        {product.isActive ? "Aktif" : "Nonaktif"}
+                      </Badge>
+                    </span>
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-3">
-                      <div>
+                      <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="text-lg font-semibold text-foreground">{product.title}</p>
                           {product.badge ? <Badge className="text-[11px]">{product.badge}</Badge> : null}
+                          <span className="hidden sm:inline-flex">
+                            <Badge tone={product.isActive ? "success" : "warning"} className="gap-1.5 text-[11px]">
+                              <span className={cn("h-1.5 w-1.5 rounded-full", product.isActive ? "bg-success" : "bg-warning")} />
+                              {product.isActive ? "Aktif" : "Nonaktif"}
+                            </Badge>
+                          </span>
                         </div>
                         <p className="mt-1 text-sm text-muted">{product.category}</p>
                       </div>
-                      <p className="text-lg font-semibold text-foreground">{formatCurrency(product.price)}</p>
+                      <p className="shrink-0 text-lg font-semibold text-foreground">{formatCurrency(product.price)}</p>
                     </div>
 
                     <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted">{product.description}</p>

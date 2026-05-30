@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
 import {
   BoxIcon,
   ChartIcon,
+  CloseIcon,
   CopyIcon,
   EyeIcon,
+  LogoutIcon,
+  MenuIcon,
   StoreIcon,
   UserIcon
 } from "@/components/icons";
@@ -19,20 +22,35 @@ import { useAppState } from "@/components/app-provider";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: ChartIcon },
-  { href: "/dashboard/products", label: "Produk", icon: BoxIcon },
-  { href: "/dashboard/profile", label: "Profil", icon: UserIcon }
+  { href: "/dashboard", label: "Overview", icon: ChartIcon, hint: "Ringkasan toko" },
+  { href: "/dashboard/products", label: "Produk", icon: BoxIcon, hint: "Kelola katalog" },
+  { href: "/dashboard/profile", label: "Profil", icon: UserIcon, hint: "Profil & toko" }
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { currentUser, isDemoMode, isHydrated, copyPublicLink, profileCompletion, signOut } = useAppState();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const activeLabel = useMemo(
     () => navItems.find((item) => pathname === item.href)?.label ?? "Dashboard",
     [pathname]
   );
+
+  // Close the mobile drawer whenever the route changes.
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [pathname]);
+
+  // Prevent background scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
 
   if (!isHydrated) {
     return (
@@ -69,37 +87,78 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     );
   }
 
+  const handleSignOut = () => {
+    signOut();
+    router.push("/auth");
+  };
+
+  const userCard = (
+    <div className="flex items-center gap-3 rounded-[1.5rem] bg-surface-soft p-3">
+      {currentUser.profileImage ? (
+        <img
+          src={currentUser.profileImage}
+          alt={currentUser.name}
+          className="h-14 w-14 rounded-2xl object-cover ring-1 ring-line"
+        />
+      ) : (
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+          <UserIcon className="h-6 w-6" />
+        </div>
+      )}
+      <div className="min-w-0">
+        <p className="truncate font-semibold text-foreground">{currentUser.name}</p>
+        <p className="truncate text-sm text-muted">@{currentUser.username}</p>
+      </div>
+    </div>
+  );
+
+  const progressBlock = (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-semibold text-foreground">Progress profil</p>
+        <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-semibold text-brand">
+          {profileCompletion.percentage}%
+        </span>
+      </div>
+      <div
+        className="h-2 overflow-hidden rounded-full bg-surface-soft"
+        role="progressbar"
+        aria-valuenow={profileCompletion.percentage}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="h-full rounded-full bg-brand transition-all"
+          style={{ width: `${profileCompletion.percentage}%` }}
+        />
+      </div>
+      <p className="text-xs leading-5 text-muted">
+        Rapikan profil untuk bikin katalog lebih meyakinkan.
+      </p>
+      <Link href="/dashboard/profile" className="inline-block">
+        <Button variant="secondary" size="sm">
+          Lengkapi profil
+        </Button>
+      </Link>
+    </div>
+  );
+
   return (
     <main className="page-shell min-h-screen">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-4 sm:px-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-8">
+        {/* Desktop sidebar */}
         <aside className="hidden lg:block">
           <div className="sticky top-4 space-y-4">
             <Card className="rounded-[2rem] p-5">
-              <Link href="/" className="min-w-0">
+              <Link href="/" className="inline-block min-w-0">
                 <BrandLockup size="lg" />
               </Link>
-              <div className="mt-6 flex items-center gap-3 rounded-[1.5rem] bg-surface-soft p-3">
-                {currentUser.profileImage ? (
-                  <img
-                    src={currentUser.profileImage}
-                    alt={currentUser.name}
-                    className="h-14 w-14 rounded-2xl object-cover"
-                  />
-                ) : (
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-                    <UserIcon className="h-6 w-6" />
-                  </div>
-                )}
-                <div>
-                  <p className="font-semibold text-foreground">{currentUser.name}</p>
-                  <p className="text-sm text-muted">@{currentUser.username}</p>
-                </div>
-              </div>
+              <div className="mt-6">{userCard}</div>
             </Card>
 
-            <Card className="space-y-2 rounded-[2rem] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Navigasi</p>
-              <div className="space-y-2">
+            <Card className="space-y-3 rounded-[2rem] p-4">
+              <p className="px-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Navigasi</p>
+              <nav className="space-y-1.5">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const active = pathname === item.href;
@@ -107,40 +166,42 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     <Link
                       key={item.href}
                       href={item.href}
+                      aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
-                        active ? "bg-brand text-white shadow-card" : "text-muted hover:bg-surface-soft hover:text-foreground"
+                        "group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                        active
+                          ? "bg-brand text-white shadow-card"
+                          : "text-muted hover:bg-surface-soft hover:text-foreground"
                       )}
                     >
-                      <Icon className="h-5 w-5" />
-                      {item.label}
+                      <span
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-xl transition",
+                          active ? "bg-white/15 text-white" : "bg-surface-soft text-muted group-hover:text-foreground"
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="flex flex-col leading-tight">
+                        <span>{item.label}</span>
+                        <span className={cn("text-xs font-normal", active ? "text-white/70" : "text-muted")}>
+                          {item.hint}
+                        </span>
+                      </span>
                     </Link>
                   );
                 })}
-              </div>
+              </nav>
             </Card>
 
-            <Card className="rounded-[2rem] p-5">
-              <p className="text-sm font-semibold text-foreground">Progress profil</p>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface-soft">
-                <div
-                  className="h-full rounded-full bg-brand transition-all"
-                  style={{ width: `${profileCompletion.percentage}%` }}
-                />
-              </div>
-              <p className="mt-3 text-sm text-muted">
-                {profileCompletion.percentage}% lengkap. Rapikan profil untuk bikin katalog lebih meyakinkan.
-              </p>
-              <Link href="/dashboard/profile" className="mt-4 inline-block">
-                <Button variant="secondary" size="sm">
-                  Lengkapi profil
-                </Button>
-              </Link>
-            </Card>
+            {profileCompletion.percentage < 100 && (
+              <Card className="rounded-[2rem] p-5">{progressBlock}</Card>
+            )}
           </div>
         </aside>
 
-        <div className="space-y-6 pb-24 lg:pb-8">
+        {/* Main column */}
+        <div className="space-y-6 pb-28 lg:pb-8">
           {isDemoMode ? (
             <Card className="rounded-[1.75rem] border-brand/20 bg-brand/5 px-5 py-4">
               <p className="text-sm font-semibold text-foreground">Mode demo Vercel aktif</p>
@@ -150,33 +211,39 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </Card>
           ) : null}
 
-          <header className="sticky top-4 z-30 flex flex-wrap items-center justify-between gap-3 rounded-[2rem] border border-line bg-surface/85 p-4 shadow-soft backdrop-blur-xl">
-            <div>
-              <p className="text-sm text-muted">Dashboard</p>
-              <h1 className="text-2xl font-semibold text-foreground">{activeLabel}</h1>
+          {/* Topbar */}
+          <header className="sticky top-4 z-30 flex items-center justify-between gap-3 rounded-[2rem] border border-line bg-surface/85 p-3 shadow-soft backdrop-blur-xl sm:p-4">
+            <div className="flex min-w-0 items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(true)}
+                aria-label="Buka menu"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-surface text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 lg:hidden"
+              >
+                <MenuIcon className="h-5 w-5" />
+              </button>
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">Dashboard</p>
+                <h1 className="truncate text-xl font-semibold text-foreground sm:text-2xl">{activeLabel}</h1>
+              </div>
             </div>
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-              <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:flex-wrap">
-                <Link href={`/${currentUser.username}`} target="_blank" className="w-full sm:w-auto">
-                  <Button variant="secondary" className="w-full sm:w-auto">
-                    <EyeIcon className="h-4 w-4" />
-                    Buka Link
-                  </Button>
-                </Link>
-                <Button variant="secondary" className="w-full sm:w-auto" onClick={() => copyPublicLink()}>
-                  <CopyIcon className="h-4 w-4" />
-                  Salin link
+
+            <div className="flex items-center gap-2">
+              <Link href={`/${currentUser.username}`} target="_blank" className="hidden sm:inline-block">
+                <Button variant="secondary" size="sm">
+                  <EyeIcon className="h-4 w-4" />
+                  Buka Link
                 </Button>
-              </div>
-              <div className="flex w-full items-center gap-2 sm:w-auto sm:justify-end">
-                <ThemeToggle compact />
-                <Button variant="ghost" className="flex-1 sm:flex-none" onClick={() => {
-                  signOut();
-                  router.push("/auth");
-                }}>
-                  Keluar
-                </Button>
-              </div>
+              </Link>
+              <Button variant="secondary" size="sm" className="hidden sm:inline-flex" onClick={() => copyPublicLink()}>
+                <CopyIcon className="h-4 w-4" />
+                Salin link
+              </Button>
+              <ThemeToggle compact />
+              <Button variant="ghost" size="sm" className="hidden lg:inline-flex" onClick={handleSignOut}>
+                <LogoutIcon className="h-4 w-4" />
+                Keluar
+              </Button>
             </div>
           </header>
 
@@ -184,8 +251,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
 
-      <nav className="fixed inset-x-4 bottom-4 z-40 lg:hidden">
-        <Card className="grid grid-cols-3 rounded-full p-2">
+      {/* Mobile bottom navigation */}
+      <nav className="fixed inset-x-3 bottom-3 z-40 lg:hidden" aria-label="Navigasi utama">
+        <Card className="grid grid-cols-3 gap-1 rounded-[1.75rem] p-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -193,9 +261,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex flex-col items-center gap-1 rounded-full px-3 py-2 text-xs font-medium transition",
-                  active ? "bg-brand text-white" : "text-muted"
+                  "flex flex-col items-center gap-1 rounded-2xl px-2 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                  active ? "bg-brand text-white shadow-card" : "text-muted hover:bg-surface-soft"
                 )}
               >
                 <Icon className="h-5 w-5" />
@@ -205,6 +274,75 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           })}
         </Card>
       </nav>
+
+      {/* Mobile drawer (secondary actions) */}
+      {drawerOpen ? (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu penjual">
+          <div
+            className="absolute inset-0 bg-slate-900/45 backdrop-blur-sm"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <div className="absolute inset-y-0 left-0 flex w-[86%] max-w-xs flex-col gap-4 overflow-y-auto bg-surface p-5 shadow-soft">
+            <div className="flex items-center justify-between">
+              <Link href="/" className="min-w-0">
+                <BrandLockup size="md" />
+              </Link>
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(false)}
+                aria-label="Tutup menu"
+                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-line text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            </div>
+
+            {userCard}
+
+            <nav className="space-y-1.5" aria-label="Navigasi">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
+                      active ? "bg-brand text-white shadow-card" : "text-muted hover:bg-surface-soft hover:text-foreground"
+                    )}
+                  >
+                    <Icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {profileCompletion.percentage < 100 && (
+              <div className="rounded-[1.5rem] border border-line bg-surface-soft p-4">{progressBlock}</div>
+            )}
+
+            <div className="mt-auto space-y-2">
+              <Link href={`/${currentUser.username}`} target="_blank" className="block">
+                <Button variant="secondary" className="w-full">
+                  <EyeIcon className="h-4 w-4" />
+                  Buka Link
+                </Button>
+              </Link>
+              <Button variant="secondary" className="w-full" onClick={() => copyPublicLink()}>
+                <CopyIcon className="h-4 w-4" />
+                Salin link
+              </Button>
+              <Button variant="ghost" className="w-full" onClick={handleSignOut}>
+                <LogoutIcon className="h-4 w-4" />
+                Keluar
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }

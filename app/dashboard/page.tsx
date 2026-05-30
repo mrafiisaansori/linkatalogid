@@ -36,12 +36,40 @@ export default function DashboardPage() {
   const activeProducts = currentProducts.filter((item) => item.isActive);
   const hasAnalytics = currentAnalytics.views > 0 || currentAnalytics.whatsappClicks > 0;
 
+  const stats = [
+    {
+      label: "Total produk",
+      value: String(currentProducts.length),
+      hint: `${activeProducts.length} produk aktif tampil di katalog`,
+      icon: BoxIcon,
+      tone: "brand" as const
+    },
+    {
+      label: "Total views",
+      value: formatCompactNumber(currentAnalytics.views),
+      hint: "Naik tiap kali halaman publik kamu dibuka",
+      icon: ChartIcon,
+      tone: "brand" as const
+    },
+    {
+      label: "WhatsApp clicks",
+      value: formatCompactNumber(currentAnalytics.whatsappClicks),
+      hint: "Klik CTA order dari halaman publik kamu",
+      icon: WhatsAppIcon,
+      tone: "success" as const
+    }
+  ];
+
   return (
     <>
+      {/* Hero + public link */}
       <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="rounded-[2rem] bg-hero-mesh p-6 sm:p-7">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand">Halo, {currentUser.name}</p>
-          <h2 className="mt-3 max-w-2xl text-3xl font-semibold leading-tight text-foreground">
+        <Card className="relative overflow-hidden rounded-[2rem] bg-hero-mesh p-6 sm:p-7">
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand">
+            <SparkIcon className="h-4 w-4" />
+            Halo, {currentUser.name}
+          </span>
+          <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
             Semua yang kamu butuhkan untuk bagikan katalog dalam satu link sudah siap.
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
@@ -59,17 +87,25 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="flex flex-col rounded-[2rem] p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-foreground">Link publik kamu</p>
               <p className="mt-1 text-sm text-muted">Siap dibagikan ke bio Instagram, story, atau chat.</p>
             </div>
-            <Badge>Live</Badge>
+            <Badge tone="success" className="gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-success" />
+              Live
+            </Badge>
           </div>
-          <div className="mt-5 rounded-[1.5rem] border border-line bg-background p-4">
-            <p className="text-sm text-muted">Link katalog</p>
-            <p className="mt-1 font-semibold text-foreground">linkatalog.id/{currentUser.username}</p>
+          <div className="mt-5 flex items-center gap-3 rounded-[1.5rem] border border-line bg-background p-4">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+              <EyeIcon className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs text-muted">Link katalog</p>
+              <p className="truncate font-semibold text-foreground">linkatalog.id/{currentUser.username}</p>
+            </div>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <Link href={`/${currentUser.username}`} target="_blank" className="block w-full">
@@ -86,50 +122,50 @@ export default function DashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card className="rounded-[2rem] p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted">Total produk</p>
-            <BoxIcon className="h-5 w-5 text-brand" />
-          </div>
-          <p className="mt-4 text-3xl font-semibold text-foreground">{currentProducts.length}</p>
-          <p className="mt-2 text-sm text-muted">{activeProducts.length} produk aktif tampil di katalog</p>
-        </Card>
-
-        <Card className="rounded-[2rem] p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted">Total views</p>
-            <ChartIcon className="h-5 w-5 text-brand" />
-          </div>
-          <p className="mt-4 text-3xl font-semibold text-foreground">{formatCompactNumber(currentAnalytics.views)}</p>
-          <p className="mt-2 text-sm text-muted">Placeholder analytics yang akan naik saat halaman publik dibuka</p>
-        </Card>
-
-        <Card className="rounded-[2rem] p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted">WhatsApp clicks</p>
-            <WhatsAppIcon className="h-5 w-5 text-success" />
-          </div>
-          <p className="mt-4 text-3xl font-semibold text-foreground">
-            {formatCompactNumber(currentAnalytics.whatsappClicks)}
-          </p>
-          <p className="mt-2 text-sm text-muted">Klik CTA order dari halaman publik kamu</p>
-        </Card>
+      {/* Stat cards */}
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={stat.label} className="rounded-[2rem] p-5 transition hover:shadow-card">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted">{stat.label}</p>
+                <span
+                  className={
+                    stat.tone === "success"
+                      ? "flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 text-success"
+                      : "flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 text-brand"
+                  }
+                >
+                  <Icon className="h-5 w-5" />
+                </span>
+              </div>
+              <p className="mt-4 text-3xl font-semibold tracking-tight text-foreground">{stat.value}</p>
+              <p className="mt-2 text-sm leading-6 text-muted">{stat.hint}</p>
+            </Card>
+          );
+        })}
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
+      {/* Progress + latest products */}
+      <section className={`grid gap-4 ${profileCompletion.percentage < 100 ? "xl:grid-cols-[0.85fr_1.15fr]" : ""}`}>
+        {profileCompletion.percentage < 100 && (
         <Card className="rounded-[2rem] p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Progress profil</p>
               <p className="mt-1 text-sm text-muted">Lengkapi profil agar calon pembeli lebih percaya.</p>
             </div>
-            <Badge className="text-sm">
-              {profileCompletion.percentage}%
-            </Badge>
+            <Badge className="text-sm">{profileCompletion.percentage}%</Badge>
           </div>
-          <div className="mt-5 h-3 overflow-hidden rounded-full bg-surface-soft">
-            <div className="h-full rounded-full bg-brand" style={{ width: `${profileCompletion.percentage}%` }} />
+          <div
+            className="mt-5 h-3 overflow-hidden rounded-full bg-surface-soft"
+            role="progressbar"
+            aria-valuenow={profileCompletion.percentage}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${profileCompletion.percentage}%` }} />
           </div>
           <div className="mt-6 rounded-[1.5rem] border border-line bg-surface-soft p-4">
             <p className="text-sm font-medium text-foreground">
@@ -176,6 +212,7 @@ export default function DashboardPage() {
             </div>
           )}
         </Card>
+        )}
 
         <Card className="rounded-[2rem] p-6">
           <div className="flex items-center justify-between gap-4">
@@ -202,9 +239,9 @@ export default function DashboardPage() {
               currentProducts.slice(0, 4).map((product) => (
                 <div
                   key={product.id}
-                  className="flex flex-col gap-4 rounded-[1.5rem] border border-line bg-background p-4 sm:flex-row sm:items-center"
+                  className="flex flex-col gap-4 rounded-[1.5rem] border border-line bg-background p-4 transition hover:border-brand/40 sm:flex-row sm:items-center"
                 >
-                  <img src={product.imageUrl} alt={product.title} className="h-24 w-full rounded-2xl object-cover sm:w-28" />
+                  <img src={product.imageUrl} alt={product.title} className="h-24 w-full rounded-2xl object-cover sm:h-20 sm:w-20" />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-semibold text-foreground">{product.title}</p>

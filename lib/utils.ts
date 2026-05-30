@@ -76,11 +76,27 @@ export function generateId(prefix: string) {
 }
 
 export function sanitizeWhatsappNumber(value: string) {
-  return value.replace(/[^\d]/g, "");
+  const digits = value.replace(/[^\d]/g, "");
+
+  if (!digits) return "";
+  if (digits.startsWith("62")) return `0${digits.slice(2)}`;
+  if (digits.startsWith("8")) return `0${digits}`;
+
+  return digits;
+}
+
+export function toWhatsappDestinationNumber(value: string) {
+  const localNumber = sanitizeWhatsappNumber(value);
+
+  if (!localNumber) return "";
+  if (localNumber.startsWith("0")) return `62${localNumber.slice(1)}`;
+  if (localNumber.startsWith("8")) return `62${localNumber}`;
+
+  return localNumber;
 }
 
 export function getWhatsappLink(whatsapp: string, productTitle?: string) {
-  const digits = sanitizeWhatsappNumber(whatsapp);
+  const digits = toWhatsappDestinationNumber(whatsapp);
   const message = productTitle
     ? `Halo, saya mau order ${productTitle} dari Linkatalog.id`
     : "Halo, saya mau tanya katalog dari Linkatalog.id";

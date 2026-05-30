@@ -1,4 +1,5 @@
 import { Product, ProductBadge, ThemeAccent, ThemeMode, User } from "@/lib/types";
+import { sanitizeWhatsappNumber } from "@/lib/utils";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -31,7 +32,7 @@ export function serializeUser(input: AnyRecord & { account?: { email?: string | 
     username: s(input.username),
     email: (input.email as string | null | undefined) ?? input.account?.email ?? null,
     bio: s(input.bio),
-    whatsapp: s(input.whatsapp),
+    whatsapp: sanitizeWhatsappNumber(s(input.whatsapp)),
     profileImage: s(input.profileImage),
     location: s(input.location),
     themePreference: parseThemeMode(input.themePreference),

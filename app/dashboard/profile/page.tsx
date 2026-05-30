@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { accentOptions } from "@/lib/sample-data";
-import { getAccentPalette, getWhatsappLink, normalizePublicUsername } from "@/lib/utils";
+import { getAccentPalette, getWhatsappLink, normalizePublicUsername, sanitizeWhatsappNumber } from "@/lib/utils";
 import { useAppState } from "@/components/app-provider";
 import { ThemeAccent } from "@/lib/types";
 
@@ -44,7 +44,7 @@ export default function DashboardProfilePage() {
       name: currentUser.name,
       username: currentUser.username,
       bio: currentUser.bio,
-      whatsapp: currentUser.whatsapp,
+      whatsapp: sanitizeWhatsappNumber(currentUser.whatsapp),
       profileImage: currentUser.profileImage,
       location: currentUser.location,
       themeAccent: currentUser.themeAccent
@@ -202,10 +202,13 @@ export default function DashboardProfilePage() {
             <label className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Nomor WhatsApp</span>
               <Input
-                placeholder="6281234567890"
+                placeholder="082123456789"
                 value={form.whatsapp}
-                onChange={(event) => setForm((current) => ({ ...current, whatsapp: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, whatsapp: sanitizeWhatsappNumber(event.target.value) }))
+                }
               />
+              <p className="text-xs leading-5 text-muted">Input pakai format lokal, misalnya `0821...`.</p>
             </label>
             <label className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Lokasi</span>

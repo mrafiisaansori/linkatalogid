@@ -34,7 +34,14 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { DEMO_DRAFT_STORAGE_KEY, parseDemoDraft, toPublicCatalogPayload } from "@/lib/demo-draft";
 import { PublicCatalogPayload, Product, User } from "@/lib/types";
-import { cn, formatCurrency, getAccentPalette, getWhatsappLink, normalizePublicUsername } from "@/lib/utils";
+import {
+  cn,
+  formatCurrency,
+  getAccentPalette,
+  getWhatsappLink,
+  normalizePublicUsername,
+  toWhatsappDestinationNumber
+} from "@/lib/utils";
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Types
@@ -206,7 +213,7 @@ function CartDrawer({
 
   const handleCheckout = () => {
     const message = buildCartMessage(sellerName, items, totalPrice);
-    const waUrl   = `https://wa.me/${sellerWhatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+    const waUrl = `https://wa.me/${toWhatsappDestinationNumber(sellerWhatsapp)}?text=${encodeURIComponent(message)}`;
     onWhatsappClick();
     window.open(waUrl, "_blank", "noreferrer");
   };

@@ -389,9 +389,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     async (updates: Partial<User>) => {
       if (!currentUser) return { success: false, message: "Sesi belum aktif." };
 
+      const normalizedUpdates: Partial<User> = {
+        ...updates,
+        ...(typeof updates.username === "string"
+          ? { username: normalizePublicUsername(updates.username) }
+          : {}),
+        ...(typeof updates.whatsapp === "string"
+          ? { whatsapp: sanitizeWhatsappNumber(updates.whatsapp) }
+          : {})
+      };
+
       if (isDemoMode) {
         const nextUsername =
-          typeof updates.username === "string" ? normalizePublicUsername(updates.username) : currentUser.username;
+          typeof normalizedUpdates.username === "string" ? normalizedUpdates.username : currentUser.username;
 
         if (!nextUsername) {
           return { success: false, message: "Link anda wajib diisi." };
@@ -408,10 +418,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
         const nextUser: User = {
           ...currentUser,
-          ...updates,
+          ...normalizedUpdates,
           username: nextUsername,
           whatsapp:
-            typeof updates.whatsapp === "string" ? sanitizeWhatsappNumber(updates.whatsapp) : currentUser.whatsapp,
+            typeof normalizedUpdates.whatsapp === "string" ? normalizedUpdates.whatsapp : currentUser.whatsapp,
           themePreference: nextThemePreference,
           updatedAt: new Date().toISOString()
         };
@@ -435,7 +445,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json"
         },
         credentials: "same-origin",
-        body: JSON.stringify(updates)
+        body: JSON.stringify(normalizedUpdates)
       });
 
       const data = await readJson<{ success?: boolean; message?: string; data?: User }>(response);
@@ -444,8 +454,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       setCurrentUser(data.data);
-      if (updates.themePreference === "dark" || updates.themePreference === "light") {
-        setThemeState(updates.themePreference);
+      if (normalizedUpdates.themePreference === "dark" || normalizedUpdates.themePreference === "light") {
+        setThemeState(normalizedUpdates.themePreference);
       }
       pushToast({ title: "Profil diperbarui", description: "Perubahan profil sudah tersimpan.", tone: "success" });
       return { success: true, message: data.message ?? "Profil berhasil diperbarui." };

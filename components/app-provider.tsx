@@ -329,10 +329,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json"
         },
         credentials: "same-origin",
-        body: JSON.stringify({ email, code })
+        body: JSON.stringify({ email, code, password })
       });
 
-      const data = await readJson<{ success?: boolean; message?: string }>(response);
+      const data = await readJson<{
+        success?: boolean;
+        message?: string;
+        data?: SellerSessionPayload;
+      }>(response);
       if (!response.ok || !data?.success) {
         return { success: false, message: data?.message ?? "Kode verifikasi belum cocok." };
       }
@@ -343,13 +347,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
         tone: "success"
       });
 
+      // Sesi sudah dibuat oleh route verify-email (tanpa Turnstile) → pakai langsung.
+      if (data.data) {
+        applySessionPayload(data.data);
+        return { success: true, message: data.message ?? "Verifikasi email berhasil." };
+      }
+
+      // Fallback: kalau sesi belum terbentuk, coba sign-in biasa.
       if (password) {
         return signIn(email, password);
       }
 
       return { success: true, message: data.message ?? "Verifikasi email berhasil." };
     },
-    [pushToast, signIn]
+    [applySessionPayload, pushToast, signIn]
   );
 
   const resendVerificationCode = useCallback(async (email: string) => {

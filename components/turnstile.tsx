@@ -2,85 +2,86 @@
 
 import {
   forwardRef,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
   useState
 } from "react";
 
-const SCRIPT_ID = "google-recaptcha-v2";
-const SCRIPT_SRC = "https://www.google.com/recaptcha/api.js?render=explicit";
+const SCRIPT_ID = "cloudflare-turnstile";
+const SCRIPT_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
 declare global {
   interface Window {
-    grecaptcha?: {
+    turnstile?: {
       render: (
         container: HTMLElement,
         params: {
           sitekey: string;
-          theme?: "light" | "dark";
+          theme?: "light" | "dark" | "auto";
           callback?: (token: string) => void;
           "expired-callback"?: () => void;
           "error-callback"?: () => void;
         }
-      ) => number;
-      reset: (widgetId?: number) => void;
+      ) => string;
+      reset: (widgetId?: string) => void;
+      remove: (widgetId?: string) => void;
     };
-    onRecaptchaApiLoad?: () => void;
+    onTurnstileApiLoad?: () => void;
   }
 }
 
-export interface RecaptchaHandle {
-  /** Reset the widget so the user must solve it again. */
+export interface TurnstileHandle {
+  /** Reset widget supaya user harus verifikasi lagi. */
   reset: () => void;
 }
 
-interface RecaptchaProps {
-  /** Called with the token when the user solves the challenge. */
+interface TurnstileProps {
+  /** Dipanggil dengan token saat verifikasi berhasil. */
   onVerify: (token: string) => void;
-  /** Called when the token expires or is reset. */
+  /** Dipanggil saat token kedaluwarsa atau di-reset. */
   onExpire?: () => void;
 }
 
 let scriptPromise: Promise<void> | null = null;
 
-function loadRecaptchaScript(): Promise<void> {
+function loadTurnstileScript(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
-  if (window.grecaptcha?.render) return Promise.resolve();
+  if (window.turnstile?.render) return Promise.resolve();
   if (scriptPromise) return scriptPromise;
 
   scriptPromise = new Promise<void>((resolve, reject) => {
     const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
 
-    window.onRecaptchaApiLoad = () => resolve();
+    window.onTurnstileApiLoad = () => resolve();
 
     if (existing) {
-      if (window.grecaptcha?.render) resolve();
+      if (window.turnstile?.render) resolve();
       return;
     }
 
     const script = document.createElement("script");
     script.id = SCRIPT_ID;
-    script.src = `${SCRIPT_SRC}&onload=onRecaptchaApiLoad`;
+    script.src = `${SCRIPT_SRC}&onload=onTurnstileApiLoad`;
     script.async = true;
     script.defer = true;
-    script.onerror = () => reject(new Error("Gagal memuat reCAPTCHA."));
+    script.onerror = () => reject(new Error("Gagal memuat Turnstile."));
     document.head.appendChild(script);
   });
 
   return scriptPromise;
 }
 
-export const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Recaptcha(
+export const Turnstile = forwardRef<TurnstileHandle, TurnstileProps>(function Turnstile(
   { onVerify, onExpire },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const widgetIdRef = useRef<number | null>(null);
+  const widgetIdRef = useRef<string | null>(null);
   const [error, setError] = useState(false);
 
-  // Keep latest callbacks without re-rendering the widget.
+  // Simpan callback terbaru tanpa me-render ulang widget.
   const onVerifyRef = useRef(onVerify);
   const onExpireRef = useRef(onExpire);
   onVerifyRef.current = onVerify;
@@ -88,15 +89,15 @@ export const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Re
 
   useImperativeHandle(ref, () => ({
     reset() {
-      if (widgetIdRef.current !== null && window.grecaptcha) {
-        window.grecaptcha.reset(widgetIdRef.current);
+      if (widgetIdRef.current !== null && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
         onExpireRef.current?.();
       }
     }
   }));
 
   useEffect(() => {
-    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
     if (!siteKey) {
       setError(true);
       return;
@@ -104,18 +105,14 @@ export const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Re
 
     let cancelled = false;
 
-    loadRecaptchaScript()
+    loadTurnstileScript()
       .then(() => {
         if (cancelled || !containerRef.current || widgetIdRef.current !== null) return;
-        if (!window.grecaptcha?.render) return;
+        if (!window.turnstile?.render) return;
 
-        const isDark =
-          typeof document !== "undefined" &&
-          document.documentElement.classList.contains("dark");
-
-        widgetIdRef.current = window.grecaptcha.render(containerRef.current, {
+        widgetIdRef.current = window.turnstile.render(containerRef.current, {
           sitekey: siteKey,
-          theme: isDark ? "dark" : "light",
+          theme: "auto",
           callback: (token: string) => onVerifyRef.current(token),
           "expired-callback": () => onExpireRef.current?.(),
           "error-callback": () => onExpireRef.current?.()
@@ -127,16 +124,20 @@ export const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Re
 
     return () => {
       cancelled = true;
+      if (widgetIdRef.current !== null && window.turnstile?.remove) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
     };
   }, []);
 
   if (error) {
     return (
       <p className="text-xs leading-5 text-warning">
-        reCAPTCHA tidak dapat dimuat. Periksa koneksi atau konfigurasi site key.
+        Verifikasi Turnstile tidak dapat dimuat. Periksa koneksi atau konfigurasi site key.
       </p>
     );
   }
 
-  return <div ref={containerRef} className="min-h-[78px]" />;
+  return <div ref={containerRef} className="min-h-[65px]" />;
 });

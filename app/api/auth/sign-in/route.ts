@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { USER_SESSION_COOKIE, createSessionToken, getUserSessionCookieOptions } from "@/lib/auth/session";
 import { backendFetch } from "@/lib/server/backend-client";
-import { verifyRecaptcha } from "@/lib/server/recaptcha";
-import { isRecaptchaRequiredForHost } from "@/lib/recaptcha-env";
+import { verifyTurnstile } from "@/lib/server/turnstile";
+import { isTurnstileRequiredForHost } from "@/lib/turnstile-env";
 
 interface SignInResponse {
   success: boolean;
@@ -19,13 +19,13 @@ interface SignInResponse {
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
 
-  const { recaptchaToken, ...credentials } = (body as Record<string, unknown> | null) ?? {};
+  const { turnstileToken, ...credentials } = (body as Record<string, unknown> | null) ?? {};
 
-  // reCAPTCHA hanya diverifikasi di host production; di lokal dilewati.
-  if (isRecaptchaRequiredForHost(request.headers.get("host"))) {
-    const recaptcha = await verifyRecaptcha(recaptchaToken);
-    if (!recaptcha.ok) {
-      return NextResponse.json({ success: false, message: recaptcha.message }, { status: 400 });
+  // Turnstile hanya diverifikasi di host production; di lokal dilewati.
+  if (isTurnstileRequiredForHost(request.headers.get("host"))) {
+    const turnstile = await verifyTurnstile(turnstileToken);
+    if (!turnstile.ok) {
+      return NextResponse.json({ success: false, message: turnstile.message }, { status: 400 });
     }
   }
 

@@ -1,9 +1,9 @@
 /**
- * Penentuan apakah reCAPTCHA perlu diaktifkan berdasarkan host.
+ * Penentuan apakah Cloudflare Turnstile perlu diaktifkan berdasarkan host.
  *
- * Aturan: di lingkungan lokal (localhost / IP LAN privat) reCAPTCHA DILEWATI
+ * Aturan: di lingkungan lokal (localhost / IP LAN privat) Turnstile DILEWATI
  * supaya pengembangan tidak terganggu. Di domain production (mis. linkatalog.id)
- * reCAPTCHA WAJIB.
+ * Turnstile WAJIB.
  *
  * Helper ini tidak boleh mengimpor modul server-only agar bisa dipakai
  * di komponen klien maupun di route handler.
@@ -38,7 +38,7 @@ export function isLocalHost(host: string | null | undefined): boolean {
   return false;
 }
 
-/** True jika reCAPTCHA wajib diverifikasi untuk host ini (yaitu non-lokal). */
-export function isRecaptchaRequiredForHost(host: string | null | undefined): boolean {
+/** True jika Turnstile wajib diverifikasi untuk host ini (yaitu non-lokal). */
+export function isTurnstileRequiredForHost(host: string | null | undefined): boolean {
   return !isLocalHost(host);
 }

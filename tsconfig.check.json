@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "incremental": false,
+    "noEmit": true
+  },
+  "include": ["app/**/*.ts","app/**/*.tsx","components/**/*.tsx","components/**/*.ts","lib/**/*.ts","next-env.d.ts"],
+  "exclude": ["node_modules",".next",".next-build",".next-dev",".next-verify",".next-verify-restapi",".next-verify-vercel",".verify-build-20260424-094704"]
+}

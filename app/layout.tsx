@@ -1,11 +1,37 @@
 import type { Metadata } from "next";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 import { AppProvider } from "@/components/app-provider";
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "LINK KATALOG",
-  description: "Katalog jualan dalam 1 link. Tampilkan produk atau jasa, lalu terima order langsung via WhatsApp.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`
+  },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    locale: "id_ID"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true }
+  },
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",
@@ -26,7 +52,7 @@ function ThemeBootstrapScript() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" className="scroll-smooth" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <ThemeBootstrapScript />
         <AppProvider>{children}</AppProvider>

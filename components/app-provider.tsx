@@ -41,12 +41,13 @@ interface AppContextValue {
   isHydrated: boolean;
   toasts: ToastMessage[];
   setTheme: (theme: ThemeMode) => void;
-  signIn: (email: string, password: string) => Promise<AuthActionResult>;
+  signIn: (email: string, password: string, recaptchaToken?: string) => Promise<AuthActionResult>;
   signUp: (input: {
     name: string;
     username: string;
     email: string;
     password: string;
+    recaptchaToken?: string;
   }) => Promise<AuthActionResult>;
   verifyEmailCode: (email: string, code: string, password?: string) => Promise<AuthActionResult>;
   resendVerificationCode: (email: string) => Promise<AuthActionResult>;
@@ -245,14 +246,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   const signIn = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, recaptchaToken?: string) => {
       const response = await fetch("/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         credentials: "same-origin",
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, recaptchaToken })
       });
       const data = await readJson<{
         success?: boolean;
@@ -279,14 +280,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   const signUp = useCallback(
-    async ({ name, username, email, password }: { name: string; username: string; email: string; password: string }) => {
+    async ({ name, username, email, password, recaptchaToken }: { name: string; username: string; email: string; password: string; recaptchaToken?: string }) => {
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         credentials: "same-origin",
-        body: JSON.stringify({ name, username, email, password })
+        body: JSON.stringify({ name, username, email, password, recaptchaToken })
       });
       const data = await readJson<{
         success?: boolean;

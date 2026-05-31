@@ -274,3 +274,21 @@ export function MinusIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function InstagramIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={base(className)}>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <circle cx="12" cy="12" r="3.75" />
+      <circle cx="17.1" cy="6.9" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function TikTokIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" className={base(className)}>
+      <path d="M16.5 3c.31 1.92 1.47 3.36 3.5 3.62v2.45c-1.18.05-2.27-.27-3.3-.86v5.45c0 3.46-2.6 5.79-5.6 5.79-2.5 0-4.6-1.78-4.6-4.45 0-2.85 2.36-4.66 5.27-4.18v2.6c-.32-.1-.7-.16-1.1-.16-1.1 0-1.93.78-1.93 1.85 0 1.1.85 1.85 1.9 1.85 1.27 0 2.16-.97 2.16-2.55V3h3.2Z" />
+    </svg>
+  );
+}

@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { Recaptcha, RecaptchaHandle } from "@/components/recaptcha";
+import { isRecaptchaRequiredForHost } from "@/lib/recaptcha-env";
 import { ArrowRightIcon, CheckIcon, SparkIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -46,6 +48,20 @@ export default function AuthPage() {
     email: "",
     password: ""
   });
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  // Default aktif supaya production aman sejak render pertama; di lokal dimatikan
+  // setelah mount via efek di bawah.
+  const [recaptchaEnabled, setRecaptchaEnabled] = useState(true);
+  const recaptchaRef = useRef<RecaptchaHandle | null>(null);
+
+  useEffect(() => {
+    setRecaptchaEnabled(isRecaptchaRequiredForHost(window.location.hostname));
+  }, []);
+
+  function resetRecaptcha() {
+    recaptchaRef.current?.reset();
+    setRecaptchaToken("");
+  }
 
   useEffect(() => {
     if (isHydrated && currentUser) {
@@ -120,17 +136,20 @@ export default function AuthPage() {
 
     const result =
       tab === "signin"
-        ? await signIn(form.email, form.password)
+        ? await signIn(form.email, form.password, recaptchaToken)
         : await signUp({
             name: form.name,
             username: form.username,
             email: form.email,
-            password: form.password
+            password: form.password,
+            recaptchaToken
           });
 
     setLoading(false);
 
     if (!result.success) {
+      // Token reCAPTCHA hanya sekali pakai — minta verifikasi ulang.
+      resetRecaptcha();
       if (result.requiresVerification && result.email) {
         setVerificationEmail(result.email);
         setStep("verify");
@@ -225,6 +244,7 @@ export default function AuthPage() {
                   setTab("signin");
                   setStep("form");
                   setError("");
+                  resetRecaptcha();
                 }}
               >
                 Sign in
@@ -236,6 +256,7 @@ export default function AuthPage() {
                   setTab("signup");
                   setStep("form");
                   setError("");
+                  resetRecaptcha();
                 }}
               >
                 Sign up
@@ -389,7 +410,28 @@ export default function AuthPage() {
                 </div>
               ) : null}
 
-              <Button type="submit" className="w-full" size="lg" loading={loading}>
+              {recaptchaEnabled ? (
+                <div className="space-y-2">
+                  <Recaptcha
+                    ref={recaptchaRef}
+                    onVerify={(token) => setRecaptchaToken(token)}
+                    onExpire={() => setRecaptchaToken("")}
+                  />
+                  {!recaptchaToken ? (
+                    <p className="text-xs leading-5 text-muted">
+                      Selesaikan verifikasi reCAPTCHA dulu untuk mengaktifkan tombol.
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
+
+              <Button
+                type="submit"
+                className="w-full"
+                size="lg"
+                loading={loading}
+                disabled={recaptchaEnabled && !recaptchaToken}
+              >
                 {tab === "signin" ? "Masuk sekarang" : "Buat akun gratis"}
                 {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
               </Button>

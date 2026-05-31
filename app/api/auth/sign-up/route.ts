@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { backendFetch } from "@/lib/server/backend-client";
+import { verifyRecaptcha } from "@/lib/server/recaptcha";
+import { isRecaptchaRequiredForHost } from "@/lib/recaptcha-env";
 
 interface SignUpResponse {
   success: boolean;
@@ -15,7 +17,21 @@ interface SignUpResponse {
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
-  const result = await backendFetch<SignUpResponse>("/auth/sign-up", { method: "POST", body });
+
+  const { recaptchaToken, ...payload } = (body as Record<string, unknown> | null) ?? {};
+
+  // reCAPTCHA hanya diverifikasi di host production; di lokal dilewati.
+  if (isRecaptchaRequiredForHost(request.headers.get("host"))) {
+    const recaptcha = await verifyRecaptcha(recaptchaToken);
+    if (!recaptcha.ok) {
+      return NextResponse.json({ success: false, message: recaptcha.message }, { status: 400 });
+    }
+  }
+
+  const result = await backendFetch<SignUpResponse>("/auth/sign-up", {
+    method: "POST",
+    body: payload
+  });
 
   if (result.data?.requiresVerification) {
     return NextResponse.json(

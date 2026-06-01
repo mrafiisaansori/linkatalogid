@@ -22,9 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
-const PAGE_TITLE = "Katalog Online untuk Jualan Lebih Rapi | Checkout via WhatsApp";
+const PAGE_TITLE = "Link Katalog Gratis untuk Jualan Lebih Rapi | Checkout via WhatsApp";
 const PAGE_DESCRIPTION =
-  "Buat katalog produk online dalam satu link. Pelanggan pilih produk, masukkan ke keranjang, lalu checkout langsung via WhatsApp. Cocok untuk UMKM, reseller, dan toko online.";
+  "Buat link katalog gratis dalam satu halaman. Pelanggan pilih produk, masukkan ke keranjang, lalu checkout langsung via WhatsApp. Cocok untuk UMKM, reseller, dan toko online.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
 const trustPoints = ["UMKM", "Reseller", "Toko rumahan", "Penjual online"];
 
 const problems = [
-  "Kirim foto dan harga satu per satu lewat chat — melelahkan dan makan waktu.",
+  "Kirim foto dan harga satu per satu lewat chat - melelahkan dan makan waktu.",
   "Pelanggan bingung memilih karena tak ada etalase yang jelas.",
   "Rekap pesanan berantakan, gampang salah hitung dan salah catat.",
   "Belum punya katalog yang rapi dan layak dibagikan ke pelanggan."
@@ -95,7 +95,7 @@ const features = [
   {
     icon: BoltIcon,
     title: "Gampang dikelola",
-    desc: "Tambah, ubah, atau hapus produk kapan saja — tanpa perlu keahlian teknis."
+    desc: "Tambah, ubah, atau hapus produk kapan saja - tanpa perlu keahlian teknis."
   },
   {
     icon: GlobeIcon,
@@ -127,7 +127,7 @@ const benefits = [
   {
     icon: ClockIcon,
     title: "Hemat waktu melayani",
-    desc: "Stop mengirim foto dan harga satu per satu — pelanggan cukup buka katalog."
+    desc: "Stop mengirim foto dan harga satu per satu - pelanggan cukup buka katalog."
   },
   {
     icon: ShieldIcon,
@@ -225,7 +225,7 @@ export default function HomePage() {
       <MarketingHeader />
 
       <main>
-        {/* ── Hero ───────────────────────────────────────────────────────── */}
+        {/* Hero */}
         <section className="relative mx-auto max-w-7xl overflow-hidden px-4 pb-16 pt-8 sm:px-6 lg:px-8 lg:pb-24">
           <div className="pointer-events-none absolute left-0 top-0 h-56 w-56 rounded-full bg-brand/12 blur-3xl" />
           <div className="pointer-events-none absolute right-0 top-16 h-52 w-52 rounded-full bg-sky-500/10 blur-3xl" />
@@ -234,20 +234,20 @@ export default function HomePage() {
             <div className="space-y-7">
               <div className="landing-reveal inline-flex items-center gap-2 rounded-full border border-brand/15 bg-surface/90 px-4 py-2 text-sm text-muted shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur">
                 <SparkIcon className="h-4 w-4 text-brand" />
-                Katalog online untuk UMKM &amp; penjual online
+                Link katalog gratis untuk UMKM &amp; penjual online
               </div>
 
               <div className="landing-reveal landing-reveal-delay-1 space-y-5">
                 <h1 className="max-w-3xl text-4xl font-semibold leading-[1.1] text-foreground sm:text-5xl lg:text-[3.4rem]">
-                  Jualan cukup satu link,{" "}
+                  Buat link katalog gratis,{" "}
                   <span className="relative inline-block">
                     order masuk via WhatsApp
                     <span className="absolute inset-x-1 bottom-1 -z-10 h-4 rounded-full bg-brand/15 blur-md sm:bottom-2 sm:h-5" />
                   </span>
                 </h1>
                 <p className="max-w-xl text-lg leading-8 text-muted sm:text-xl">
-                  Tampilkan seluruh produk dalam satu katalog online yang rapi. Pelanggan tinggal pilih, masukkan ke
-                  keranjang, lalu checkout lewat WhatsApp — tanpa ribet bikin website.
+                  Tampilkan seluruh produk dalam satu halaman katalog yang rapi. Pelanggan tinggal pilih, masukkan ke
+                  keranjang, lalu checkout lewat WhatsApp - tanpa ribet bikin website.
                 </p>
               </div>
 
@@ -314,8 +314,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* ── Problem / Solution ─────────────────────────────────────────── */}
+        {/* Problem / Solution */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Kenapa Linkatalog</p>
@@ -364,8 +363,7 @@ export default function HomePage() {
             </Card>
           </div>
         </section>
-
-        {/* ── Fitur ──────────────────────────────────────────────────────── */}
+        {/* Fitur */}
         <section id="fitur" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Fitur utama</p>
@@ -373,7 +371,7 @@ export default function HomePage() {
               Semua kebutuhan jualan online kamu, dalam satu link
             </h2>
             <p className="mt-3 text-base leading-7 text-muted">
-              Mulai dari memajang produk, mengatur keranjang, sampai checkout via WhatsApp — semuanya rapi dan mudah
+              Mulai dari memajang produk, mengatur keranjang, sampai checkout via WhatsApp - semuanya rapi dan mudah
               dipakai.
             </p>
           </div>
@@ -397,8 +395,7 @@ export default function HomePage() {
             })}
           </div>
         </section>
-
-        {/* ── Cara kerja ─────────────────────────────────────────────────── */}
+        {/* Cara kerja */}
         <section id="cara-kerja" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Cara kerja</p>
@@ -426,8 +423,7 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-
-        {/* ── Preview katalog ────────────────────────────────────────────── */}
+        {/* Preview katalog */}
         <section id="preview" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
             <div className="space-y-6">
@@ -437,7 +433,7 @@ export default function HomePage() {
               </h2>
               <p className="text-base leading-7 text-muted">
                 Halaman katalog publik menampilkan profil toko, kategori, pencarian, kartu produk berikut harga, tombol
-                tambah ke keranjang, sampai checkout via WhatsApp — semuanya dalam tampilan mobile yang nyaman.
+                tambah ke keranjang, sampai checkout via WhatsApp - semuanya dalam tampilan mobile yang nyaman.
               </p>
               <ul className="space-y-3">
                 {[
@@ -465,13 +461,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* ── Benefit untuk seller ───────────────────────────────────────── */}
+        {/* Benefit untuk seller */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Manfaat untuk seller</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-              Bukan sekadar etalase — bikin jualan lebih efisien
+              Bukan sekadar etalase - bikin jualan lebih efisien
             </h2>
             <p className="mt-3 text-base leading-7 text-muted">
               Katalog yang rapi menghemat waktu, menekan salah pesan, dan membuat pelanggan lebih nyaman berbelanja.
@@ -497,8 +492,7 @@ export default function HomePage() {
             })}
           </div>
         </section>
-
-        {/* ── FAQ ────────────────────────────────────────────────────────── */}
+        {/* FAQ */}
         <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">FAQ</p>
@@ -522,8 +516,7 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-
-        {/* ── CTA akhir ──────────────────────────────────────────────────── */}
+        {/* CTA akhir */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <Card className="landing-reveal rounded-[2rem] bg-hero-mesh p-7 sm:p-10">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -551,8 +544,7 @@ export default function HomePage() {
       </main>
 
       <MarketingFooter />
-
-      {/* ── Sticky CTA (mobile) ──────────────────────────────────────────── */}
+      {/* Sticky CTA (mobile) */}
       <div className="sticky bottom-4 z-30 px-4 md:hidden">
         <Card className="mx-auto flex max-w-md items-center justify-between rounded-full px-4 py-3">
           <div>
@@ -565,3 +557,4 @@ export default function HomePage() {
     </div>
   );
 }
+

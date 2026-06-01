@@ -32,11 +32,6 @@ export function MarketingFooter() {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/auth" className="transition hover:text-foreground">
-                Masuk / Daftar
-              </Link>
-            </li>
           </ul>
         </nav>
 
@@ -81,7 +76,7 @@ export function MarketingFooter() {
       <div className="border-t border-line/70">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:px-6 lg:px-8">
           <p>
-            © {year} {SITE_NAME}. Katalog online untuk UMKM, seller &amp; toko online.
+            Copyright {year} {SITE_NAME}. Katalog online untuk UMKM, seller &amp; toko online.
           </p>
           <p className="flex items-center gap-1.5">
             Pesanan rapi lewat checkout WhatsApp

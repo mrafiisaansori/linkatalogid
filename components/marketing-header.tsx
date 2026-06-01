@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
 import { useAppState } from "@/components/app-provider";
 
 const navItems = [
-  { href: "#fitur", label: "Fitur" },
-  { href: "#cara-kerja", label: "Cara kerja" },
-  { href: "#preview", label: "Preview" },
-  { href: "#faq", label: "FAQ" }
+  { href: "/#fitur", label: "Fitur" },
+  { href: "/#cara-kerja", label: "Cara kerja" },
+  { href: "/#preview", label: "Preview" },
+  { href: "/blog", label: "Blog" },
+  { href: "/#faq", label: "FAQ" }
 ];
 
 export function MarketingHeader() {
@@ -33,9 +34,9 @@ export function MarketingHeader() {
 
           <nav className="hidden items-center gap-7 text-sm text-muted md:flex">
             {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="transition hover:text-foreground">
+              <Link key={item.href} href={item.href} className="transition hover:text-foreground">
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -71,14 +72,14 @@ export function MarketingHeader() {
       >
         <div className="flex flex-col gap-3">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="rounded-2xl px-4 py-3 text-sm text-foreground transition hover:bg-surface-soft"
               onClick={() => setOpen(false)}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
           <Link href={currentUser ? "/dashboard" : "/auth"} onClick={() => setOpen(false)}>
             <Button variant="secondary" className="w-full">

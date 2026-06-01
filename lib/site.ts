@@ -7,13 +7,15 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://linkatalog
 
 export const SITE_NAME = "Linkatalog";
 
-export const SITE_TAGLINE = "Katalog online untuk jualan lebih rapi";
+export const SITE_TAGLINE = "Link katalog gratis untuk jualan lebih rapi";
 
 export const SITE_DESCRIPTION =
-  "Buat katalog produk online yang mudah dibagikan ke pelanggan lewat satu link. Pelanggan bisa memilih produk, memasukkannya ke keranjang, lalu checkout langsung via WhatsApp. Cocok untuk UMKM, reseller, toko online, dan merchant.";
+  "Buat link katalog gratis untuk produk dan jasa dalam satu halaman yang mudah dibagikan. Pelanggan bisa memilih produk, memasukkannya ke keranjang, lalu checkout langsung via WhatsApp. Cocok untuk UMKM, reseller, toko online, dan merchant.";
 
 export const SITE_KEYWORDS = [
+  "link katalog gratis",
   "katalog online",
+  "katalog online gratis",
   "katalog produk online",
   "link katalog",
   "katalog jualan",
@@ -25,7 +27,8 @@ export const SITE_KEYWORDS = [
   "keranjang belanja",
   "katalog produk untuk WhatsApp",
   "link produk untuk pelanggan",
-  "katalog digital untuk seller"
+  "katalog digital untuk seller",
+  "katalog WhatsApp gratis"
 ];
 
 /** Navigasi utama (anchor diawali "/" agar tetap bekerja dari halaman mana pun). */
@@ -33,6 +36,7 @@ export const FOOTER_NAV = [
   { href: "/#fitur", label: "Fitur" },
   { href: "/#cara-kerja", label: "Cara kerja" },
   { href: "/#preview", label: "Preview katalog" },
+  { href: "/blog", label: "Blog" },
   { href: "/#faq", label: "FAQ" }
 ];
 

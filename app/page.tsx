@@ -20,7 +20,7 @@ import { MarketingFooter } from "@/components/marketing-footer";
 import { MarketingHeader } from "@/components/marketing-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 const PAGE_TITLE = "Katalog Online untuk Jualan Lebih Rapi | Checkout via WhatsApp";
 const PAGE_DESCRIPTION =
@@ -37,12 +37,21 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
-    locale: "id_ID"
+    locale: "id_ID",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: PAGE_TITLE
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
     title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION
+    description: PAGE_DESCRIPTION,
+    images: ["/og-image.png"]
   }
 };
 
@@ -174,6 +183,16 @@ const websiteJsonLd = {
   inLanguage: "id-ID"
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
+  description: SITE_DESCRIPTION,
+  sameAs: SOCIAL_LINKS.map((link) => link.href)
+};
+
 const appJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -199,6 +218,7 @@ export default function HomePage() {
   return (
     <div className="page-shell min-h-screen overflow-x-clip">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 

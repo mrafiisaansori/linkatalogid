@@ -40,12 +40,8 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true }
-  },
-  icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png"
   }
+  // Favicon ditangani otomatis oleh file app/favicon.ico, app/icon.png, app/apple-icon.png
 };
 
 function ThemeBootstrapScript() {

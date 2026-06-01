@@ -199,7 +199,7 @@ export default function AuthPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="rounded-[2rem] border-brand/15 bg-gradient-to-br from-brand/18 via-brand/10 to-sky-500/10 p-8 text-foreground dark:border-white/10 dark:from-brand/22 dark:via-brand/16 dark:to-sky-500/14 dark:text-white">
+          <Card className="hidden rounded-[2rem] border-brand/15 bg-gradient-to-br from-brand/18 via-brand/10 to-sky-500/10 p-8 text-foreground lg:block dark:border-white/10 dark:from-brand/22 dark:via-brand/16 dark:to-sky-500/14 dark:text-white">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm text-foreground shadow-soft dark:bg-white/10 dark:text-white dark:shadow-none">
               <SparkIcon className="h-4 w-4" />
               Siap dipakai untuk demo

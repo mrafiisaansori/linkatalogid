@@ -6,7 +6,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
 import { Turnstile, TurnstileHandle } from "@/components/turnstile";
 import { isTurnstileRequiredForHost } from "@/lib/turnstile-env";
-import { ArrowRightIcon, CheckIcon, SparkIcon } from "@/components/icons";
+import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -200,11 +200,7 @@ export default function AuthPage() {
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <Card className="hidden rounded-[2rem] border-brand/15 bg-gradient-to-br from-brand/18 via-brand/10 to-sky-500/10 p-8 text-foreground lg:block dark:border-white/10 dark:from-brand/22 dark:via-brand/16 dark:to-sky-500/14 dark:text-white">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm text-foreground shadow-soft dark:bg-white/10 dark:text-white dark:shadow-none">
-              <SparkIcon className="h-4 w-4" />
-              Siap dipakai untuk demo
-            </div>
-            <h1 className="mt-6 text-4xl font-semibold leading-tight">
+            <h1 className="text-4xl font-semibold leading-tight">
               Halaman katalog personal yang kelihatan profesional sejak hari pertama.
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-7 text-muted dark:text-white/80">

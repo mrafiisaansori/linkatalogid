@@ -44,6 +44,31 @@ import {
 } from "@/lib/utils";
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   Helpers item fleksibel (produk & jasa)
+───────────────────────────────────────────────────────────────────────────── */
+
+// Hanya item dengan harga pasti (>0) yang bisa masuk keranjang.
+// Item "mulai dari", "hubungi untuk harga", atau jasa diarahkan langsung via WhatsApp.
+function canAddToCart(product: { priceMode?: string; price?: number }): boolean {
+  const mode = product.priceMode ?? "fixed";
+  return mode === "fixed" && (product.price ?? 0) > 0;
+}
+
+// Label tombol aksi sesuai jenis item/jasa.
+function ctaLabel(product: { ctaType?: string }): string {
+  switch (product.ctaType) {
+    case "booking":
+      return "Booking Sekarang";
+    case "consult":
+      return "Konsultasi Gratis";
+    case "quote":
+      return "Minta Penawaran";
+    default:
+      return "Pesan Sekarang";
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    Types
 ───────────────────────────────────────────────────────────────────────────── */
 
@@ -496,9 +521,21 @@ function ProductDetailSheet({
             </div>
 
             {/* Price */}
-            <div>
-              {product.price > 0 ? (
-                <p className="text-2xl font-bold text-foreground">{formatCurrency(product.price)}</p>
+            <div className="flex items-baseline gap-2">
+              {product.priceMode === "custom" ? (
+                <p className="text-base font-medium text-muted">Hubungi untuk harga</p>
+              ) : product.price > 0 ? (
+                <>
+                  {product.priceMode === "from" ? (
+                    <span className="text-sm text-muted">Mulai dari</span>
+                  ) : null}
+                  <p className="text-2xl font-bold text-foreground">{formatCurrency(product.price)}</p>
+                  {product.compareAtPrice && product.compareAtPrice > product.price ? (
+                    <span className="text-base text-muted line-through">
+                      {formatCurrency(product.compareAtPrice)}
+                    </span>
+                  ) : null}
+                </>
               ) : (
                 <p className="text-base font-medium text-muted">Harga sesuai kesepakatan</p>
               )}
@@ -510,23 +547,25 @@ function ProductDetailSheet({
             )}
 
             {/* Action buttons */}
-            <div className="grid grid-cols-2 gap-3 pb-2 pt-1">
-              <button
-                type="button"
-                onClick={() => onAddToCart(product)}
-                className={cn(
-                  "flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold transition active:scale-95",
-                  cartQty > 0
-                    ? "border border-brand/40 bg-brand/10 text-brand"
-                    : "border border-line bg-background text-foreground hover:bg-surface-soft"
-                )}
-              >
-                <CartIcon className="h-4 w-4" />
-                {cartQty > 0 ? `Di keranjang ×${cartQty}` : "Ke Keranjang"}
-              </button>
+            <div className={cn("grid gap-3 pb-2 pt-1", canAddToCart(product) ? "grid-cols-2" : "grid-cols-1")}>
+              {canAddToCart(product) ? (
+                <button
+                  type="button"
+                  onClick={() => onAddToCart(product)}
+                  className={cn(
+                    "flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold transition active:scale-95",
+                    cartQty > 0
+                      ? "border border-brand/40 bg-brand/10 text-brand"
+                      : "border border-line bg-background text-foreground hover:bg-surface-soft"
+                  )}
+                >
+                  <CartIcon className="h-4 w-4" />
+                  {cartQty > 0 ? `Di keranjang ×${cartQty}` : "Ke Keranjang"}
+                </button>
+              ) : null}
               {user.whatsapp && (
                 <a
-                  href={getWhatsappLink(user.whatsapp, product.title)}
+                  href={getWhatsappLink(user.whatsapp, product.title, product.ctaType)}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white transition active:scale-95"
@@ -534,7 +573,7 @@ function ProductDetailSheet({
                   onClick={() => onWhatsappClick(product.id)}
                 >
                   <WhatsAppIcon className="h-4 w-4" />
-                  Pesan Sekarang
+                  {ctaLabel(product)}
                 </a>
               )}
             </div>
@@ -683,32 +722,47 @@ function CatalogProductCard({
               {/* Price + Actions */}
               <div className="mt-2.5 space-y-2 sm:mt-3">
                 <p className="text-base font-bold text-foreground sm:text-lg">
-                  {product.price > 0
-                    ? formatCurrency(product.price)
-                    : <span className="text-xs font-medium text-muted">Sesuai kesepakatan</span>
-                  }
+                  {product.priceMode === "custom" ? (
+                    <span className="text-xs font-medium text-muted">Hubungi untuk harga</span>
+                  ) : product.price > 0 ? (
+                    <span className="inline-flex items-baseline gap-1.5">
+                      {product.priceMode === "from" ? (
+                        <span className="text-[10px] font-medium text-muted sm:text-xs">Mulai</span>
+                      ) : null}
+                      {formatCurrency(product.price)}
+                      {product.compareAtPrice && product.compareAtPrice > product.price ? (
+                        <span className="text-xs font-normal text-muted line-through">
+                          {formatCurrency(product.compareAtPrice)}
+                        </span>
+                      ) : null}
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium text-muted">Sesuai kesepakatan</span>
+                  )}
                 </p>
 
-                <div className="grid grid-cols-2 gap-1.5">
-                  {/* Keranjang — icon only */}
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
-                    className={cn(
-                      "inline-flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition active:scale-95 sm:rounded-full sm:py-2.5",
-                      cartQty > 0
-                        ? "border border-brand/40 bg-brand/10 text-brand"
-                        : "border border-line bg-background text-foreground hover:border-brand/40 hover:bg-brand/5 hover:text-brand"
-                    )}
-                  >
-                    <CartIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
-                    {cartQty > 0 && <span className="text-[10px] font-bold sm:text-xs">×{cartQty}</span>}
-                  </button>
+                <div className={cn("grid gap-1.5", canAddToCart(product) ? "grid-cols-2" : "grid-cols-1")}>
+                  {/* Keranjang — icon only (hanya untuk harga pasti) */}
+                  {canAddToCart(product) ? (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
+                      className={cn(
+                        "inline-flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition active:scale-95 sm:rounded-full sm:py-2.5",
+                        cartQty > 0
+                          ? "border border-brand/40 bg-brand/10 text-brand"
+                          : "border border-line bg-background text-foreground hover:border-brand/40 hover:bg-brand/5 hover:text-brand"
+                      )}
+                    >
+                      <CartIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                      {cartQty > 0 && <span className="text-[10px] font-bold sm:text-xs">×{cartQty}</span>}
+                    </button>
+                  ) : null}
 
                   {/* Pesan WA */}
                   {user.whatsapp ? (
                     <a
-                      href={getWhatsappLink(user.whatsapp, product.title)}
+                      href={getWhatsappLink(user.whatsapp, product.title, product.ctaType)}
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => { e.stopPropagation(); onWhatsappClick(product.id); }}
@@ -716,7 +770,13 @@ function CatalogProductCard({
                       style={{ backgroundColor: "#25D366" }}
                     >
                       <WhatsAppIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
-                      Pesan
+                      {product.ctaType === "booking"
+                        ? "Booking"
+                        : product.ctaType === "consult"
+                          ? "Konsultasi"
+                          : product.ctaType === "quote"
+                            ? "Penawaran"
+                            : "Pesan"}
                     </a>
                   ) : (
                     <div className="flex items-center justify-center rounded-xl border border-line bg-surface-soft py-2 text-[10px] text-muted sm:rounded-full">
@@ -827,6 +887,8 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
 
   // ── Add to cart + mini toast ───────────────────────────────────────────────
   const handleAddToCart = useCallback((product: Product) => {
+    // Pengaman: hanya produk berharga pasti yang boleh masuk keranjang.
+    if (!canAddToCart(product)) return;
     cart.addItem(product);
     setAddedToast(product.title);
     window.setTimeout(() => setAddedToast(null), 2000);

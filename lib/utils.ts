@@ -95,13 +95,53 @@ export function toWhatsappDestinationNumber(value: string) {
   return localNumber;
 }
 
-export function getWhatsappLink(whatsapp: string, productTitle?: string) {
+export function getWhatsappLink(whatsapp: string, productTitle?: string, ctaType?: string) {
   const digits = toWhatsappDestinationNumber(whatsapp);
-  const message = productTitle
-    ? `Halo, saya mau order ${productTitle} dari Linkatalog.id`
-    : "Halo, saya mau tanya katalog dari Linkatalog.id";
-
+  const message = buildWhatsappMessage(productTitle, ctaType);
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+}
+
+/**
+ * Template pesan WhatsApp yang menyesuaikan jenis aksi (produk/jasa).
+ * Multi-baris, sopan, dan jelas agar penjual langsung paham maksud pembeli.
+ */
+export function buildWhatsappMessage(productTitle?: string, ctaType?: string): string {
+  const footer = "\n\n(Dikirim lewat katalog Linkatalog.id)";
+
+  // Tanpa item spesifik (tombol kontak umum di halaman).
+  if (!productTitle) {
+    return `Halo, saya melihat katalog Anda dan tertarik untuk mengetahui lebih lanjut. Boleh dibantu informasinya?${footer}`;
+  }
+
+  const item = `*${productTitle}*`;
+
+  switch (ctaType) {
+    case "booking":
+      return (
+        `Halo, saya ingin melakukan booking untuk:\n${item}\n\n` +
+        `Boleh tahu jadwal yang masih tersedia? Saya siap menyesuaikan waktu dan melengkapi data yang diperlukan. Terima kasih!` +
+        footer
+      );
+    case "consult":
+      return (
+        `Halo, saya tertarik dan ingin berkonsultasi dulu mengenai:\n${item}\n\n` +
+        `Boleh dibantu penjelasan dan saran yang sesuai dengan kebutuhan saya? Terima kasih!` +
+        footer
+      );
+    case "quote":
+      return (
+        `Halo, saya ingin meminta penawaran untuk:\n${item}\n\n` +
+        `Mohon informasi estimasi harga, ketentuan, serta estimasi waktu pengerjaannya ya. Terima kasih!` +
+        footer
+      );
+    default:
+      // Order produk
+      return (
+        `Halo, saya ingin memesan:\n${item}\n\n` +
+        `Apakah masih tersedia? Mohon info total harga dan cara pembayaran/pengirimannya ya. Terima kasih!` +
+        footer
+      );
+  }
 }
 
 export function getAccentPalette(accent: ThemeAccent) {

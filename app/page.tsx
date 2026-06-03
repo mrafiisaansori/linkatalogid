@@ -22,9 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
-const PAGE_TITLE = "Link Katalog Gratis untuk Jualan Lebih Rapi | Checkout via WhatsApp";
+const PAGE_TITLE = "Linkatalog — Etalase Online Profesional untuk Produk & Jasa | Order via WhatsApp";
 const PAGE_DESCRIPTION =
-  "Buat link katalog gratis dalam satu halaman. Pelanggan pilih produk, masukkan ke keranjang, lalu checkout langsung via WhatsApp. Cocok untuk UMKM, reseller, dan toko online.";
+  "Ubah followers jadi pesanan. Satu link katalog profesional untuk produk maupun jasa, pelanggan tinggal pilih lalu order via WhatsApp. Semua fitur gratis, tanpa biaya tersembunyi.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   }
 };
 
-const trustPoints = ["UMKM", "Reseller", "Toko rumahan", "Penjual online"];
+const trustPoints = ["UMKM & toko rumahan", "Reseller", "Penyedia jasa & freelancer", "Penjual online"];
 
 const problems = [
   "Kirim foto dan harga satu per satu lewat chat - melelahkan dan makan waktu.",
@@ -74,33 +74,33 @@ const solutions = [
 const features = [
   {
     icon: StoreIcon,
-    title: "Katalog dalam satu link",
-    desc: "Kumpulkan semua produk di satu halaman yang siap dibagikan ke mana pun."
+    title: "Etalase dalam satu link",
+    desc: "Satukan seluruh produk dan jasa kamu di satu halaman elegan yang siap dibagikan ke mana saja."
+  },
+  {
+    icon: SparkIcon,
+    title: "Fleksibel: produk & jasa",
+    desc: "Jual barang fisik atau tawarkan layanan dengan harga 'mulai dari' maupun custom — satu sistem untuk keduanya."
   },
   {
     icon: EyeIcon,
-    title: "Tampilan yang meyakinkan",
-    desc: "Foto, harga, kategori, dan deskripsi tampil rapi agar toko kamu terlihat tepercaya."
-  },
-  {
-    icon: CartIcon,
-    title: "Keranjang multi-produk",
-    desc: "Pelanggan bisa memilih beberapa produk sekaligus sebelum memesan."
+    title: "Tampil premium & tepercaya",
+    desc: "Foto, harga, kategori, dan promo tertata rapi sehingga usaha kamu terlihat profesional sejak detik pertama."
   },
   {
     icon: WhatsAppIcon,
-    title: "Checkout via WhatsApp",
-    desc: "Isi keranjang langsung jadi pesan WhatsApp yang rapi ke nomor kamu."
+    title: "Order langsung via WhatsApp",
+    desc: "Setiap pesanan masuk rapi ke WhatsApp kamu, lengkap dengan rincian — tombolnya bisa 'Pesan', 'Booking', atau 'Konsultasi'."
   },
   {
     icon: BoltIcon,
-    title: "Gampang dikelola",
-    desc: "Tambah, ubah, atau hapus produk kapan saja - tanpa perlu keahlian teknis."
+    title: "Kelola tanpa ribet",
+    desc: "Tambah, ubah, atau sembunyikan item kapan saja, langsung dari ponsel — tanpa perlu paham teknis."
   },
   {
     icon: GlobeIcon,
-    title: "Sebar ke mana saja",
-    desc: "Satu link untuk bio Instagram, TikTok, status WhatsApp, sampai chat pelanggan."
+    title: "Siap dibagikan & dilacak",
+    desc: "Satu link untuk semua bio sosial, plus statistik kunjungan dan klik agar kamu tahu apa yang laku."
   }
 ];
 
@@ -170,7 +170,12 @@ const faqItems = [
   {
     question: "Jenis produk apa saja yang bisa ditampilkan?",
     answer:
-      "Kamu bisa menampilkan produk maupun jasa, lengkap dengan foto, harga, kategori, dan deskripsi singkat agar pelanggan mudah memahaminya."
+      "Kamu bisa menampilkan produk fisik maupun jasa. Untuk jasa tersedia opsi harga 'mulai dari' atau 'hubungi untuk harga', serta tombol aksi yang bisa diatur menjadi 'Pesan', 'Booking', atau 'Konsultasi'."
+  },
+  {
+    question: "Apakah benar-benar gratis?",
+    answer:
+      "Ya. Semua fitur Linkatalog bisa kamu pakai gratis sepenuhnya — tanpa kartu kredit dan tanpa biaya tersembunyi. Tujuan kami sekarang adalah membantu sebanyak mungkin penjual tumbuh bersama Linkatalog."
   }
 ];
 
@@ -234,26 +239,26 @@ export default function HomePage() {
             <div className="space-y-7">
               <div className="landing-reveal inline-flex items-center gap-2 rounded-full border border-brand/15 bg-surface/90 px-4 py-2 text-sm text-muted shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur">
                 <SparkIcon className="h-4 w-4 text-brand" />
-                Link katalog gratis untuk UMKM &amp; penjual online
+                Etalase online untuk produk &amp; jasa
               </div>
 
               <div className="landing-reveal landing-reveal-delay-1 space-y-5">
                 <h1 className="max-w-3xl text-4xl font-semibold leading-[1.1] text-foreground sm:text-5xl lg:text-[3.4rem]">
-                  Buat link katalog gratis,{" "}
+                  Ubah followers jadi pesanan dengan{" "}
                   <span className="relative inline-block">
-                    order masuk via WhatsApp
+                    satu link profesional
                     <span className="absolute inset-x-1 bottom-1 -z-10 h-4 rounded-full bg-brand/15 blur-md sm:bottom-2 sm:h-5" />
                   </span>
                 </h1>
                 <p className="max-w-xl text-lg leading-8 text-muted sm:text-xl">
-                  Tampilkan seluruh produk dalam satu halaman katalog yang rapi. Pelanggan tinggal pilih, masukkan ke
-                  keranjang, lalu checkout lewat WhatsApp - tanpa ribet bikin website.
+                  Tampilkan produk maupun jasa kamu dalam satu etalase yang rapi dan tepercaya. Pelanggan tinggal pilih,
+                  lalu pesan langsung via WhatsApp — tanpa ribet bikin website, tanpa potongan marketplace.
                 </p>
               </div>
 
               <div className="landing-reveal landing-reveal-delay-2 flex flex-col gap-3 sm:flex-row">
                 <LandingSessionButton
-                  guestLabel="Mulai Buat Katalog"
+                  guestLabel="Mulai Gratis Sekarang"
                   userLabel="Buka Dashboard"
                   size="lg"
                   className="w-full sm:w-auto"
@@ -451,7 +456,7 @@ export default function HomePage() {
                 ))}
               </ul>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <LandingSessionButton guestLabel="Mulai Buat Katalog" userLabel="Buka Dashboard" size="lg" />
+                <LandingSessionButton guestLabel="Mulai Gratis Sekarang" userLabel="Buka Dashboard" size="lg" />
               </div>
             </div>
 
@@ -492,6 +497,29 @@ export default function HomePage() {
             })}
           </div>
         </section>
+        {/* Semua fitur gratis */}
+        <section id="gratis" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
+          <Card className="rounded-[2rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
+            <div className="mx-auto max-w-2xl space-y-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">100% gratis</p>
+              <h2 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                Semua fitur, gratis untuk semua penjual
+              </h2>
+              <p className="text-base leading-7 text-muted">
+                Buat katalog, tampilkan produk maupun jasa tanpa batas, dan terima order via WhatsApp — semua bisa
+                kamu pakai sekarang tanpa biaya. Tanpa kartu kredit, tanpa biaya tersembunyi.
+              </p>
+              <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
+                <LandingSessionButton guestLabel="Mulai Gratis Sekarang" userLabel="Buka Dashboard" size="lg" />
+                <a href="#preview">
+                  <Button variant="secondary" size="lg">
+                    Lihat Tampilan Katalog
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </Card>
+        </section>
         {/* FAQ */}
         <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
@@ -521,17 +549,17 @@ export default function HomePage() {
           <Card className="landing-reveal rounded-[2rem] bg-hero-mesh p-7 sm:p-10">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Siap dipakai hari ini</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Mulai hari ini, gratis</p>
                 <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                  Bikin katalog rapi, jualan lebih cepat closing
+                  Jadikan setiap link sebagai mesin pesanan kamu
                 </h2>
                 <p className="mt-3 text-base leading-7 text-muted">
-                  Pas untuk reseller, UMKM, toko rumahan, dan penjual online yang butuh etalase simpel tapi tetap
-                  profesional. Pelanggan masukkan ke keranjang, kamu terima order via WhatsApp.
+                  Untuk penjual produk maupun penyedia jasa yang ingin tampil profesional dan menutup lebih banyak order.
+                  Bangun etalase kamu dalam hitungan menit — semua fitur gratis, tanpa biaya tersembunyi.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <LandingSessionButton guestLabel="Mulai Buat Katalog" userLabel="Buka Dashboard" size="lg" />
+                <LandingSessionButton guestLabel="Mulai Gratis Sekarang" userLabel="Buka Dashboard" size="lg" />
                 <a href="#preview">
                   <Button variant="secondary" size="lg">
                     Lihat Tampilan Katalog

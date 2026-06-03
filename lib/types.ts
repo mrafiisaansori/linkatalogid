@@ -3,6 +3,15 @@ export type ThemeAccent = "emerald" | "sky" | "coral" | "amber";
 export type ProductBadge = "Best Seller" | "Promo" | "Baru" | "";
 export type AnalyticsEventType = "PAGE_VIEW" | "PRODUCT_VIEW" | "WHATSAPP_CLICK";
 
+// Model item fleksibel: satu item bisa berupa produk fisik atau jasa.
+export type ItemType = "product" | "service";
+// Mode harga: angka pasti, "mulai dari", atau "hubungi untuk harga".
+export type PriceMode = "fixed" | "from" | "custom";
+// Jenis tombol aksi di halaman publik.
+export type ItemCtaType = "buy" | "booking" | "consult" | "quote";
+// Paket langganan penjual (fondasi monetisasi).
+export type UserPlan = "free" | "starter" | "pro" | "enterprise";
+
 export interface User {
   id: string;
   name: string;
@@ -15,6 +24,8 @@ export interface User {
   themePreference: ThemeMode;
   themeAccent: ThemeAccent;
   isActive: boolean;
+  // Paket langganan aktif. Default "free". Opsional agar backward-compatible.
+  plan?: UserPlan;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,6 +42,11 @@ export interface Product {
   badge: ProductBadge;
   category: string;
   isActive: boolean;
+  // Field item fleksibel (opsional → backward-compatible dengan data lama).
+  type?: ItemType;
+  priceMode?: PriceMode;
+  compareAtPrice?: number;
+  ctaType?: ItemCtaType;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,6 +60,10 @@ export interface ProductInput {
   badge: ProductBadge;
   category: string;
   isActive: boolean;
+  type?: ItemType;
+  priceMode?: PriceMode;
+  compareAtPrice?: number;
+  ctaType?: ItemCtaType;
 }
 
 export interface AnalyticsSummary {

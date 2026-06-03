@@ -26,7 +26,18 @@ const initialForm: ProductInput = {
   imageUrl: "",
   badge: "",
   category: "",
-  isActive: true
+  isActive: true,
+  type: "product",
+  priceMode: "fixed",
+  compareAtPrice: 0,
+  ctaType: "buy"
+};
+
+const ctaLabels: Record<NonNullable<ProductInput["ctaType"]>, string> = {
+  buy: "Pesan via WhatsApp",
+  booking: "Booking sekarang",
+  consult: "Konsultasi gratis",
+  quote: "Minta penawaran"
 };
 
 export function ProductModal({ open, onClose, onSubmit, product }: ProductModalProps) {
@@ -50,7 +61,11 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
             imageUrl: product.imageUrl,
             badge: product.badge,
             category: product.category,
-            isActive: product.isActive
+            isActive: product.isActive,
+            type: product.type ?? "product",
+            priceMode: product.priceMode ?? "fixed",
+            compareAtPrice: product.compareAtPrice ?? 0,
+            ctaType: product.ctaType ?? "buy"
           }
         : initialForm
     );
@@ -59,6 +74,20 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
   function updateField<K extends keyof ProductInput>(key: K, value: ProductInput[K]) {
     setForm((current) => ({ ...current, [key]: value }));
   }
+
+  // Ganti tipe item sekaligus set default CTA & mode harga yang masuk akal.
+  function changeType(nextType: NonNullable<ProductInput["type"]>) {
+    setForm((current) => ({
+      ...current,
+      type: nextType,
+      ctaType: nextType === "service" ? "booking" : "buy",
+      priceMode: nextType === "service" ? "from" : current.priceMode ?? "fixed"
+    }));
+  }
+
+  const itemType = form.type ?? "product";
+  const priceMode = form.priceMode ?? "fixed";
+  const isService = itemType === "service";
 
   async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -125,25 +154,105 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
     >
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-5">
+          <div className="space-y-2 text-sm">
+            <span className="font-medium text-foreground">Tipe item</span>
+            <div className="flex rounded-full bg-surface-soft p-1">
+              <button
+                type="button"
+                className={cn(
+                  "flex-1 rounded-full px-4 py-2.5 text-sm font-medium transition",
+                  !isService ? "bg-surface text-foreground shadow-card" : "text-muted"
+                )}
+                onClick={() => changeType("product")}
+              >
+                Produk
+              </button>
+              <button
+                type="button"
+                className={cn(
+                  "flex-1 rounded-full px-4 py-2.5 text-sm font-medium transition",
+                  isService ? "bg-surface text-foreground shadow-card" : "text-muted"
+                )}
+                onClick={() => changeType("service")}
+              >
+                Jasa
+              </button>
+            </div>
+            <p className="text-xs text-muted">
+              {isService
+                ? "Cocok untuk layanan: jasa desain, MUA, fotografer, konsultasi, les, dll."
+                : "Cocok untuk barang fisik yang dijual dengan harga tetap."}
+            </p>
+          </div>
+
+          <label className="space-y-2 text-sm">
+            <span className="font-medium text-foreground">{isService ? "Nama layanan" : "Judul"}</span>
+            <Input
+              placeholder={isService ? "Contoh: Paket makeup wisuda" : "Contoh: Paket dessert box"}
+              value={form.title}
+              onChange={(event) => updateField("title", event.target.value)}
+            />
+          </label>
+
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="space-y-2 text-sm">
-              <span className="font-medium text-foreground">Judul</span>
-              <Input
-                placeholder="Contoh: Paket dessert box"
-                value={form.title}
-                onChange={(event) => updateField("title", event.target.value)}
-              />
+              <span className="font-medium text-foreground">Mode harga</span>
+              <select
+                className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+                value={priceMode}
+                onChange={(event) => updateField("priceMode", event.target.value as ProductInput["priceMode"])}
+              >
+                <option value="fixed">Harga pasti</option>
+                <option value="from">Mulai dari</option>
+                <option value="custom">Hubungi untuk harga</option>
+              </select>
             </label>
+            {priceMode !== "custom" ? (
+              <label className="space-y-2 text-sm">
+                <span className="font-medium text-foreground">
+                  {priceMode === "from" ? "Harga mulai dari" : "Harga"}
+                </span>
+                <Input
+                  type="number"
+                  placeholder="35000"
+                  value={form.price || ""}
+                  onChange={(event) => updateField("price", Number(event.target.value))}
+                />
+              </label>
+            ) : (
+              <div className="flex items-end">
+                <p className="rounded-2xl bg-surface-soft px-4 py-3 text-xs leading-5 text-muted">
+                  Harga disembunyikan. Pembeli diarahkan untuk menghubungi kamu.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {priceMode !== "custom" ? (
             <label className="space-y-2 text-sm">
-              <span className="font-medium text-foreground">Harga</span>
+              <span className="font-medium text-foreground">Harga coret (opsional)</span>
               <Input
                 type="number"
-                placeholder="35000"
-                value={form.price || ""}
-                onChange={(event) => updateField("price", Number(event.target.value))}
+                placeholder="Mis. 50000 — untuk menampilkan diskon"
+                value={form.compareAtPrice || ""}
+                onChange={(event) => updateField("compareAtPrice", Number(event.target.value))}
               />
             </label>
-          </div>
+          ) : null}
+
+          <label className="space-y-2 text-sm">
+            <span className="font-medium text-foreground">Tombol aksi (CTA)</span>
+            <select
+              className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+              value={form.ctaType ?? "buy"}
+              onChange={(event) => updateField("ctaType", event.target.value as ProductInput["ctaType"])}
+            >
+              <option value="buy">Pesan via WhatsApp</option>
+              <option value="booking">Booking sekarang</option>
+              <option value="consult">Konsultasi gratis</option>
+              <option value="quote">Minta penawaran</option>
+            </select>
+          </label>
 
           <label className="space-y-2 text-sm">
             <span className="font-medium text-foreground">Deskripsi</span>
@@ -288,12 +397,29 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
                 {form.description || "Deskripsi singkat akan muncul di sini supaya calon pembeli lebih yakin."}
               </p>
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold text-foreground">
-                  {formatCurrency(Number(form.price) || 0)}
-                </p>
+                <div className="flex items-baseline gap-2">
+                  {priceMode === "custom" ? (
+                    <p className="text-lg font-semibold text-foreground">Hubungi untuk harga</p>
+                  ) : (
+                    <>
+                      {priceMode === "from" ? <span className="text-xs text-muted">Mulai</span> : null}
+                      <p className="text-lg font-semibold text-foreground">
+                        {formatCurrency(Number(form.price) || 0)}
+                      </p>
+                      {form.compareAtPrice && form.compareAtPrice > (form.price || 0) ? (
+                        <span className="text-sm text-muted line-through">
+                          {formatCurrency(Number(form.compareAtPrice))}
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </div>
                 <Badge tone={form.isActive ? "success" : "warning"}>
                   {form.isActive ? "Aktif" : "Nonaktif"}
                 </Badge>
+              </div>
+              <div className="rounded-full bg-brand px-4 py-2.5 text-center text-sm font-semibold text-white">
+                {ctaLabels[form.ctaType ?? "buy"]}
               </div>
             </div>
           </div>

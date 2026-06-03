@@ -1,4 +1,14 @@
-import { Product, ProductBadge, ThemeAccent, ThemeMode, User } from "@/lib/types";
+import {
+  ItemCtaType,
+  ItemType,
+  PriceMode,
+  Product,
+  ProductBadge,
+  ThemeAccent,
+  ThemeMode,
+  User,
+  UserPlan
+} from "@/lib/types";
 import { sanitizeWhatsappNumber } from "@/lib/utils";
 
 type AnyRecord = Record<string, unknown>;
@@ -17,6 +27,22 @@ function parseThemeAccent(value: unknown): ThemeAccent {
 
 function parseProductBadge(value: unknown): ProductBadge {
   return value === "Best Seller" || value === "Promo" || value === "Baru" ? value : "";
+}
+
+function parseItemType(value: unknown): ItemType {
+  return value === "service" ? "service" : "product";
+}
+
+function parsePriceMode(value: unknown): PriceMode {
+  return value === "from" || value === "custom" ? value : "fixed";
+}
+
+function parseCtaType(value: unknown): ItemCtaType {
+  return value === "booking" || value === "consult" || value === "quote" ? value : "buy";
+}
+
+function parseUserPlan(value: unknown): UserPlan {
+  return value === "starter" || value === "pro" || value === "enterprise" ? value : "free";
 }
 
 function toIso(value: unknown): string {
@@ -38,6 +64,7 @@ export function serializeUser(input: AnyRecord & { account?: { email?: string | 
     themePreference: parseThemeMode(input.themePreference),
     themeAccent: parseThemeAccent(input.themeAccent),
     isActive: Boolean(input.isActive),
+    plan: parseUserPlan(input.plan),
     createdAt: toIso(input.createdAt),
     updatedAt: toIso(input.updatedAt)
   };
@@ -56,6 +83,10 @@ export function serializeProduct(input: AnyRecord & { owner?: { name?: string; u
     badge: parseProductBadge(input.badge),
     category: s(input.category),
     isActive: Boolean(input.isActive),
+    type: parseItemType(input.type),
+    priceMode: parsePriceMode(input.priceMode),
+    compareAtPrice: Number(input.compareAtPrice ?? 0) || 0,
+    ctaType: parseCtaType(input.ctaType),
     createdAt: toIso(input.createdAt),
     updatedAt: toIso(input.updatedAt)
   };

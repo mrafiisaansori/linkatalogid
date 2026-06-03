@@ -16,17 +16,20 @@ import { UsernameAvailability } from "@/lib/types";
 import { isReservedPublicUsername, normalizePublicUsername } from "@/lib/utils";
 
 type AuthTab = "signin" | "signup";
-type AuthStep = "form" | "verify";
+type AuthStep = "form" | "verify" | "forgot" | "reset";
 
 export default function AuthPage() {
   const router = useRouter();
   const {
     currentUser,
     isHydrated,
+    isProfileComplete,
     signIn,
     signUp,
     verifyEmailCode,
     resendVerificationCode,
+    requestPasswordReset,
+    resetPassword,
     checkUsernameAvailability
   } = useAppState();
   const [tab, setTab] = useState<AuthTab>("signin");
@@ -36,6 +39,12 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationEmail, setVerificationEmail] = useState("");
+  // State untuk alur lupa password.
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [resetPasswordValue, setResetPasswordValue] = useState("");
+  const [resetPasswordConfirm, setResetPasswordConfirm] = useState("");
+  const [resetInfo, setResetInfo] = useState("");
   const [linkEdited, setLinkEdited] = useState(false);
   const [linkStatus, setLinkStatus] = useState<UsernameAvailability>({
     available: false,
@@ -65,9 +74,11 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (isHydrated && currentUser) {
-      router.replace("/dashboard");
+      // Penjual baru diarahkan ke halaman profil dulu sampai datanya lengkap,
+      // baru boleh menambah produk.
+      router.replace(isProfileComplete ? "/dashboard" : "/dashboard/profile");
     }
-  }, [currentUser, isHydrated, router]);
+  }, [currentUser, isHydrated, isProfileComplete, router]);
 
   const normalizedLink = normalizePublicUsername(form.username);
   const linkIsReserved = isReservedPublicUsername(form.username);
@@ -158,7 +169,7 @@ export default function AuthPage() {
       return;
     }
 
-    router.push("/dashboard");
+    // Navigasi ditangani oleh useEffect berdasarkan kelengkapan profil.
   }
 
   async function handleVerify(event: FormEvent) {
@@ -174,7 +185,64 @@ export default function AuthPage() {
       return;
     }
 
-    router.push("/dashboard");
+    // Navigasi ditangani oleh useEffect berdasarkan kelengkapan profil.
+  }
+
+  async function handleForgotSubmit(event: FormEvent) {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    setResetInfo("");
+
+    const result = await requestPasswordReset(resetEmail, turnstileToken);
+    setLoading(false);
+    // Token Turnstile sekali pakai — minta verifikasi ulang untuk step berikutnya.
+    resetTurnstile();
+
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+
+    setResetInfo(result.message);
+    setResetCode("");
+    setResetPasswordValue("");
+    setResetPasswordConfirm("");
+    setStep("reset");
+  }
+
+  async function handleResetSubmit(event: FormEvent) {
+    event.preventDefault();
+    setError("");
+
+    if (resetPasswordValue.length < 8) {
+      setError("Password baru minimal 8 karakter.");
+      return;
+    }
+    if (resetPasswordValue !== resetPasswordConfirm) {
+      setError("Konfirmasi password tidak sama.");
+      return;
+    }
+
+    setLoading(true);
+    const result = await resetPassword(resetEmail, resetCode, resetPasswordValue, turnstileToken);
+    setLoading(false);
+    // Token Turnstile sekali pakai — reset setelah submit.
+    resetTurnstile();
+
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+
+    // Sukses: kembali ke form sign in dengan email yang sama terisi.
+    setForm((current) => ({ ...current, email: resetEmail, password: "" }));
+    setResetCode("");
+    setResetPasswordValue("");
+    setResetPasswordConfirm("");
+    setResetInfo("");
+    setStep("form");
+    setTab("signin");
   }
 
   if (!isHydrated) {
@@ -232,6 +300,7 @@ export default function AuthPage() {
           </Card>
 
           <Card className="rounded-[2rem] p-6 sm:p-8">
+            {step === "form" ? (
             <div className="flex rounded-full bg-surface-soft p-1">
               <button
                 type="button"
@@ -258,21 +327,30 @@ export default function AuthPage() {
                 Sign up
               </button>
             </div>
+            ) : null}
 
             <div className="mt-8">
               <h2 className="text-2xl font-semibold text-foreground">
                 {step === "verify"
                   ? "Verifikasi email kamu"
-                  : tab === "signin"
-                    ? "Masuk ke dashboard kamu"
-                    : "Buat akun baru"}
+                  : step === "forgot"
+                    ? "Lupa password"
+                    : step === "reset"
+                      ? "Atur password baru"
+                      : tab === "signin"
+                        ? "Masuk ke dashboard kamu"
+                        : "Buat akun baru"}
               </h2>
               <p className="mt-2 text-sm leading-6 text-muted">
                 {step === "verify"
                   ? `Masukkan kode 6 digit yang dikirim ke ${verificationEmail || form.email}.`
-                  : tab === "signin"
-                    ? "Lanjutkan edit katalog, cek klik WhatsApp, dan bagikan link kamu."
-                    : "Pilih link katalog sendiri, atur profil sederhana, lalu tambahkan produk atau jasa pertama kamu."}
+                  : step === "forgot"
+                    ? "Masukkan email akun kamu. Kami akan kirim kode untuk mengatur ulang password."
+                    : step === "reset"
+                      ? `Masukkan kode yang dikirim ke ${resetEmail} lalu buat password baru kamu.`
+                      : tab === "signin"
+                        ? "Lanjutkan edit katalog, cek klik WhatsApp, dan bagikan link kamu."
+                        : "Pilih link katalog sendiri, atur profil sederhana, lalu tambahkan produk atau jasa pertama kamu."}
               </p>
             </div>
 
@@ -331,6 +409,164 @@ export default function AuthPage() {
                 >
                   Kembali ke form
                 </button>
+              </form>
+            ) : step === "forgot" ? (
+              <form className="mt-8 space-y-5" onSubmit={handleForgotSubmit}>
+                <label className="space-y-2 text-sm">
+                  <span className="font-medium text-foreground">Email akun kamu</span>
+                  <Input
+                    type="email"
+                    placeholder="nama@bisnis.com"
+                    value={resetEmail}
+                    onChange={(event) => setResetEmail(event.target.value)}
+                  />
+                </label>
+
+                {error ? (
+                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                    {error}
+                  </div>
+                ) : null}
+
+                {turnstileEnabled ? (
+                  <div className="space-y-2">
+                    <Turnstile
+                      ref={turnstileRef}
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onExpire={() => setTurnstileToken("")}
+                    />
+                    {!turnstileToken ? (
+                      <p className="text-xs leading-5 text-muted">
+                        Selesaikan verifikasi keamanan dulu untuk mengaktifkan tombol.
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                  loading={loading}
+                  disabled={!resetEmail.trim() || (turnstileEnabled && !turnstileToken)}
+                >
+                  Kirim kode reset
+                  {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
+                </Button>
+
+                <button
+                  type="button"
+                  className="text-sm text-muted transition hover:text-foreground"
+                  onClick={() => {
+                    setStep("form");
+                    setTab("signin");
+                    setError("");
+                    resetTurnstile();
+                  }}
+                >
+                  Kembali ke halaman masuk
+                </button>
+              </form>
+            ) : step === "reset" ? (
+              <form className="mt-8 space-y-5" onSubmit={handleResetSubmit}>
+                {resetInfo ? (
+                  <div className="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success">
+                    {resetInfo}
+                  </div>
+                ) : null}
+
+                <label className="space-y-2 text-sm">
+                  <span className="font-medium text-foreground">Kode reset</span>
+                  <Input
+                    inputMode="numeric"
+                    placeholder="Contoh: 482913"
+                    value={resetCode}
+                    onChange={(event) => setResetCode(event.target.value.replace(/[^\d]/g, "").slice(0, 6))}
+                  />
+                </label>
+
+                <label className="space-y-2 text-sm">
+                  <span className="font-medium text-foreground">Password baru</span>
+                  <Input
+                    type="password"
+                    placeholder="Minimal 8 karakter"
+                    value={resetPasswordValue}
+                    onChange={(event) => setResetPasswordValue(event.target.value)}
+                  />
+                </label>
+
+                <label className="space-y-2 text-sm">
+                  <span className="font-medium text-foreground">Ulangi password baru</span>
+                  <Input
+                    type="password"
+                    placeholder="Ketik ulang password baru"
+                    value={resetPasswordConfirm}
+                    onChange={(event) => setResetPasswordConfirm(event.target.value)}
+                  />
+                </label>
+
+                {error ? (
+                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                    {error}
+                  </div>
+                ) : null}
+
+                {turnstileEnabled ? (
+                  <div className="space-y-2">
+                    <Turnstile
+                      ref={turnstileRef}
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onExpire={() => setTurnstileToken("")}
+                    />
+                    {!turnstileToken ? (
+                      <p className="text-xs leading-5 text-muted">
+                        Selesaikan verifikasi keamanan dulu untuk mengaktifkan tombol.
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                  loading={loading}
+                  disabled={
+                    resetCode.length < 6 ||
+                    !resetPasswordValue ||
+                    !resetPasswordConfirm ||
+                    (turnstileEnabled && !turnstileToken)
+                  }
+                >
+                  Simpan password baru
+                  {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
+                </Button>
+
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    className="text-sm text-muted transition hover:text-foreground"
+                    onClick={() => {
+                      setStep("forgot");
+                      setError("");
+                      resetTurnstile();
+                    }}
+                  >
+                    Kirim ulang kode
+                  </button>
+                  <button
+                    type="button"
+                    className="text-sm text-muted transition hover:text-foreground"
+                    onClick={() => {
+                      setStep("form");
+                      setTab("signin");
+                      setError("");
+                      resetTurnstile();
+                    }}
+                  >
+                    Kembali ke masuk
+                  </button>
+                </div>
               </form>
             ) : (
             <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
@@ -400,6 +636,24 @@ export default function AuthPage() {
                 />
               </label>
 
+              {tab === "signin" ? (
+                <div className="-mt-1 flex justify-end">
+                  <button
+                    type="button"
+                    className="text-sm font-medium text-brand transition hover:underline"
+                    onClick={() => {
+                      setStep("forgot");
+                      setError("");
+                      setResetInfo("");
+                      setResetEmail(form.email);
+                      resetTurnstile();
+                    }}
+                  >
+                    Lupa password?
+                  </button>
+                </div>
+              ) : null}
+
               {error ? (
                 <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
                   {error}
@@ -431,6 +685,42 @@ export default function AuthPage() {
                 {tab === "signin" ? "Masuk sekarang" : "Buat akun gratis"}
                 {!loading ? <ArrowRightIcon className="h-4 w-4" /> : null}
               </Button>
+
+              <p className="text-center text-sm text-muted">
+                {tab === "signin" ? (
+                  <>
+                    Belum punya akun?{" "}
+                    <button
+                      type="button"
+                      className="font-semibold text-brand transition hover:underline"
+                      onClick={() => {
+                        setTab("signup");
+                        setStep("form");
+                        setError("");
+                        resetTurnstile();
+                      }}
+                    >
+                      Daftar di sini
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Sudah punya akun?{" "}
+                    <button
+                      type="button"
+                      className="font-semibold text-brand transition hover:underline"
+                      onClick={() => {
+                        setTab("signin");
+                        setStep("form");
+                        setError("");
+                        resetTurnstile();
+                      }}
+                    >
+                      Masuk di sini
+                    </button>
+                  </>
+                )}
+              </p>
             </form>
             )}
 

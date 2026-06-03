@@ -51,6 +51,13 @@ interface AppContextValue {
   }) => Promise<AuthActionResult>;
   verifyEmailCode: (email: string, code: string, password?: string) => Promise<AuthActionResult>;
   resendVerificationCode: (email: string) => Promise<AuthActionResult>;
+  requestPasswordReset: (email: string, turnstileToken?: string) => Promise<{ success: boolean; message: string }>;
+  resetPassword: (
+    email: string,
+    code: string,
+    password: string,
+    turnstileToken?: string
+  ) => Promise<{ success: boolean; message: string }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<{ success: boolean; message: string }>;
   saveProduct: (input: ProductInput) => Promise<{ success: boolean; message: string }>;
@@ -60,6 +67,7 @@ interface AppContextValue {
   checkUsernameAvailability: (username: string) => Promise<UsernameAvailability>;
   pushToast: (toast: Omit<ToastMessage, "id">) => void;
   profileCompletion: { completed: number; total: number; percentage: number };
+  isProfileComplete: boolean;
   accentOptions: typeof accentOptions;
 }
 
@@ -386,6 +394,55 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return { success: true, message: data.message ?? "Kode verifikasi berhasil dikirim ulang." };
   }, [pushToast]);
 
+  const requestPasswordReset = useCallback(async (email: string, turnstileToken?: string) => {
+    const response = await fetch("/api/auth/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ email, turnstileToken })
+    });
+    const data = await readJson<{ success?: boolean; message?: string }>(response);
+
+    if (!response.ok || !data?.success) {
+      return { success: false, message: data?.message ?? "Kode reset belum bisa dikirim. Coba lagi." };
+    }
+
+    pushToast({
+      title: "Kode reset dikirim",
+      description: "Cek inbox email kamu untuk kode reset password.",
+      tone: "success"
+    });
+    return { success: true, message: data.message ?? "Kode reset password sudah dikirim ke email kamu." };
+  }, [pushToast]);
+
+  const resetPassword = useCallback(
+    async (email: string, code: string, password: string, turnstileToken?: string) => {
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({ email, code, password, turnstileToken })
+      });
+      const data = await readJson<{ success?: boolean; message?: string }>(response);
+
+      if (!response.ok || !data?.success) {
+        return { success: false, message: data?.message ?? "Kode reset belum cocok atau sudah kedaluwarsa." };
+      }
+
+      pushToast({
+        title: "Password berhasil diubah",
+        description: "Silakan masuk dengan password baru kamu.",
+        tone: "success"
+      });
+      return { success: true, message: data.message ?? "Password berhasil diubah." };
+    },
+    [pushToast]
+  );
+
   const signOut = useCallback(async () => {
     await fetch("/api/auth/sign-out", {
       method: "POST",
@@ -656,6 +713,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     productCount: currentProducts.length
   });
 
+  // Kelengkapan data profil saja (tanpa syarat jumlah produk), dipakai untuk
+  // menggating akses ke halaman tambah produk.
+  const isProfileComplete = Boolean(
+    currentUser?.name &&
+      currentUser?.username &&
+      currentUser?.bio &&
+      currentUser?.whatsapp &&
+      currentUser?.profileImage &&
+      currentUser?.location
+  );
+
   const value = useMemo<AppContextValue>(
     () => ({
       theme,
@@ -670,6 +738,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       signUp,
       verifyEmailCode,
       resendVerificationCode,
+      requestPasswordReset,
+      resetPassword,
       signOut,
       updateProfile,
       saveProduct,
@@ -679,6 +749,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       checkUsernameAvailability,
       pushToast,
       profileCompletion,
+      isProfileComplete,
       accentOptions
     }),
     [
@@ -694,6 +765,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       signUp,
       verifyEmailCode,
       resendVerificationCode,
+      requestPasswordReset,
+      resetPassword,
       signOut,
       updateProfile,
       saveProduct,
@@ -702,7 +775,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       copyPublicLink,
       checkUsernameAvailability,
       pushToast,
-      profileCompletion
+      profileCompletion,
+      isProfileComplete
     ]
   );
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   ArrowRightIcon,
@@ -27,11 +28,28 @@ export default function DashboardPage() {
     currentProducts,
     currentUser,
     profileCompletion,
+    isProfileComplete,
+    pushToast,
     saveProduct
   } = useAppState();
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
 
   if (!currentUser) return null;
+
+  // Penjual harus melengkapi profil dulu sebelum boleh menambah produk.
+  function handleAddProduct() {
+    if (!isProfileComplete) {
+      pushToast({
+        title: "Lengkapi profil dulu",
+        description: "Isi semua data profil sebelum menambahkan produk.",
+        tone: "default"
+      });
+      router.push("/dashboard/profile");
+      return;
+    }
+    setOpenModal(true);
+  }
 
   const activeProducts = currentProducts.filter((item) => item.isActive);
   const hasAnalytics = currentAnalytics.views > 0 || currentAnalytics.whatsappClicks > 0;
@@ -77,7 +95,7 @@ export default function DashboardPage() {
             via WhatsApp.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button onClick={() => setOpenModal(true)}>
+            <Button onClick={handleAddProduct}>
               Tambah produk
               <ArrowRightIcon className="h-4 w-4" />
             </Button>
@@ -233,7 +251,7 @@ export default function DashboardPage() {
                 icon={<BoxIcon className="h-6 w-6" />}
                 title="Belum ada produk"
                 description="Tambahkan produk atau jasa pertamamu supaya halaman publik langsung terlihat hidup."
-                action={<Button size="sm" onClick={() => setOpenModal(true)}>Tambah produk</Button>}
+                action={<Button size="sm" onClick={handleAddProduct}>Tambah produk</Button>}
               />
             ) : (
               currentProducts.slice(0, 4).map((product) => (

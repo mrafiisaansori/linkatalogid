@@ -14,6 +14,7 @@ function basicAuthHeader(): string {
   return `Basic ${Buffer.from(`${user}:${pass}`).toString("base64")}`;
 }
 
+// Tipe gambar yang diizinkan untuk upload produk.
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 const MAX_SIZE      = 5 * 1024 * 1024;
 
@@ -57,22 +58,80 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "File kosong, tidak ada data yang bisa diupload." }, { status: 400 });
     }
 
-    // ── Step 3: Kirim ke PHP backend ────────────────────────────────────────
+    // ── Step 3: Kirim ke PHP backend (dengan retry untuk error transient) ────
     const target = `${backendUrl()}/upload/image`;
-    log(`Step 3: kirim ke PHP ${target}, payload size: ${base64.length} chars...`);
+    const payload = JSON.stringify({ imageBase64: base64, mimeType: fileType, originalName: fileName });
 
-    const phpResponse = await fetch(target, {
-      method: "POST",
-      headers: {
-        Authorization:  basicAuthHeader(),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ imageBase64: base64, mimeType: fileType, originalName: fileName }),
-    });
+    // "Route not found" yang muncul kadang-kadang biasanya berasal dari error
+    // transient backend (cold start, redirect yang men-drop body POST, atau
+    // deploy yang sedang berjalan). Kita coba ulang beberapa kali sebelum
+    // menyerah, dengan jeda singkat.
+    const MAX_ATTEMPTS = 3;
+    let phpResponse: Response | null = null;
+    let rawText = "";
+    let lastError: unknown = null;
 
-    // ── Step 4: Baca response PHP ────────────────────────────────────────────
-    const rawText = await phpResponse.text();
-    log(`Step 4: PHP HTTP ${phpResponse.status}, response (150 chars): ${rawText.slice(0, 150)}`);
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      log(`Step 3: kirim ke PHP ${target} (percobaan ${attempt}/${MAX_ATTEMPTS}), payload size: ${base64.length} chars...`);
+      try {
+        phpResponse = await fetch(target, {
+          method: "POST",
+          headers: {
+            Authorization:  basicAuthHeader(),
+            "Content-Type": "application/json",
+            Accept:         "application/json",
+          },
+          body: payload,
+          redirect: "follow",
+          cache: "no-store",
+        });
+      } catch (fetchError) {
+        lastError = fetchError;
+        err(`Percobaan ${attempt} gagal connect:`, fetchError instanceof Error ? fetchError.message : fetchError);
+        if (attempt < MAX_ATTEMPTS) {
+          await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+          continue;
+        }
+        return NextResponse.json(
+          { success: false, message: "Tidak bisa connect ke server upload. Coba lagi sebentar." },
+          { status: 502 }
+        );
+      }
+
+      rawText = await phpResponse.text();
+      log(`Step 4: PHP HTTP ${phpResponse.status} (percobaan ${attempt}), response (150 chars): ${rawText.slice(0, 150)}`);
+
+      // Retry hanya untuk indikasi error transient: 404/route-not-found atau 5xx.
+      const looksTransient =
+        phpResponse.status === 404 ||
+        phpResponse.status >= 500 ||
+        /route not found/i.test(rawText);
+
+      if (looksTransient && attempt < MAX_ATTEMPTS) {
+        err(`Respons transient (HTTP ${phpResponse.status}), mencoba ulang...`);
+        await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+        continue;
+      }
+
+      break;
+    }
+
+    if (!phpResponse) {
+      err("Tidak ada respons dari PHP:", lastError);
+      return NextResponse.json(
+        { success: false, message: "Server upload tidak merespons. Coba lagi sebentar." },
+        { status: 502 }
+      );
+    }
+
+    // Pesan lebih jelas kalau yang muncul memang "route not found" sampai akhir.
+    if (phpResponse.status === 404 || /route not found/i.test(rawText)) {
+      err("Route upload tidak ditemukan di backend:", rawText.slice(0, 200));
+      return NextResponse.json(
+        { success: false, message: "Endpoint upload sedang bermasalah. Coba lagi beberapa saat lagi." },
+        { status: 502 }
+      );
+    }
 
     let data: { success?: boolean; message?: string; url?: string } = {};
     try {

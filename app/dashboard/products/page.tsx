@@ -1,6 +1,7 @@
 "use client";
 
-import { startTransition, useDeferredValue, useMemo, useState } from "react";
+import { startTransition, useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 // Filter status produk dihilangkan sesuai permintaan; pencarian tetap tersedia.
 import { BoxIcon, PencilIcon, TrashIcon } from "@/components/icons";
 import { ProductModal } from "@/components/product-modal";
@@ -24,11 +25,33 @@ function SearchIconInline() {
 }
 
 export default function DashboardProductsPage() {
-  const { currentProducts, deleteProduct, saveProduct, toggleProduct } = useAppState();
+  const {
+    currentProducts,
+    deleteProduct,
+    saveProduct,
+    toggleProduct,
+    isProfileComplete,
+    isHydrated,
+    currentUser,
+    pushToast
+  } = useAppState();
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  // Penjual wajib melengkapi profil dulu sebelum boleh menambah/mengelola produk.
+  useEffect(() => {
+    if (isHydrated && currentUser && !isProfileComplete) {
+      pushToast({
+        title: "Lengkapi profil dulu",
+        description: "Isi semua data profil sebelum menambahkan produk.",
+        tone: "default"
+      });
+      router.replace("/dashboard/profile");
+    }
+  }, [isHydrated, currentUser, isProfileComplete, pushToast, router]);
 
   const filteredProducts = useMemo(() => {
     return currentProducts.filter((product) => {
@@ -49,6 +72,11 @@ export default function DashboardProductsPage() {
   function handleEdit(product: Product) {
     setSelectedProduct(product);
     setModalOpen(true);
+  }
+
+  // Hindari kedip konten produk saat sedang diarahkan ke halaman profil.
+  if (isHydrated && currentUser && !isProfileComplete) {
+    return null;
   }
 
   return (

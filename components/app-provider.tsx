@@ -560,6 +560,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
           badge: input.badge,
           category,
           isActive: input.isActive,
+          type: input.type ?? "product",
+          priceMode: input.priceMode ?? "fixed",
+          compareAtPrice: Number(input.compareAtPrice) || 0,
+          ctaType: input.ctaType ?? "buy",
           createdAt: existing?.createdAt ?? now,
           updatedAt: now
         };

@@ -59,8 +59,8 @@ Lihat `.env.example`:
 
 ```env
 BACKEND_URL="https://linkatalog.raftechsolution.web.id"
-BACKEND_AUTH_USER="admin"
-BACKEND_AUTH_PASS="Indones!4"
+BACKEND_AUTH_USER="your-backend-basic-auth-user"
+BACKEND_AUTH_PASS="your-backend-basic-auth-password"
 LINKATALOG_SESSION_SECRET="secret-random-panjang"
 ```
 

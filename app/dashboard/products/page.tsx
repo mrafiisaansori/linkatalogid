@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/components/app-provider";
+import { getProductQuotaStatus } from "@/lib/plans";
 import { Product } from "@/lib/types";
 import { cn, formatCurrency } from "@/lib/utils";
 
@@ -40,6 +41,7 @@ export default function DashboardProductsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const deferredQuery = useDeferredValue(query);
+  const productQuota = getProductQuotaStatus(currentUser?.plan, currentProducts.length);
 
   // Penjual wajib melengkapi profil dulu sebelum boleh menambah/mengelola produk.
   useEffect(() => {
@@ -65,6 +67,14 @@ export default function DashboardProductsPage() {
   }, [currentProducts, deferredQuery]);
 
   function handleCreate() {
+    if (productQuota.isAtLimit) {
+      pushToast({
+        title: "Limit paket tercapai",
+        description: `Paket ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
+        tone: "warning"
+      });
+      return;
+    }
     setSelectedProduct(null);
     setModalOpen(true);
   }
@@ -88,12 +98,20 @@ export default function DashboardProductsPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-lg font-semibold text-foreground">Kelola produk & jasa</p>
                 <Badge tone="neutral">{currentProducts.length} item</Badge>
+                <Badge tone={productQuota.isAtLimit ? "warning" : "success"}>
+                  {productQuota.limit === null
+                    ? `${productQuota.definition.name}: tanpa batas`
+                    : `${productQuota.definition.name}: ${productQuota.used}/${productQuota.limit}`}
+                </Badge>
               </div>
               <p className="mt-1 text-sm text-muted">
                 Atur katalog publik kamu, edit detail item, atau matikan produk sementara.
+                {productQuota.limit !== null ? ` Sisa slot item: ${productQuota.remaining}.` : ""}
               </p>
             </div>
-            <Button onClick={handleCreate} className="w-full sm:w-auto">Tambah produk</Button>
+            <Button onClick={handleCreate} className="w-full sm:w-auto">
+              {productQuota.isAtLimit ? "Upgrade paket" : "Tambah produk"}
+            </Button>
           </div>
 
           <div className="mt-5">

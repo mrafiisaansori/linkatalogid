@@ -24,7 +24,7 @@ import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, SOCIAL_LINKS } fr
 
 const PAGE_TITLE = "Linkatalog — Etalase Online Profesional untuk Produk & Jasa | Order via WhatsApp";
 const PAGE_DESCRIPTION =
-  "Ubah followers jadi pesanan. Satu link katalog profesional untuk produk maupun jasa, pelanggan tinggal pilih lalu order via WhatsApp. Semua fitur gratis, tanpa biaya tersembunyi.";
+  "Ubah followers jadi pesanan. Satu link katalog profesional untuk produk maupun jasa, pelanggan tinggal pilih lalu order via WhatsApp. Gratis sepenuhnya untuk saat ini.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -175,7 +175,7 @@ const faqItems = [
   {
     question: "Apakah benar-benar gratis?",
     answer:
-      "Ya. Semua fitur Linkatalog bisa kamu pakai gratis sepenuhnya — tanpa kartu kredit dan tanpa biaya tersembunyi. Tujuan kami sekarang adalah membantu sebanyak mungkin penjual tumbuh bersama Linkatalog."
+      "Ya. Untuk saat ini Linkatalog dibuka gratis sepenuhnya tanpa kartu kredit. Struktur paket berbayar tetap disiapkan agar nanti bisa mendukung katalog besar, analytics lebih panjang, fitur tim, dan dukungan prioritas."
   }
 ];
 
@@ -243,7 +243,7 @@ export default function HomePage() {
               </div>
 
               <div className="landing-reveal landing-reveal-delay-1 space-y-5">
-                <h1 className="max-w-3xl text-4xl font-semibold leading-[1.1] text-foreground sm:text-5xl lg:text-[3.4rem]">
+                <h1 className="max-w-3xl text-4xl font-semibold leading-[1.3] text-foreground sm:text-5xl lg:text-[3.4rem]">
                   Ubah followers jadi pesanan dengan{" "}
                   <span className="relative inline-block">
                     satu link profesional
@@ -497,17 +497,17 @@ export default function HomePage() {
             })}
           </div>
         </section>
-        {/* Semua fitur gratis */}
+        {/* Paket gratis */}
         <section id="gratis" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <Card className="rounded-[2rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
             <div className="mx-auto max-w-2xl space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">100% gratis</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Gratis untuk saat ini</p>
               <h2 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                Semua fitur, gratis untuk semua penjual
+                Bangun katalog tanpa biaya
               </h2>
               <p className="text-base leading-7 text-muted">
-                Buat katalog, tampilkan produk maupun jasa tanpa batas, dan terima order via WhatsApp — semua bisa
-                kamu pakai sekarang tanpa biaya. Tanpa kartu kredit, tanpa biaya tersembunyi.
+                Buat katalog, tampilkan produk maupun jasa, dan terima order via WhatsApp tanpa biaya. Ke depan,
+                paket berbayar bisa ditambahkan untuk fitur bisnis yang lebih besar tanpa mengubah alur utama seller.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 pt-2 sm:flex-row">
                 <LandingSessionButton guestLabel="Mulai Gratis Sekarang" userLabel="Buka Dashboard" size="lg" />
@@ -549,13 +549,14 @@ export default function HomePage() {
           <Card className="landing-reveal rounded-[2rem] bg-hero-mesh p-7 sm:p-10">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Mulai hari ini, gratis</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Mulai hari ini</p>
                 <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                   Jadikan setiap link sebagai mesin pesanan kamu
                 </h2>
                 <p className="mt-3 text-base leading-7 text-muted">
                   Untuk penjual produk maupun penyedia jasa yang ingin tampil profesional dan menutup lebih banyak order.
-                  Bangun etalase kamu dalam hitungan menit — semua fitur gratis, tanpa biaya tersembunyi.
+                  Bangun etalase kamu dalam hitungan menit. Untuk saat ini semua dibuka gratis, sambil fondasi paket
+                  berbayar disiapkan untuk kebutuhan pertumbuhan yang lebih serius.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
@@ -585,4 +586,3 @@ export default function HomePage() {
     </div>
   );
 }
-

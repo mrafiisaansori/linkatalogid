@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useAppState } from "@/components/app-provider";
+import { getProductQuotaStatus } from "@/lib/plans";
 import { formatCompactNumber, formatCurrency } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -37,6 +38,8 @@ export default function DashboardPage() {
 
   if (!currentUser) return null;
 
+  const productQuota = getProductQuotaStatus(currentUser.plan, currentProducts.length);
+
   // Penjual harus melengkapi profil dulu sebelum boleh menambah produk.
   function handleAddProduct() {
     if (!isProfileComplete) {
@@ -46,6 +49,14 @@ export default function DashboardPage() {
         tone: "default"
       });
       router.push("/dashboard/profile");
+      return;
+    }
+    if (productQuota.isAtLimit) {
+      pushToast({
+        title: "Limit paket tercapai",
+      description: `Paket ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
+        tone: "warning"
+      });
       return;
     }
     setOpenModal(true);
@@ -58,7 +69,10 @@ export default function DashboardPage() {
     {
       label: "Total produk",
       value: String(currentProducts.length),
-      hint: `${activeProducts.length} produk aktif tampil di katalog`,
+      hint:
+        productQuota.limit === null
+          ? `${activeProducts.length} produk aktif tampil di katalog`
+          : `${activeProducts.length} aktif, ${productQuota.remaining} slot tersisa`,
       icon: BoxIcon,
       tone: "brand" as const
     },
@@ -137,6 +151,44 @@ export default function DashboardPage() {
               Salin link
             </Button>
           </div>
+        </Card>
+      </section>
+
+      <section>
+        <Card className="rounded-[2rem] p-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
+                  Paket {productQuota.definition.name}
+                </p>
+                <Badge tone={productQuota.isAtLimit ? "warning" : "success"}>
+                  {productQuota.limit === null
+                    ? "Item tanpa batas"
+                    : `${productQuota.used}/${productQuota.limit} item`}
+                </Badge>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {productQuota.limit === null
+                  ? "Saat ini semua fitur katalog dibuka gratis. Struktur paket sudah disiapkan untuk kebutuhan berbayar di masa depan."
+                  : `${productQuota.remaining} slot item tersisa. Upgrade paket akan membuka limit lebih besar, analytics lebih panjang, dan dukungan prioritas.`}
+              </p>
+            </div>
+            <Button variant={productQuota.isAtLimit ? "primary" : "secondary"} onClick={handleAddProduct}>
+              {productQuota.isAtLimit ? "Upgrade paket" : "Tambah item"}
+            </Button>
+          </div>
+          {productQuota.limit !== null ? (
+            <div
+              className="mt-4 h-2 overflow-hidden rounded-full bg-surface-soft"
+              role="progressbar"
+              aria-valuenow={productQuota.percentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${productQuota.percentage}%` }} />
+            </div>
+          ) : null}
         </Card>
       </section>
 

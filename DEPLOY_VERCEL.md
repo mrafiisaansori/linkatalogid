@@ -22,11 +22,11 @@ Arsitektur:
 1. Upload isi folder `backend/` ke document root subdomain `linkatalog.raftechsolution.web.id`.
 2. Import `backend/schema.sql` ke database `raftechs_linkatalog`.
 3. Jika database live sudah ada, jalankan juga `backend/migration-email-verification.sql`.
-4. Jalankan `php seed.php` untuk membuat admin awal `admin / Indones!4`.
+4. Jalankan `php seed.php` untuk membuat admin awal, lalu segera ganti password admin.
 5. Cek health endpoint:
 
 ```bash
-curl -u admin:'Indones!4' https://linkatalog.raftechsolution.web.id/health
+curl -u your-backend-basic-auth-user:'your-backend-basic-auth-password' https://linkatalog.raftechsolution.web.id/health
 ```
 
 ## Setup frontend di Vercel
@@ -37,12 +37,12 @@ Set environment variables berikut:
 | --- | --- |
 | `BACKEND_URL` | `https://linkatalog.raftechsolution.web.id` |
 | `BACKEND_AUTH_USER` | `admin` |
-| `BACKEND_AUTH_PASS` | `Indones!4` |
+| `BACKEND_AUTH_PASS` | Password Basic Auth backend yang kuat |
 | `LINKATALOG_SESSION_SECRET` | secret random panjang |
 
 ## Verifikasi
 
-1. Buka `/be-admin`, login `admin / Indones!4`.
+1. Buka `/be-admin`, login dengan akun admin yang dibuat saat seed/deploy.
 2. Register seller baru dari `/auth`.
 3. Ubah profil dan tambah produk dari dashboard.
 4. Buka `/{username}` dan pastikan katalog publik tampil.

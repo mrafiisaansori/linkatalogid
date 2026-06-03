@@ -2,25 +2,28 @@
  * HTTP client untuk PHP REST backend.
  *
  * Backend di-host terpisah di https://linkatalog.raftechsolution.web.id.
- * Semua endpoint butuh Basic Auth (admin:<password>) yang di-set lewat env var.
+ * Semua endpoint butuh Basic Auth yang di-set lewat env var.
  *
  * Env vars (set di Vercel → Settings → Environment Variables):
  *   BACKEND_URL          = "https://linkatalog.raftechsolution.web.id"
- *   BACKEND_AUTH_USER    = "admin"
- *   BACKEND_AUTH_PASS    = "Indones!4"
+ *   BACKEND_AUTH_USER    = "..."
+ *   BACKEND_AUTH_PASS    = "..."
  */
 
-const FALLBACK_BACKEND_URL = "https://linkatalog.raftechsolution.web.id";
-const FALLBACK_AUTH_USER = "admin";
-const FALLBACK_AUTH_PASS = "Indones!4";
-
 function backendUrl(): string {
-  return (process.env.BACKEND_URL || FALLBACK_BACKEND_URL).replace(/\/+$/, "");
+  const value = process.env.BACKEND_URL?.trim();
+  if (!value) {
+    throw new Error("BACKEND_URL is required.");
+  }
+  return value.replace(/\/+$/, "");
 }
 
 function basicAuthHeader(): string {
-  const user = process.env.BACKEND_AUTH_USER || FALLBACK_AUTH_USER;
-  const pass = process.env.BACKEND_AUTH_PASS || FALLBACK_AUTH_PASS;
+  const user = process.env.BACKEND_AUTH_USER?.trim();
+  const pass = process.env.BACKEND_AUTH_PASS?.trim();
+  if (!user || !pass) {
+    throw new Error("BACKEND_AUTH_USER and BACKEND_AUTH_PASS are required.");
+  }
   const encoded = Buffer.from(`${user}:${pass}`).toString("base64");
   return `Basic ${encoded}`;
 }
@@ -59,12 +62,27 @@ export async function backendFetch<T = unknown>(
   path: string,
   options: BackendOptions = {}
 ): Promise<BackendResult<T>> {
-  const url = buildUrl(path, options.query);
   const method = options.method ?? "GET";
+  let url: string;
+  let authHeader: string;
+  try {
+    url = buildUrl(path, options.query);
+    authHeader = basicAuthHeader();
+  } catch (error) {
+    return {
+      ok: false,
+      status: 500,
+      data: {
+        success: false,
+        message: "Konfigurasi koneksi backend belum lengkap.",
+        detail: error instanceof Error ? error.message : String(error)
+      } as T
+    };
+  }
 
   const headers: Record<string, string> = {
     Accept: "application/json",
-    Authorization: basicAuthHeader()
+    Authorization: authHeader
   };
 
   let body: BodyInit | undefined;

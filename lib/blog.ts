@@ -31,6 +31,8 @@ export interface BlogPost {
   author: string;
   /** ISO date string, mis. "2026-05-20". */
   publishedAt: string;
+  /** Jam posting dalam WIB, format "HH:mm". */
+  publishedTime?: string;
   updatedAt?: string;
   readingMinutes: number;
   coverImage: string;
@@ -41,6 +43,244 @@ export interface BlogPost {
 }
 
 const POSTS: BlogPost[] = [
+  {
+    slug: "rupiah-melemah-dollar-naik-dampak-seller-online",
+    title: "Rupiah Melemah, Dollar Naik: Dampaknya untuk Seller Online dan Cara Menyesuaikan Harga",
+    seoTitle: "Rupiah Melemah, Dollar Naik: Dampak untuk Seller Online",
+    description:
+      "Rupiah melemah dan dollar AS menguat ke kisaran Rp18.000. Pelajari dampaknya untuk seller online, harga produk, stok, dan cara menjaga order tetap masuk.",
+    keywords: [
+      "rupiah melemah",
+      "dollar naik",
+      "dampak dollar naik untuk seller",
+      "strategi harga seller online",
+      "harga produk naik"
+    ],
+    category: "Strategi Harga",
+    author: "Tim Linkatalog",
+    publishedAt: "2026-06-06",
+    publishedTime: "15:30",
+    readingMinutes: 6,
+    coverImage: "/blog/jualan-online-tanpa-website-photo.png",
+    coverAlt: "Seller online mengecek harga produk saat rupiah melemah terhadap dollar AS",
+    excerpt:
+      "Dollar AS yang menguat bisa menekan biaya barang, kemasan, iklan, dan stok. Ini cara seller menyesuaikan harga tanpa membuat pelanggan kaget.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Awal Juni 2026, pembahasan soal rupiah melemah kembali ramai karena dolar AS sempat bergerak di sekitar Rp17.900 sampai Rp18.000. Untuk seller online, isu ini bukan sekadar berita ekonomi. Kalau bahan baku, produk impor, kemasan, iklan, atau alat produksi ikut terdampak, margin bisa menipis tanpa terasa."
+      },
+      {
+        type: "paragraph",
+        text: "Kabar baiknya, seller tidak harus langsung panik menaikkan semua harga. Yang dibutuhkan adalah menghitung ulang biaya, memilah produk yang paling terpengaruh, lalu mengomunikasikan perubahan dengan rapi di katalog."
+      },
+      { type: "heading", level: 2, text: "Kenapa dollar naik bisa terasa ke harga jual" },
+      {
+        type: "list",
+        items: [
+          "Produk impor atau bahan baku impor biasanya ikut naik lebih cepat.",
+          "Kemasan, perlengkapan produksi, dan alat kerja tertentu bisa terdampak karena rantai pasoknya memakai komponen impor.",
+          "Biaya iklan digital dan tools online yang dibayar dalam dollar bisa terasa lebih mahal.",
+          "Supplier cenderung memperbarui harga bertahap, sehingga seller perlu memantau harga modal secara rutin."
+        ]
+      },
+      { type: "heading", level: 2, text: "Langkah pertama: hitung ulang margin per produk" },
+      {
+        type: "paragraph",
+        text: "Jangan menaikkan harga hanya berdasarkan perasaan. Ambil 10 sampai 20 produk yang paling sering terjual, lalu bandingkan harga modal lama, harga modal baru, ongkir atau kemasan, biaya admin, dan margin bersih. Dari sini kamu bisa melihat produk mana yang benar-benar perlu disesuaikan."
+      },
+      {
+        type: "callout",
+        title: "Prioritaskan produk cepat laku",
+        text: "Kalau waktu terbatas, mulai dari produk best seller. Produk yang paling sering terjual adalah produk yang paling cepat menggerus margin saat harga modal naik."
+      },
+      { type: "heading", level: 2, text: "Cara menaikkan harga tanpa membuat pelanggan kaget" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Naikkan harga bertahap untuk produk yang sensitif, bukan sekaligus besar.",
+          "Beri alternatif ukuran, paket hemat, atau bundle agar pelanggan tetap punya pilihan.",
+          "Gunakan badge seperti Harga Baru atau Best Value di katalog agar perubahan terlihat jelas.",
+          "Jelaskan secara singkat bila harga berubah karena biaya bahan atau stok terbaru."
+        ]
+      },
+      { type: "heading", level: 2, text: "Perbarui katalog agar tidak salah order" },
+      {
+        type: "paragraph",
+        text: "Saat harga bergerak cepat, katalog yang tidak diperbarui bisa membuat pelanggan kecewa. Pastikan harga, stok, dan deskripsi produk di link katalog selalu sesuai kondisi terbaru. Lebih baik menampilkan harga terbaru secara jelas daripada harus meralat setelah pelanggan checkout."
+      },
+      {
+        type: "paragraph",
+        text: "Kuncinya bukan sekadar menaikkan harga, tetapi menjaga kepercayaan. Jika katalog rapi dan informasi jelas, pelanggan lebih mudah memahami perubahan dan tetap nyaman melanjutkan order via WhatsApp."
+      }
+    ],
+    faq: [
+      {
+        question: "Apakah semua harga produk harus langsung dinaikkan saat dollar naik?",
+        answer:
+          "Tidak selalu. Naikkan hanya produk yang modal atau biaya pendukungnya benar-benar berubah, lalu pantau margin produk best seller lebih dulu."
+      },
+      {
+        question: "Bagaimana cara memberi tahu pelanggan soal harga baru?",
+        answer:
+          "Perbarui harga di katalog, gunakan badge atau catatan singkat bila perlu, dan pastikan pesan WhatsApp checkout sudah mengikuti harga terbaru."
+      }
+    ]
+  },
+  {
+    slug: "cara-membuat-katalog-online-siap-dibagikan-ke-bio",
+    title: "Cara Membuat Katalog Online yang Siap Dibagikan ke Bio Instagram dan TikTok",
+    description:
+      "Checklist membuat katalog online yang siap dipasang di bio Instagram dan TikTok, dari nama toko, foto produk, kategori, CTA, sampai link order WhatsApp.",
+    keywords: [
+      "katalog online untuk bio",
+      "link katalog instagram",
+      "link katalog tiktok",
+      "cara membuat katalog online",
+      "katalog online siap dibagikan"
+    ],
+    category: "Optimasi Bio",
+    author: "Tim Linkatalog",
+    publishedAt: "2026-06-06",
+    publishedTime: "14:10",
+    readingMinutes: 5,
+    coverImage: "/blog/template-katalog-online-gratis-photo.png",
+    coverAlt: "Seller menyiapkan katalog online sebelum memasang link di bio media sosial",
+    excerpt:
+      "Sebelum link katalog dipasang di bio, pastikan halamanmu sudah menjawab pertanyaan pembeli dalam beberapa detik pertama.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Bio Instagram dan TikTok sering menjadi pintu masuk pertama calon pembeli. Masalahnya, orang yang klik link dari bio biasanya tidak punya banyak waktu. Mereka ingin cepat tahu kamu jual apa, harganya berapa, dan bagaimana cara order."
+      },
+      { type: "heading", level: 2, text: "Mulai dari profil toko yang jelas" },
+      {
+        type: "list",
+        items: [
+          "Gunakan nama toko yang sama dengan akun media sosial.",
+          "Tulis bio singkat yang menjelaskan produk utama dan area layanan bila relevan.",
+          "Pastikan nomor WhatsApp aktif dan mudah dihubungi.",
+          "Gunakan foto profil atau logo yang konsisten."
+        ]
+      },
+      { type: "heading", level: 2, text: "Susun produk seperti pembeli sedang buru-buru" },
+      {
+        type: "paragraph",
+        text: "Jangan membuat calon pembeli menggulir terlalu jauh untuk menemukan produk penting. Letakkan produk best seller, paket promo, atau item yang sedang sering ditanyakan di bagian atas. Setelah itu baru tampilkan kategori lain."
+      },
+      {
+        type: "callout",
+        title: "Aturan 5 detik",
+        text: "Dalam 5 detik pertama, pembeli sebaiknya sudah paham jenis produkmu, kisaran harga, dan tombol order yang harus mereka klik."
+      },
+      { type: "heading", level: 2, text: "Checklist sebelum link dipasang di bio" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Minimal ada 3 sampai 5 produk aktif dengan foto jelas.",
+          "Harga dan varian utama terlihat tanpa perlu bertanya dulu.",
+          "Kategori tidak terlalu banyak dan mudah dipahami.",
+          "Deskripsi produk menjawab ukuran, bahan, rasa, manfaat, atau cara pemakaian.",
+          "Tombol checkout WhatsApp sudah diuji dari HP."
+        ]
+      },
+      { type: "heading", level: 2, text: "Tambahkan ajakan di bio dan konten" },
+      {
+        type: "paragraph",
+        text: "Link saja tidak cukup. Tambahkan arahan di bio seperti 'Katalog lengkap & order di link ini' atau 'Cek harga terbaru di katalog'. Di caption dan story, arahkan orang ke produk tertentu agar klik terasa punya tujuan."
+      }
+    ],
+    faq: [
+      {
+        question: "Berapa produk minimal sebelum katalog dibagikan?",
+        answer:
+          "Sebaiknya minimal 3 sampai 5 produk aktif agar halaman terasa berisi dan pembeli punya pilihan."
+      },
+      {
+        question: "Apakah link katalog perlu diganti setiap ada promo?",
+        answer:
+          "Tidak. Cukup perbarui isi katalog dan pakai link yang sama di bio agar promosi tetap konsisten."
+      }
+    ]
+  },
+  {
+    slug: "cara-meningkatkan-checkout-whatsapp-dari-link-katalog",
+    title: "Cara Meningkatkan Checkout WhatsApp dari Link Katalog",
+    description:
+      "Tips menaikkan checkout WhatsApp dari link katalog: susun produk unggulan, CTA jelas, deskripsi ringkas, dan pesan order yang membuat pembeli yakin.",
+    keywords: [
+      "meningkatkan checkout whatsapp",
+      "checkout whatsapp",
+      "link katalog whatsapp",
+      "cara menaikkan order whatsapp",
+      "optimasi katalog online"
+    ],
+    category: "Konversi",
+    author: "Tim Linkatalog",
+    publishedAt: "2026-06-06",
+    publishedTime: "13:20",
+    readingMinutes: 5,
+    coverImage: "/blog/cara-promosi-link-katalog-photo.png",
+    coverAlt: "Seller mengoptimalkan link katalog agar lebih banyak checkout WhatsApp",
+    excerpt:
+      "Banyak klik belum tentu banyak order. Optimalkan susunan katalog dan CTA agar pembeli lebih yakin lanjut checkout via WhatsApp.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Link katalog yang ramai dibuka belum tentu langsung menghasilkan order. Kadang masalahnya bukan di traffic, tetapi di pengalaman pembeli: produk sulit dipilih, harga kurang jelas, atau tombol order tidak terasa meyakinkan."
+      },
+      { type: "heading", level: 2, text: "Tampilkan produk yang paling mudah dibeli" },
+      {
+        type: "paragraph",
+        text: "Produk pertama yang dilihat pembeli sebaiknya bukan produk paling rumit. Mulai dari best seller, paket hemat, atau item dengan manfaat paling jelas. Produk seperti ini membuat pembeli lebih cepat masuk ke keranjang."
+      },
+      { type: "heading", level: 2, text: "Buat CTA yang sesuai konteks" },
+      {
+        type: "list",
+        items: [
+          "Gunakan Pesan untuk produk fisik yang siap dikirim.",
+          "Gunakan Booking untuk layanan berbasis jadwal.",
+          "Gunakan Konsultasi untuk jasa yang butuh diskusi sebelum harga final.",
+          "Gunakan tombol yang singkat agar pembeli tidak ragu."
+        ]
+      },
+      {
+        type: "callout",
+        title: "CTA harus menjawab niat pembeli",
+        text: "Pembeli produk ingin pesan cepat. Pembeli jasa sering ingin bertanya dulu. Sesuaikan tombol agar langkah berikutnya terasa natural."
+      },
+      { type: "heading", level: 2, text: "Kurangi pertanyaan berulang sebelum checkout" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Cantumkan harga atau kisaran harga dengan jelas.",
+          "Tulis deskripsi singkat yang menjawab ukuran, bahan, stok, durasi, atau area layanan.",
+          "Gunakan foto yang konsisten agar katalog terlihat tepercaya.",
+          "Tambahkan badge promo hanya untuk item yang benar-benar ingin kamu dorong."
+        ]
+      },
+      { type: "heading", level: 2, text: "Uji pesan WhatsApp yang masuk" },
+      {
+        type: "paragraph",
+        text: "Coba checkout dari HP seperti pembeli sungguhan. Pastikan pesan WhatsApp berisi nama produk, jumlah, total, dan catatan yang mudah kamu proses. Pesan yang rapi membuat admin lebih cepat membalas dan pembeli lebih percaya."
+      }
+    ],
+    faq: [
+      {
+        question: "Apa penyebab link katalog banyak klik tetapi sedikit checkout?",
+        answer:
+          "Biasanya karena produk unggulan tidak terlihat, harga kurang jelas, CTA tidak sesuai, atau pembeli belum yakin dengan detail produk."
+      },
+      {
+        question: "Apakah semua produk perlu badge promo?",
+        answer:
+          "Tidak. Pakai badge hanya untuk produk prioritas agar perhatian pembeli tidak terpecah."
+      }
+    ]
+  },
   {
     slug: "cara-bikin-katalog-online-gratis",
     title: "Cara Bikin Katalog Online Gratis untuk Jualan (Panduan 2026)",
@@ -917,8 +1157,12 @@ const POSTS: BlogPost[] = [
 ];
 
 /** Urutkan dari yang terbaru. */
+function postTimestamp(post: BlogPost) {
+  return new Date(`${post.publishedAt}T${post.publishedTime ?? "09:00"}:00+07:00`).getTime();
+}
+
 function byNewest(a: BlogPost, b: BlogPost) {
-  return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  return postTimestamp(b) - postTimestamp(a);
 }
 
 export async function getAllPosts(): Promise<BlogPost[]> {
@@ -944,5 +1188,10 @@ export function formatPostDate(iso: string): string {
     month: "long",
     year: "numeric"
   });
+}
+
+/** Format jam posting ke gaya Indonesia, mis. "15.30 WIB". */
+export function formatPostTime(post: Pick<BlogPost, "publishedTime">): string {
+  return `${(post.publishedTime ?? "09:00").replace(":", ".")} WIB`;
 }
 

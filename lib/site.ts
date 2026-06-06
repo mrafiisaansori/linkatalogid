@@ -33,11 +33,19 @@ export const SITE_KEYWORDS = [
 
 /** Navigasi utama (anchor diawali "/" agar tetap bekerja dari halaman mana pun). */
 export const FOOTER_NAV = [
+  { href: "/link-katalog", label: "Link katalog" },
   { href: "/#fitur", label: "Fitur" },
   { href: "/#cara-kerja", label: "Cara kerja" },
   { href: "/#preview", label: "Preview katalog" },
   { href: "/blog", label: "Blog" },
   { href: "/#faq", label: "FAQ" }
+];
+
+export const FEATURED_PUBLIC_CATALOGS = [
+  {
+    username: "alatkopimalang",
+    url: `${SITE_URL}/alatkopimalang`
+  }
 ];
 
 export const FOOTER_LEGAL = [

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogShareButtons } from "@/components/blog-share-buttons";
 import { SiteContentHeader } from "@/components/site-content-header";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { ArrowRightIcon, ClockIcon, SparkIcon } from "@/components/icons";
@@ -10,6 +11,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   type BlogBlock,
   formatPostDate,
+  formatPostTime,
   getAllSlugs,
   getPostBySlug,
   getRelatedPosts
@@ -189,7 +191,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <span className="text-muted">{formatPostDate(post.publishedAt)}</span>
             <span className="inline-flex items-center gap-1 text-muted">
               <ClockIcon className="h-3.5 w-3.5" />
-              {post.readingMinutes} menit baca
+              {formatPostTime(post)}
             </span>
           </div>
 
@@ -233,16 +235,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           ) : null}
         </article>
 
+        <BlogShareButtons title={post.title} url={url} />
+
         <section className="mt-12 overflow-hidden rounded-[2rem] border border-brand/20 bg-gradient-to-br from-brand/15 via-brand/8 to-sky-500/10 p-8 text-center">
           <h2 className="text-xl font-semibold text-foreground sm:text-2xl">Mulai bikin katalog onlinemu gratis</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-muted">
             Susun produk, bagikan satu link, terima order rapi via WhatsApp. Tanpa biaya, tanpa coding.
           </p>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/auth">
-              <Button size="lg">
+              <Button size="lg" className="w-full sm:w-auto">
                 Mulai Gratis
                 <ArrowRightIcon className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/link-katalog">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                Panduan Link Katalog
               </Button>
             </Link>
           </div>

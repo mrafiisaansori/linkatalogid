@@ -22,9 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
-const PAGE_TITLE = "Linkatalog — Etalase Online Profesional untuk Produk & Jasa | Order via WhatsApp";
+const PAGE_TITLE = "Linkatalog — Link Katalog Gratis untuk Produk & Jasa | Order via WhatsApp";
 const PAGE_DESCRIPTION =
-  "Ubah followers jadi pesanan. Satu link katalog profesional untuk produk maupun jasa, pelanggan tinggal pilih lalu order via WhatsApp. Gratis sepenuhnya untuk saat ini.";
+  "Buat link katalog gratis untuk produk maupun jasa. Pelanggan tinggal pilih item, masukkan ke keranjang, lalu order langsung via WhatsApp. Cocok untuk UMKM, reseller, dan toko online.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -244,9 +244,9 @@ export default function HomePage() {
 
               <div className="landing-reveal landing-reveal-delay-1 space-y-5">
                 <h1 className="max-w-3xl text-4xl font-semibold leading-[1.3] text-foreground sm:text-5xl lg:text-[3.4rem]">
-                  Ubah followers jadi pesanan dengan{" "}
+                  Link katalog gratis untuk ubah followers jadi pesanan
                   <span className="relative inline-block">
-                    satu link profesional
+                    {" "}via WhatsApp
                     <span className="absolute inset-x-1 bottom-1 -z-10 h-4 rounded-full bg-brand/15 blur-md sm:bottom-2 sm:h-5" />
                   </span>
                 </h1>
@@ -318,6 +318,33 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </section>
+        {/* Apa itu link katalog */}
+        <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <Card className="rounded-[2rem] border-line/80 p-6 sm:p-8">
+            <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Link katalog</p>
+                <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                  Satu link untuk semua produk dan jasa
+                </h2>
+              </div>
+              <div>
+                <p className="text-base leading-8 text-muted">
+                  Link katalog adalah halaman online berisi foto, harga, kategori, deskripsi, dan tombol order. Dengan
+                  Linkatalog, kamu bisa membagikan satu URL ke bio Instagram, TikTok, status WhatsApp, atau chat
+                  pelanggan supaya mereka melihat katalog lengkap sebelum memesan.
+                </p>
+                <a
+                  href="/link-katalog"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:text-brand-strong"
+                >
+                  Baca panduan link katalog
+                  <ArrowRightIcon className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </Card>
         </section>
         {/* Problem / Solution */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

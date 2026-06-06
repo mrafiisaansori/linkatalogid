@@ -5,7 +5,7 @@ import { SiteContentHeader } from "@/components/site-content-header";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { ArrowRightIcon, ClockIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { formatPostDate, getAllPosts } from "@/lib/blog";
+import { formatPostDate, formatPostTime, getAllPosts } from "@/lib/blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -105,7 +105,7 @@ export default async function BlogIndexPage() {
                 <span className="text-muted">{formatPostDate(featured.publishedAt)}</span>
                 <span className="inline-flex items-center gap-1 text-muted">
                   <ClockIcon className="h-3.5 w-3.5" />
-                  {featured.readingMinutes} menit baca
+                  {formatPostTime(featured)}
                 </span>
               </div>
               <h2 className="text-2xl font-semibold leading-snug text-foreground sm:text-3xl">{featured.title}</h2>
@@ -141,7 +141,7 @@ export default async function BlogIndexPage() {
                   </span>
                   <span className="inline-flex items-center gap-1 text-muted">
                     <ClockIcon className="h-3.5 w-3.5" />
-                    {post.readingMinutes} menit
+                    {formatPostTime(post)}
                   </span>
                 </div>
                 <h3 className="text-lg font-semibold leading-snug text-foreground">{post.title}</h3>
@@ -160,11 +160,16 @@ export default async function BlogIndexPage() {
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-muted">
             Gratis, tanpa coding. Susun produk, bagikan satu link, dan terima order rapi via WhatsApp.
           </p>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/auth">
-              <Button size="lg">
+              <Button size="lg" className="w-full sm:w-auto">
                 Mulai Gratis Sekarang
                 <ArrowRightIcon className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/link-katalog">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                Panduan Link Katalog
               </Button>
             </Link>
           </div>

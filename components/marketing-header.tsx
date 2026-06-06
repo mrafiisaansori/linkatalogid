@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useAppState } from "@/components/app-provider";
 
 const navItems = [
+  { href: "/", label: "Beranda" },
   { href: "/#fitur", label: "Fitur" },
   { href: "/#cara-kerja", label: "Cara kerja" },
   { href: "/#preview", label: "Preview" },

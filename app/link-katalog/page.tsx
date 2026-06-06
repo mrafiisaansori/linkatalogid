@@ -117,7 +117,7 @@ const faqItems = [
   {
     question: "Apakah Linkatalog gratis?",
     answer:
-      "Ya. Untuk saat ini Linkatalog bisa dipakai gratis untuk membuat katalog, menambahkan produk atau jasa, membagikan link, dan menerima order via WhatsApp."
+      "Ya. Linkatalog gratis permanen untuk membuat katalog, menambahkan produk atau jasa, membagikan link, dan menerima order via WhatsApp."
   },
   {
     question: "Apakah cocok untuk jasa, bukan hanya produk?",

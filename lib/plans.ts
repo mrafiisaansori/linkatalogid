@@ -12,7 +12,7 @@ export interface PlanDefinition {
 export const PLAN_DEFINITIONS: Record<UserPlan, PlanDefinition> = {
   free: {
     id: "free",
-    name: "Free Saat Ini",
+    name: "Free Selamanya",
     productLimit: null,
     analyticsRetentionDays: 365,
     teamSeats: 1,
@@ -20,27 +20,27 @@ export const PLAN_DEFINITIONS: Record<UserPlan, PlanDefinition> = {
   },
   starter: {
     id: "starter",
-    name: "Starter",
-    productLimit: 50,
-    analyticsRetentionDays: 30,
+    name: "Free Selamanya",
+    productLimit: null,
+    analyticsRetentionDays: 365,
     teamSeats: 1,
-    supportLevel: "Email"
+    supportLevel: "Basic"
   },
   pro: {
     id: "pro",
-    name: "Professional",
-    productLimit: 250,
-    analyticsRetentionDays: 180,
-    teamSeats: 3,
-    supportLevel: "Priority"
+    name: "Free Selamanya",
+    productLimit: null,
+    analyticsRetentionDays: 365,
+    teamSeats: 1,
+    supportLevel: "Basic"
   },
   enterprise: {
     id: "enterprise",
-    name: "Enterprise",
+    name: "Free Selamanya",
     productLimit: null,
     analyticsRetentionDays: 365,
-    teamSeats: 10,
-    supportLevel: "SLA"
+    teamSeats: 1,
+    supportLevel: "Basic"
   }
 };
 

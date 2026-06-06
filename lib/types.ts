@@ -9,7 +9,7 @@ export type ItemType = "product" | "service";
 export type PriceMode = "fixed" | "from" | "custom";
 // Jenis tombol aksi di halaman publik.
 export type ItemCtaType = "buy" | "booking" | "consult" | "quote";
-// Paket langganan penjual (fondasi monetisasi).
+// Level akses penjual. Semua akun publik saat ini memakai akses free.
 export type UserPlan = "free" | "starter" | "pro" | "enterprise";
 
 export interface User {
@@ -24,7 +24,7 @@ export interface User {
   themePreference: ThemeMode;
   themeAccent: ThemeAccent;
   isActive: boolean;
-  // Paket langganan aktif. Default "free". Opsional agar backward-compatible.
+  // Level akses aktif. Default "free". Opsional agar backward-compatible.
   plan?: UserPlan;
   createdAt: string;
   updatedAt: string;

@@ -53,8 +53,8 @@ export default function DashboardPage() {
     }
     if (productQuota.isAtLimit) {
       pushToast({
-        title: "Limit paket tercapai",
-      description: `Paket ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
+        title: "Limit item tercapai",
+        description: `Akses ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
         tone: "warning"
       });
       return;
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
-                  Paket {productQuota.definition.name}
+                  Akses {productQuota.definition.name}
                 </p>
                 <Badge tone={productQuota.isAtLimit ? "warning" : "success"}>
                   {productQuota.limit === null
@@ -170,12 +170,12 @@ export default function DashboardPage() {
               </div>
               <p className="mt-2 text-sm leading-6 text-muted">
                 {productQuota.limit === null
-                  ? "Saat ini semua fitur katalog dibuka gratis. Struktur paket sudah disiapkan untuk kebutuhan berbayar di masa depan."
-                  : `${productQuota.remaining} slot item tersisa. Upgrade paket akan membuka limit lebih besar, analytics lebih panjang, dan dukungan prioritas.`}
+                  ? "Semua fitur inti katalog dibuka gratis permanen tanpa biaya bulanan."
+                  : `${productQuota.remaining} slot item tersisa.`}
               </p>
             </div>
-            <Button variant={productQuota.isAtLimit ? "primary" : "secondary"} onClick={handleAddProduct}>
-              {productQuota.isAtLimit ? "Upgrade paket" : "Tambah item"}
+            <Button variant="secondary" onClick={handleAddProduct}>
+              Tambah item
             </Button>
           </div>
           {productQuota.limit !== null ? (

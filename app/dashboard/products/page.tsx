@@ -69,8 +69,8 @@ export default function DashboardProductsPage() {
   function handleCreate() {
     if (productQuota.isAtLimit) {
       pushToast({
-        title: "Limit paket tercapai",
-        description: `Paket ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
+        title: "Limit item tercapai",
+        description: `Akses ${productQuota.definition.name} bisa menyimpan maksimal ${productQuota.limit} item.`,
         tone: "warning"
       });
       return;
@@ -110,7 +110,7 @@ export default function DashboardProductsPage() {
               </p>
             </div>
             <Button onClick={handleCreate} className="w-full sm:w-auto">
-              {productQuota.isAtLimit ? "Upgrade paket" : "Tambah produk"}
+              Tambah produk
             </Button>
           </div>
 

@@ -42,6 +42,7 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true }
   }
+  other: { "google-adsense-account": "ca-pub-5260203635359132" },
   // Favicon ditangani otomatis oleh file app/favicon.ico, app/icon.png, app/apple-icon.png
 };
 

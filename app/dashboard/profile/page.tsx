@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
+import { compressImage } from "@/lib/compress-image";
 import Link from "next/link";
 import { CameraIcon, EyeIcon, LocationIcon, UserIcon, WhatsAppIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ export default function DashboardProfilePage() {
     setError("");
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", await compressImage(file), file.name);
 
       const response = await fetch("/api/upload/image", {
         method: "POST",

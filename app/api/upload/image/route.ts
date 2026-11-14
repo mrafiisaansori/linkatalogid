@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { backendFetch } from "@/lib/server/backend-client";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-const MAX_SIZE = 5 * 1024 * 1024;
+const MAX_SIZE = 1 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (fileSize > MAX_SIZE) {
-      return NextResponse.json({ success: false, message: "Ukuran file maksimal 5 MB." }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Ukuran file maksimal 1 MB." }, { status: 400 });
     }
 
     const arrayBuffer = await file.arrayBuffer();

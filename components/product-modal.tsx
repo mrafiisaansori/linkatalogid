@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
+import { compressImage } from "@/lib/compress-image";
 import { CameraIcon, CheckIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -97,7 +98,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
     setError("");
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", await compressImage(file), file.name);
 
       const response = await fetch("/api/upload/image", {
         method: "POST",

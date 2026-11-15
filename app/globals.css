@@ -216,3 +216,66 @@ body {
     transform: none !important;
   }
 }
+
+/* Strip promo: muncul sekali dari atas saat halaman dibuka, tidak berulang. */
+@keyframes promoIn {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .promo-in {
+    animation: promoIn 420ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
+  }
+}
+
+/* Kilau menyapu strip promo, dipicu oleh interaksi (bukan loop). */
+.promo-shine {
+  display: none;
+}
+
+@keyframes promoShine {
+  from {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(420%) skewX(-20deg);
+  }
+}
+
+@keyframes promoWiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-12deg) scale(1.08);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .promo-shine {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    animation: promoShine 900ms ease-out both;
+  }
+
+  .group:hover .promo-icon,
+  .group:active .promo-icon {
+    animation: promoWiggle 450ms ease-in-out;
+  }
+}

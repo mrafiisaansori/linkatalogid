@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRightIcon, CheckIcon, CloseIcon, CopyIcon, StoreIcon } from "@/components/icons";
 
 const URL = "https://zonakasir.com/?utm_source=linkatalog&utm_campaign=promo_card&utm_medium=";
@@ -38,6 +38,25 @@ export function ZonaKasirPromo({
   compact?: boolean;
 }) {
   const [show, setShow] = useState(true);
+  const [shine, setShine] = useState(false);
+
+  // Kilau dipicu: setelah strip muncul, dan sekali saat pengunjung mulai scroll. Tidak berulang sendiri.
+  useEffect(() => {
+    if (!compact) return;
+    const t = setTimeout(() => setShine(true), 900);
+    const onScroll = () => {
+      if (window.scrollY > 400) {
+        setShine(true);
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [compact]);
+
   if (!show) return null;
 
   const close = (
@@ -55,16 +74,32 @@ export function ZonaKasirPromo({
 
   if (compact) {
     return (
-      <div className={`${className} bg-orange-700 text-white`}>
-        <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 text-xs sm:px-6 sm:text-sm lg:px-8">
-          <a href={URL + medium} target="_blank" rel="noopener" className="flex min-w-0 flex-1 items-center gap-2 hover:underline">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white/20">
-              <StoreIcon className="h-3.5 w-3.5" />
+      <div className={`${className} promo-in relative overflow-hidden bg-orange-700 text-white transition-colors hover:bg-orange-800`}
+        onMouseEnter={() => setShine(true)}
+      >
+        {shine && (
+          <span aria-hidden className="promo-shine" onAnimationEnd={() => setShine(false)} />
+        )}
+        <div className="relative mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 text-xs sm:px-6 sm:text-sm lg:px-8">
+          {/* Seluruh strip bisa diklik; tombol "Coba" memberi tanda aksi yang jelas. */}
+          <a
+            href={URL + medium}
+            target="_blank"
+            rel="noopener"
+            className="group flex min-w-0 flex-1 items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            <span className="promo-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/20">
+              <StoreIcon className="h-4 w-4" />
             </span>
-            <span className={`${badge} hidden sm:inline`}>Promo</span>
-            <span className="leading-snug">
-              <span className="block font-semibold">Punya usaha? Coba kasir ZonaKasir →</span>
-              <span className="block text-white/90">Kasir digital untuk catat penjualan UMKM</span>
+            <span className="min-w-0 flex-1 leading-snug">
+              <span className="block font-semibold">
+                Punya usaha? <span className={`${badge} ml-1 hidden align-middle sm:inline`}>Promo</span>
+              </span>
+              <span className="block text-white/90">Catat penjualan lebih rapi pakai kasir digital ZonaKasir</span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-orange-700 shadow-sm transition group-hover:bg-orange-50 group-active:scale-95">
+              Coba
+              <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </span>
           </a>
           {close}

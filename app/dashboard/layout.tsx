@@ -66,8 +66,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   if (!currentUser) {
     return (
       <main className="page-shell flex min-h-screen items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-xl rounded-[2rem] p-8 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+        <Card className="w-full max-w-xl rounded-2xl p-8 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-brand/10 text-brand">
             <StoreIcon className="h-7 w-7" />
           </div>
           <h1 className="mt-5 text-2xl font-semibold text-foreground">Masuk dulu untuk buka dashboard</h1>
@@ -93,15 +93,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   };
 
   const userCard = (
-    <div className="flex items-center gap-3 rounded-[1.5rem] bg-surface-soft p-3">
+    <div className="flex items-center gap-3 rounded-xl bg-surface-soft p-3">
       {currentUser.profileImage ? (
         <img
           src={currentUser.profileImage}
           alt={currentUser.name}
-          className="h-14 w-14 rounded-2xl object-cover ring-1 ring-line"
+          className="h-14 w-14 rounded-xl object-cover ring-1 ring-line"
         />
       ) : (
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand/10 text-brand">
           <UserIcon className="h-6 w-6" />
         </div>
       )}
@@ -149,15 +149,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Desktop sidebar */}
         <aside className="hidden lg:block">
           <div className="sticky top-4 space-y-4">
-            <Card className="rounded-[2rem] p-5">
+            <Card className="rounded-2xl p-5">
               <Link href="/" className="inline-block min-w-0">
                 <BrandLockup size="lg" />
               </Link>
               <div className="mt-6">{userCard}</div>
             </Card>
 
-            <Card className="space-y-3 rounded-[2rem] p-4">
-              <p className="px-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Navigasi</p>
+            <Card className="space-y-3 rounded-2xl p-4">
+              <p className="px-2 text-xs font-semibold uppercase tracking-wider text-muted">Navigasi</p>
               <nav className="space-y-1.5">
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -168,7 +168,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                       href={item.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                        "group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
                         active
                           ? "bg-brand text-white shadow-card"
                           : "text-muted hover:bg-surface-soft hover:text-foreground"
@@ -195,7 +195,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </Card>
 
             {profileCompletion.percentage < 100 && (
-              <Card className="rounded-[2rem] p-5">{progressBlock}</Card>
+              <Card className="rounded-2xl p-5">{progressBlock}</Card>
             )}
           </div>
         </aside>
@@ -203,7 +203,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Main column */}
         <div className="space-y-6 pb-28 lg:pb-8">
           {isDemoMode ? (
-            <Card className="rounded-[1.75rem] border-brand/20 bg-brand/5 px-5 py-4">
+            <Card className="rounded-2xl border-brand/20 bg-brand/5 px-5 py-4">
               <p className="text-sm font-semibold text-foreground">Mode demo Vercel aktif</p>
               <p className="mt-1 text-sm leading-6 text-muted">
                 Perubahan profil dan produk disimpan sementara di browser ini agar flow demo tetap terasa hidup.
@@ -212,18 +212,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           ) : null}
 
           {/* Topbar */}
-          <header className="sticky top-4 z-30 flex items-center justify-between gap-3 rounded-[2rem] border border-line bg-surface/85 p-3 shadow-soft backdrop-blur-xl sm:p-4">
+          <header className="sticky top-4 z-30 flex items-center justify-between gap-3 rounded-2xl border border-line bg-surface/85 p-3 shadow-soft backdrop-blur-xl sm:p-4">
             <div className="flex min-w-0 items-center gap-3">
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
                 aria-label="Buka menu"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-line bg-surface text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 lg:hidden"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 lg:hidden"
               >
                 <MenuIcon className="h-5 w-5" />
               </button>
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">Dashboard</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted">Dashboard</p>
                 <h1 className="truncate text-xl font-semibold text-foreground sm:text-2xl">{activeLabel}</h1>
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
       {/* Mobile bottom navigation */}
       <nav className="fixed inset-x-3 bottom-3 z-40 lg:hidden" aria-label="Navigasi utama">
-        <Card className="grid grid-cols-3 gap-1 rounded-[1.75rem] p-2">
+        <Card className="grid grid-cols-3 gap-1 rounded-2xl p-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -263,7 +263,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex flex-col items-center gap-1 rounded-2xl px-2 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
+                  "flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20",
                   active ? "bg-brand text-white shadow-card" : "text-muted hover:bg-surface-soft"
                 )}
               >
@@ -291,7 +291,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 type="button"
                 onClick={() => setDrawerOpen(false)}
                 aria-label="Tutup menu"
-                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-line text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-line text-foreground transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20"
               >
                 <CloseIcon className="h-5 w-5" />
               </button>
@@ -309,7 +309,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
+                      "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition",
                       active ? "bg-brand text-white shadow-card" : "text-muted hover:bg-surface-soft hover:text-foreground"
                     )}
                   >
@@ -321,7 +321,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </nav>
 
             {profileCompletion.percentage < 100 && (
-              <div className="rounded-[1.5rem] border border-line bg-surface-soft p-4">{progressBlock}</div>
+              <div className="rounded-xl border border-line bg-surface-soft p-4">{progressBlock}</div>
             )}
 
             <div className="mt-auto space-y-2">

@@ -22,6 +22,7 @@ export const demoUser: User = {
   whatsapp: "6281234567890",
   profileImage: "/demo/avatar-rara.svg",
   location: "Bandung, Jawa Barat",
+  mapsUrl: "",
   themePreference: "light",
   themeAccent: "emerald",
   isActive: true,

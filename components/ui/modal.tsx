@@ -36,7 +36,7 @@ export function Modal({ open, onClose, title, description, children, className }
       />
       <div
         className={cn(
-          "relative z-10 max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-surface p-5 shadow-soft sm:p-7",
+          "relative z-10 max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl border border-white/10 bg-surface p-5 shadow-soft sm:p-7",
           className
         )}
       >

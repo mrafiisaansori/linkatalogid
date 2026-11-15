@@ -67,7 +67,7 @@ export function MarketingHeader() {
 
       <div
         className={cn(
-          "fixed inset-x-3 top-[72px] z-50 rounded-[1.75rem] border border-line bg-surface/95 p-4 shadow-soft backdrop-blur-xl transition duration-200 sm:inset-x-4 md:hidden",
+          "fixed inset-x-3 top-[72px] z-50 rounded-2xl border border-line bg-surface/95 p-4 shadow-soft backdrop-blur-xl transition duration-200 sm:inset-x-4 md:hidden",
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-4 opacity-0"
         )}
       >
@@ -76,7 +76,7 @@ export function MarketingHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-2xl px-4 py-3 text-sm text-foreground transition hover:bg-surface-soft"
+              className="rounded-xl px-4 py-3 text-sm text-foreground transition hover:bg-surface-soft"
               onClick={() => setOpen(false)}
             >
               {item.label}

@@ -17,7 +17,7 @@ export default async function AdminSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <Badge className="w-fit" tone="brand">
           Settings & security
         </Badge>
@@ -27,19 +27,19 @@ export default async function AdminSettingsPage() {
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">Admin aktif</p>
             <p className="mt-2 text-2xl font-semibold text-foreground">{admin.username}</p>
           </div>
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">Role</p>
             <p className="mt-2 text-2xl font-semibold text-foreground">{admin.role}</p>
           </div>
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">Created</p>
             <p className="mt-2 text-lg font-semibold text-foreground">{formatDateTime(admin.createdAt)}</p>
           </div>
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">Updated</p>
             <p className="mt-2 text-lg font-semibold text-foreground">{formatDateTime(admin.updatedAt)}</p>
           </div>
@@ -47,7 +47,7 @@ export default async function AdminSettingsPage() {
       </Card>
 
       <section className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Security controls</p>
@@ -58,9 +58,9 @@ export default async function AdminSettingsPage() {
 
           <div className="mt-5 space-y-3">
             {securityRules.map((item, index) => (
-              <div key={item} className="rounded-[1.5rem] border border-line bg-background p-4">
+              <div key={item} className="rounded-xl border border-line bg-background p-4">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 text-brand">
                     {index % 2 === 0 ? <LockIcon className="h-5 w-5" /> : <SettingsIcon className="h-5 w-5" />}
                   </div>
                   <p className="text-sm leading-7 text-foreground">{item}</p>
@@ -70,7 +70,7 @@ export default async function AdminSettingsPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Recent audit logs</p>
@@ -81,7 +81,7 @@ export default async function AdminSettingsPage() {
 
           <div className="mt-5 space-y-3">
             {auditLogs.map((item) => (
-              <div key={item.id} className="rounded-[1.5rem] border border-line bg-background p-4">
+              <div key={item.id} className="rounded-xl border border-line bg-background p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="neutral">{item.adminUsername ?? "admin"}</Badge>
                   <p className="text-sm font-medium text-foreground">{item.action}</p>

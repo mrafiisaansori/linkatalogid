@@ -23,8 +23,8 @@ const config: Config = {
         warning: "rgb(var(--warning) / <alpha-value>)"
       },
       boxShadow: {
-        soft: "0 24px 70px rgba(15, 23, 42, 0.08)",
-        card: "0 12px 38px rgba(15, 23, 42, 0.10)",
+        soft: "0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.05)",
+        card: "0 6px 16px -4px rgba(15, 23, 42, 0.10)",
         glow: "0 0 0 1px rgba(255,255,255,0.08), 0 18px 50px rgba(20, 184, 166, 0.16)"
       },
       borderRadius: {
@@ -34,8 +34,7 @@ const config: Config = {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"]
       },
       backgroundImage: {
-        "hero-mesh":
-          "radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.18), transparent 26%), radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.16), transparent 24%), radial-gradient(circle at 50% 100%, rgba(251, 191, 36, 0.12), transparent 22%)"
+        "hero-mesh": "radial-gradient(120% 90% at 0% 0%, rgba(13, 148, 136, 0.10), transparent 55%)"
       }
     }
   },

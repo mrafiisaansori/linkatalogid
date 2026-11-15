@@ -68,7 +68,7 @@ export function BlogShareButtons({ title, url }: BlogShareButtonsProps) {
   ];
 
   return (
-    <section className="mt-12 rounded-[1.5rem] border border-line/80 bg-surface/95 p-5 shadow-soft backdrop-blur-xl">
+    <section className="mt-12 rounded-xl border border-line bg-surface p-5 shadow-soft">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Bagikan artikel</h2>

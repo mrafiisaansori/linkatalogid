@@ -72,13 +72,13 @@ export function AdminPanelShell({
 
   const navigation = (
     <div className="space-y-4">
-      <Card className="rounded-[2rem] p-5">
+      <Card className="rounded-2xl p-5">
         <Link href="/be-admin/dashboard" className="min-w-0">
           <BrandLockup size="lg" tagline={false} />
         </Link>
-        <div className="mt-5 rounded-[1.5rem] bg-surface-soft p-4">
+        <div className="mt-5 rounded-xl bg-surface-soft p-4">
           <div className="flex items-start gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
               <ShieldIcon className="h-6 w-6" />
             </div>
             <div className="min-w-0">
@@ -92,8 +92,8 @@ export function AdminPanelShell({
         </div>
       </Card>
 
-      <Card className="rounded-[2rem] p-4">
-        <p className="px-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Navigasi</p>
+      <Card className="rounded-2xl p-4">
+        <p className="px-2 text-xs font-semibold uppercase tracking-wider text-muted">Navigasi</p>
         <div className="mt-3 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -105,7 +105,7 @@ export function AdminPanelShell({
                 href={item.href}
                 onClick={() => setNavOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
+                  "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition",
                   active
                     ? "bg-brand text-white shadow-card"
                     : "text-muted hover:bg-surface-soft hover:text-foreground"
@@ -119,7 +119,7 @@ export function AdminPanelShell({
         </div>
       </Card>
 
-      <Card className="rounded-[2rem] p-5">
+      <Card className="rounded-2xl p-5">
         <p className="text-sm font-semibold text-foreground">Panel privat Linkatalog</p>
         <p className="mt-2 text-sm leading-6 text-muted">
           Akses admin tetap tersembunyi dari area publik dan hanya berjalan lewat URL langsung.
@@ -142,12 +142,12 @@ export function AdminPanelShell({
         </aside>
 
         <div className="min-w-0 flex-1 space-y-4 pb-24 lg:space-y-6 lg:pb-8">
-          <header className="sticky top-4 z-30 rounded-[2rem] border border-line bg-surface/90 p-4 shadow-soft backdrop-blur-xl">
+          <header className="sticky top-4 z-30 rounded-2xl border border-line bg-surface/90 p-4 shadow-soft backdrop-blur-xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-background text-foreground lg:hidden"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-background text-foreground lg:hidden"
                   onClick={() => setNavOpen(true)}
                   aria-label="Buka navigasi admin"
                 >
@@ -207,12 +207,12 @@ export function AdminPanelShell({
       {navOpen ? (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm lg:hidden">
           <div className="absolute inset-y-0 left-0 w-full max-w-xs p-4">
-            <div className="flex h-full flex-col rounded-[2rem] border border-line bg-background p-4 shadow-card">
+            <div className="flex h-full flex-col rounded-2xl border border-line bg-background p-4 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <BrandLockup tagline={false} />
                 <button
                   type="button"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-line bg-surface text-foreground"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-foreground"
                   onClick={() => setNavOpen(false)}
                   aria-label="Tutup navigasi admin"
                 >

@@ -21,6 +21,7 @@ type ProfileFormState = {
   whatsapp: string;
   profileImage: string;
   location: string;
+  mapsUrl: string;
   themeAccent: ThemeAccent;
 };
 
@@ -36,6 +37,7 @@ export default function DashboardProfilePage() {
     whatsapp: "",
     profileImage: "",
     location: "",
+    mapsUrl: "",
     themeAccent: "emerald" as const
   });
 
@@ -48,6 +50,7 @@ export default function DashboardProfilePage() {
       whatsapp: sanitizeWhatsappNumber(currentUser.whatsapp),
       profileImage: currentUser.profileImage,
       location: currentUser.location,
+      mapsUrl: currentUser.mapsUrl ?? "",
       themeAccent: currentUser.themeAccent
     });
   }, [currentUser]);
@@ -105,7 +108,7 @@ export default function DashboardProfilePage() {
 
   return (
     <section className="grid gap-4 xl:grid-cols-[1fr_0.95fr]">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div>
           <p className="text-lg font-semibold text-foreground">Edit profil</p>
           <p className="mt-1 text-sm text-muted">
@@ -114,18 +117,18 @@ export default function DashboardProfilePage() {
         </div>
 
         <div className="mt-6 space-y-5">
-          <div className="rounded-[1.75rem] border border-dashed border-line bg-background p-4">
+          <div className="rounded-2xl border border-dashed border-line bg-background p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="relative h-20 w-20 shrink-0">
                 {form.profileImage ? (
-                  <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-[1.5rem] object-cover" />
+                  <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-xl object-cover" />
                 ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-surface-soft text-muted">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-surface-soft text-muted">
                     <UserIcon className="h-8 w-8" />
                   </div>
                 )}
                 {uploadingImage && (
-                  <div className="absolute inset-0 flex items-center justify-center rounded-[1.5rem] bg-background/70 backdrop-blur-sm">
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/70 backdrop-blur-sm">
                     <svg className="h-7 w-7 animate-spin text-brand" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
@@ -173,7 +176,7 @@ export default function DashboardProfilePage() {
             </label>
             <label className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Link katalog</span>
-              <div className="flex min-h-12 items-stretch overflow-hidden rounded-2xl border border-line bg-background text-sm text-foreground transition focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10">
+              <div className="flex min-h-12 items-stretch overflow-hidden rounded-xl border border-line bg-background text-sm text-foreground transition focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10">
                 <span className="flex items-center border-r border-line bg-surface-soft px-4 text-muted">/</span>
                 <input
                   type="text"
@@ -221,6 +224,20 @@ export default function DashboardProfilePage() {
             </label>
           </div>
 
+          <label className="block space-y-2 text-sm">
+            <span className="font-medium text-foreground">Link Google Maps (opsional)</span>
+            <Input
+              type="url"
+              inputMode="url"
+              placeholder="https://maps.app.goo.gl/..."
+              value={form.mapsUrl}
+              onChange={(event) => setForm((current) => ({ ...current, mapsUrl: event.target.value }))}
+            />
+            <p className="text-xs leading-5 text-muted">
+              Buka Google Maps → cari toko kamu → Bagikan → Salin link. Muncul sebagai tombol di katalog publik.
+            </p>
+          </label>
+
           <div className="space-y-3">
             <div>
               <p className="text-sm font-medium text-foreground">Aksen tema</p>
@@ -232,10 +249,10 @@ export default function DashboardProfilePage() {
                   key={option.id}
                   type="button"
                   aria-pressed={form.themeAccent === option.id}
-                  className={`rounded-[1.5rem] border p-3 text-left transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 ${form.themeAccent === option.id ? "border-brand shadow-card ring-2 ring-brand/30" : "border-line hover:border-brand/40"}`}
+                  className={`rounded-xl border p-3 text-left transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 ${form.themeAccent === option.id ? "border-brand shadow-card ring-2 ring-brand/30" : "border-line hover:border-brand/40"}`}
                   onClick={() => setForm((current) => ({ ...current, themeAccent: option.id }))}
                 >
-                  <div className="h-12 rounded-2xl" style={{ backgroundColor: option.color }} />
+                  <div className="h-12 rounded-xl" style={{ backgroundColor: option.color }} />
                   <p className="mt-3 text-sm font-medium text-foreground">{option.name}</p>
                 </button>
               ))}
@@ -245,7 +262,7 @@ export default function DashboardProfilePage() {
           {error ? (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm font-medium text-warning"
+              className="flex items-start gap-3 rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm font-medium text-warning"
             >
               <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-warning/20 text-[12px] font-bold">!</span>
               <span>{error}</span>
@@ -266,7 +283,7 @@ export default function DashboardProfilePage() {
         </div>
       </Card>
 
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-lg font-semibold text-foreground">Preview profil publik</p>
@@ -277,7 +294,7 @@ export default function DashboardProfilePage() {
           </span>
         </div>
 
-        <div className="mt-6 overflow-hidden rounded-[2rem] border border-line bg-background shadow-card">
+        <div className="mt-6 overflow-hidden rounded-2xl border border-line bg-background shadow-card">
           <div
             className="p-6"
             style={{
@@ -286,9 +303,9 @@ export default function DashboardProfilePage() {
           >
             <div className="flex items-start gap-4">
               {form.profileImage ? (
-                <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-[1.5rem] object-cover" />
+                <img src={form.profileImage} alt={form.name} className="h-20 w-20 rounded-xl object-cover" />
               ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-white/80 text-slate-700">
+                <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-white/80 text-slate-700">
                   <UserIcon className="h-8 w-8" />
                 </div>
               )}
@@ -314,10 +331,10 @@ export default function DashboardProfilePage() {
                 href={getWhatsappLink(form.whatsapp)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-between rounded-[1.5rem] border border-line bg-surface px-4 py-3 transition hover:border-success"
+                className="flex items-center justify-between rounded-xl border border-line bg-surface px-4 py-3 transition hover:border-success"
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-success/10 text-success">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-success/10 text-success">
                     <WhatsAppIcon className="h-5 w-5" />
                   </span>
                   <div>
@@ -342,8 +359,8 @@ export default function DashboardProfilePage() {
 
             <div className="space-y-3">
               {currentProducts.slice(0, 3).map((product) => (
-                <div key={product.id} className="flex gap-3 rounded-[1.5rem] border border-line bg-surface p-3">
-                  <img src={product.imageUrl} alt={product.title} className="h-20 w-20 rounded-2xl object-cover" />
+                <div key={product.id} className="flex gap-3 rounded-xl border border-line bg-surface p-3">
+                  <img src={product.imageUrl} alt={product.title} className="h-20 w-20 rounded-xl object-cover" />
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-foreground">{product.title}</p>
                     <p className="mt-1 line-clamp-2 text-sm text-muted">{product.description}</p>

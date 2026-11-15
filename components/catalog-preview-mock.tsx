@@ -62,7 +62,7 @@ export function CatalogPreviewMock({ className }: { className?: string }) {
                 <img
                   src={demoUser.profileImage}
                   alt={`Foto profil toko ${demoUser.name} pada katalog online`}
-                  className="h-16 w-16 rounded-2xl object-cover shadow-md ring-2 ring-white/80"
+                  className="h-16 w-16 rounded-xl object-cover shadow-md ring-2 ring-white/80"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="text-base font-bold leading-tight text-slate-900">{demoUser.name}</p>
@@ -104,7 +104,7 @@ export function CatalogPreviewMock({ className }: { className?: string }) {
             </div>
 
             {/* Search */}
-            <div className="flex items-center gap-2.5 rounded-2xl border border-line bg-background px-3.5 py-2.5 text-[11px] text-muted">
+            <div className="flex items-center gap-2.5 rounded-xl border border-line bg-background px-3.5 py-2.5 text-[11px] text-muted">
               <SearchIcon className="h-3.5 w-3.5" />
               Cari nama produk, kategori…
             </div>
@@ -135,7 +135,7 @@ export function CatalogPreviewMock({ className }: { className?: string }) {
             {/* Kartu produk */}
             <div className="space-y-2.5">
               {previewProducts.map((product) => (
-                <div key={product.id} className="flex overflow-hidden rounded-2xl border border-line bg-surface">
+                <div key={product.id} className="flex overflow-hidden rounded-xl border border-line bg-surface">
                   <div className="relative w-[108px] shrink-0 overflow-hidden bg-surface-soft">
                     <img
                       src={product.imageUrl}
@@ -157,10 +157,6 @@ export function CatalogPreviewMock({ className }: { className?: string }) {
                         {product.title}
                       </p>
                       <p className="flex items-center gap-1 text-[10px] text-muted">
-                        <span
-                          className="inline-block h-1.5 w-1.5 rounded-full"
-                          style={{ backgroundColor: accent.primary }}
-                        />
                         {product.category}
                       </p>
                     </div>
@@ -188,7 +184,7 @@ export function CatalogPreviewMock({ className }: { className?: string }) {
 
         {/* Floating bar checkout */}
         <div className="border-t border-line/70 bg-slate-950 p-1.5">
-          <div className="flex items-center gap-2 rounded-2xl px-2 py-1.5">
+          <div className="flex items-center gap-2 rounded-xl px-2 py-1.5">
             <img
               src={demoUser.profileImage}
               alt=""

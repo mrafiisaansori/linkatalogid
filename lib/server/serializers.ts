@@ -61,6 +61,7 @@ export function serializeUser(input: AnyRecord & { account?: { email?: string | 
     whatsapp: sanitizeWhatsappNumber(s(input.whatsapp)),
     profileImage: s(input.profileImage),
     location: s(input.location),
+    mapsUrl: s(input.mapsUrl),
     themePreference: parseThemeMode(input.themePreference),
     themeAccent: parseThemeAccent(input.themeAccent),
     isActive: Boolean(input.isActive),

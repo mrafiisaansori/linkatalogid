@@ -21,6 +21,7 @@ export interface User {
   whatsapp: string;
   profileImage: string;
   location: string;
+  mapsUrl: string;
   themePreference: ThemeMode;
   themeAccent: ThemeAccent;
   isActive: boolean;

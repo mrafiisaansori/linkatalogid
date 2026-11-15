@@ -72,7 +72,7 @@ export default async function BlogIndexPage() {
         </nav>
 
         <div className="mt-6 max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Blog</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand">Blog</p>
           <h1 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
             Tips link katalog gratis & jualan via WhatsApp
           </h1>
@@ -85,7 +85,7 @@ export default async function BlogIndexPage() {
         {featured ? (
           <Link
             href={`/blog/${featured.slug}`}
-            className="group mt-10 grid overflow-hidden rounded-[2rem] border border-line/80 bg-surface/95 shadow-soft backdrop-blur-xl transition hover:shadow-card md:grid-cols-2"
+            className="group mt-10 grid overflow-hidden rounded-2xl border border-line bg-surface shadow-soft transition hover:shadow-card md:grid-cols-2"
           >
             <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto">
               <Image
@@ -123,7 +123,7 @@ export default async function BlogIndexPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-line/80 bg-surface/95 shadow-soft backdrop-blur-xl transition hover:shadow-card"
+              className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-soft transition hover:shadow-card"
             >
               <div className="relative aspect-[16/9] overflow-hidden">
                 <Image
@@ -155,7 +155,7 @@ export default async function BlogIndexPage() {
           ))}
         </div>
 
-        <section className="mt-14 overflow-hidden rounded-[2rem] border border-brand/20 bg-gradient-to-br from-brand/15 via-brand/8 to-sky-500/10 p-8 text-center sm:p-12">
+        <section className="mt-14 overflow-hidden rounded-2xl border border-brand/20 bg-brand/[0.07] p-8 text-center sm:p-12">
           <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">Siap bikin katalog onlinemu sendiri?</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-muted">
             Gratis, tanpa coding. Susun produk, bagikan satu link, dan terima order rapi via WhatsApp.

@@ -25,7 +25,7 @@ export default async function AdminProductsPage({
 
   return (
     <div className="space-y-6">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <Badge className="w-fit" tone="brand">
@@ -37,7 +37,7 @@ export default async function AdminProductsPage({
             </p>
           </div>
 
-          <div className="rounded-[1.5rem] border border-line bg-background px-4 py-3">
+          <div className="rounded-xl border border-line bg-background px-4 py-3">
             <p className="text-sm text-muted">Total hasil</p>
             <p className="mt-1 text-2xl font-semibold text-foreground">{products.length}</p>
           </div>
@@ -56,7 +56,7 @@ export default async function AdminProductsPage({
           <select
             name="status"
             defaultValue={status}
-            className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+            className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
           >
             <option value="all">Semua status</option>
             <option value="active">Aktif</option>
@@ -84,12 +84,12 @@ export default async function AdminProductsPage({
       ) : (
         <div className="space-y-4">
           {products.map((product) => (
-            <Card key={product.id} className="rounded-[2rem] p-5">
+            <Card key={product.id} className="rounded-2xl p-5">
               <div className="flex flex-col gap-4 xl:flex-row">
                 <img
                   src={product.imageUrl}
                   alt={product.title}
-                  className="h-32 w-full rounded-[1.5rem] object-cover xl:w-40"
+                  className="h-32 w-full rounded-xl object-cover xl:w-40"
                 />
 
                 <div className="min-w-0 flex-1">
@@ -108,18 +108,18 @@ export default async function AdminProductsPage({
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">Harga</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">Harga</p>
                       <p className="mt-2 text-lg font-semibold text-foreground">{formatCurrency(product.price)}</p>
                     </div>
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">Product views</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">Product views</p>
                       <p className="mt-2 flex items-center gap-2 text-lg font-semibold text-foreground">
                         <EyeIcon className="h-4 w-4 text-brand" />
                         {product.views}
                       </p>
                     </div>
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">WA clicks</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">WA clicks</p>
                       <p className="mt-2 flex items-center gap-2 text-lg font-semibold text-foreground">
                         <WhatsAppIcon className="h-4 w-4 text-success" />
                         {product.clicks}

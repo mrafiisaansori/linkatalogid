@@ -199,7 +199,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
             <label className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Mode harga</span>
               <select
-                className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+                className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
                 value={priceMode}
                 onChange={(event) => updateField("priceMode", event.target.value as ProductInput["priceMode"])}
               >
@@ -222,7 +222,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
               </label>
             ) : (
               <div className="flex items-end">
-                <p className="rounded-2xl bg-surface-soft px-4 py-3 text-xs leading-5 text-muted">
+                <p className="rounded-xl bg-surface-soft px-4 py-3 text-xs leading-5 text-muted">
                   Harga disembunyikan. Pembeli diarahkan untuk menghubungi kamu.
                 </p>
               </div>
@@ -244,7 +244,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
           <label className="space-y-2 text-sm">
             <span className="font-medium text-foreground">Tombol aksi (CTA)</span>
             <select
-              className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+              className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
               value={form.ctaType ?? "buy"}
               onChange={(event) => updateField("ctaType", event.target.value as ProductInput["ctaType"])}
             >
@@ -277,7 +277,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
             <label className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Badge</span>
               <select
-                className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+                className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
                 value={form.badge}
                 onChange={(event) => updateField("badge", event.target.value as ProductInput["badge"])}
               >
@@ -318,12 +318,12 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
                     key={image}
                     type="button"
                     className={cn(
-                      "group relative overflow-hidden rounded-3xl border p-2 transition",
+                      "group relative overflow-hidden rounded-2xl border p-2 transition",
                       active ? "border-brand shadow-card" : "border-line hover:border-brand/40"
                     )}
                     onClick={() => updateField("imageUrl", image)}
                   >
-                    <img src={image} alt="" className="h-28 w-full rounded-2xl object-cover" />
+                    <img src={image} alt="" className="h-28 w-full rounded-xl object-cover" />
                     {active ? (
                       <span className="absolute right-4 top-4 inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand text-white">
                         <CheckIcon className="h-4 w-4" />
@@ -344,7 +344,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
             </label>
           </div>
 
-          <div className="flex items-center justify-between rounded-3xl border border-line bg-background px-4 py-3">
+          <div className="flex items-center justify-between rounded-2xl border border-line bg-background px-4 py-3">
             <div>
               <p className="text-sm font-medium text-foreground">Tampilkan di halaman publik</p>
               <p className="text-sm text-muted">Kalau nonaktif, produk tetap tersimpan tapi tidak tampil di katalog.</p>
@@ -359,13 +359,13 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
           </datalist>
         </div>
 
-        <div className="space-y-4 rounded-[1.75rem] border border-line bg-background p-4">
+        <div className="space-y-4 rounded-2xl border border-line bg-background p-4">
           <div>
             <p className="text-sm font-semibold text-foreground">Preview kartu</p>
             <p className="mt-1 text-sm text-muted">Lihat hasilnya sebelum dipublikasikan.</p>
           </div>
 
-          <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-card">
+          <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
             <div className="relative aspect-[4/3] bg-surface-soft">
               {form.imageUrl ? (
                 <img src={form.imageUrl} alt={form.title || "Preview produk"} className="h-full w-full object-cover" />
@@ -426,7 +426,7 @@ export function ProductModal({ open, onClose, onSubmit, product }: ProductModalP
           </div>
 
           {error ? (
-            <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+            <div className="rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
               {error}
             </div>
           ) : null}

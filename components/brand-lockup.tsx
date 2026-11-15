@@ -15,8 +15,8 @@ interface BrandLockupProps extends BrandMarkProps {
 }
 
 const markSizeClasses: Record<BrandSize, string> = {
-  md: "h-10 w-10 rounded-2xl",
-  lg: "h-11 w-11 rounded-2xl"
+  md: "h-10 w-10 rounded-xl",
+  lg: "h-11 w-11 rounded-xl"
 };
 
 export function BrandMark({ size = "md", className }: BrandMarkProps) {
@@ -54,7 +54,7 @@ export function BrandLockup({
       <div className="min-w-0">
         <p
           className={cn(
-            "truncate font-semibold uppercase tracking-[0.18em] text-foreground",
+            "truncate font-semibold uppercase tracking-wider text-foreground",
             titleClassName
           )}
         >

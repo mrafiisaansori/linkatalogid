@@ -797,7 +797,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           <div
             key={toast.id}
             className={cn(
-              "toast-item pointer-events-auto flex items-start gap-3 rounded-[1.5rem] border p-3.5 shadow-lg backdrop-blur-md sm:p-4",
+              "toast-item pointer-events-auto flex items-start gap-3 rounded-xl border p-3.5 shadow-lg backdrop-blur-md sm:p-4",
               toast.tone === "success"
                 ? "border-success/30 bg-success/10 text-success"
                 : toast.tone === "warning"

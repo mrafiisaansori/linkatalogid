@@ -267,7 +267,7 @@ export default function AuthPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="hidden rounded-[2rem] border-brand/15 bg-gradient-to-br from-brand/18 via-brand/10 to-sky-500/10 p-8 text-foreground lg:block dark:border-white/10 dark:from-brand/22 dark:via-brand/16 dark:to-sky-500/14 dark:text-white">
+          <Card className="hidden rounded-2xl border-brand/15 bg-brand/[0.07] p-8 text-foreground lg:block dark:border-white/10 dark:bg-brand/15 dark:text-white">
             <h1 className="text-4xl font-semibold leading-tight">
               Halaman katalog personal yang kelihatan profesional sejak hari pertama.
             </h1>
@@ -275,7 +275,7 @@ export default function AuthPage() {
               Daftar gratis, atur profil, tambahkan produk, lalu bagikan satu link untuk menerima order via WhatsApp.
             </p>
 
-            <div className="mt-8 space-y-4 rounded-[1.75rem] border border-white/40 bg-white/55 p-5 backdrop-blur-sm dark:border-white/10 dark:bg-white/10">
+            <div className="mt-8 space-y-4 rounded-2xl border border-white/40 bg-white/55 p-5 backdrop-blur-sm dark:border-white/10 dark:bg-white/10">
               {[
                 "Dashboard dengan statistik, profil completion, dan quick action",
                 "Editor produk yang mendukung gambar, badge, kategori, dan status aktif",
@@ -290,7 +290,7 @@ export default function AuthPage() {
               ))}
             </div>
 
-            <div className="mt-8 rounded-[1.75rem] border border-line bg-background/80 p-5 dark:border-white/10 dark:bg-slate-950/20">
+            <div className="mt-8 rounded-2xl border border-line bg-background/80 p-5 dark:border-white/10 dark:bg-slate-950/20">
               <p className="text-sm font-semibold text-foreground dark:text-white">Belum punya akun?</p>
               <p className="mt-2 text-sm text-muted dark:text-white/80">
                 Daftar gratis dengan tab Sign up di samping. Pilih link katalog kamu sendiri, lalu mulai tambahkan
@@ -299,7 +299,7 @@ export default function AuthPage() {
             </div>
           </Card>
 
-          <Card className="rounded-[2rem] p-6 sm:p-8">
+          <Card className="rounded-2xl p-6 sm:p-8">
             {step === "form" ? (
             <div className="flex rounded-full bg-surface-soft p-1">
               <button
@@ -369,7 +369,7 @@ export default function AuthPage() {
                 </label>
 
                 {error ? (
-                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                  <div className="rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
                     {error}
                   </div>
                 ) : null}
@@ -423,7 +423,7 @@ export default function AuthPage() {
                 </label>
 
                 {error ? (
-                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                  <div className="rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
                     {error}
                   </div>
                 ) : null}
@@ -470,7 +470,7 @@ export default function AuthPage() {
             ) : step === "reset" ? (
               <form className="mt-8 space-y-5" onSubmit={handleResetSubmit}>
                 {resetInfo ? (
-                  <div className="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success">
+                  <div className="rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success">
                     {resetInfo}
                   </div>
                 ) : null}
@@ -506,7 +506,7 @@ export default function AuthPage() {
                 </label>
 
                 {error ? (
-                  <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                  <div className="rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
                     {error}
                   </div>
                 ) : null}
@@ -584,7 +584,7 @@ export default function AuthPage() {
               {tab === "signup" ? (
                 <label className="space-y-2 text-sm">
                   <span className="font-medium text-foreground">Link anda</span>
-                  <div className="flex min-h-12 items-stretch overflow-hidden rounded-2xl border border-line bg-background text-sm text-foreground transition focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10">
+                  <div className="flex min-h-12 items-stretch overflow-hidden rounded-xl border border-line bg-background text-sm text-foreground transition focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10">
                     <span className="flex items-center border-r border-line bg-surface-soft px-4 text-muted">
                       /
                     </span>
@@ -655,7 +655,7 @@ export default function AuthPage() {
               ) : null}
 
               {error ? (
-                <div className="rounded-2xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
+                <div className="rounded-xl border border-warning/20 bg-warning/10 px-4 py-3 text-sm text-warning">
                   {error}
                 </div>
               ) : null}
@@ -724,7 +724,7 @@ export default function AuthPage() {
             </form>
             )}
 
-            <div className="mt-6 rounded-[1.75rem] border border-line bg-surface-soft p-5 text-sm leading-6 text-muted">
+            <div className="mt-6 rounded-2xl border border-line bg-surface-soft p-5 text-sm leading-6 text-muted">
               Linkatalog.id fokus untuk bikin katalog jualan personal, bukan marketplace. Kamu pegang link sendiri,
               tampilkan produk atau jasa sendiri, dan order tetap masuk ke WhatsApp kamu.
             </div>

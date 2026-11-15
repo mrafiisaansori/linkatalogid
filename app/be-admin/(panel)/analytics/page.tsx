@@ -48,7 +48,7 @@ export default async function AdminAnalyticsPage({
 
   return (
     <div className="space-y-6">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <Badge className="w-fit" tone="brand">
@@ -64,7 +64,7 @@ export default async function AdminAnalyticsPage({
             <select
               name="days"
               defaultValue={String(days)}
-              className="h-11 rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+              className="h-11 rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
             >
               <option value="7">7 hari</option>
               <option value="14">14 hari</option>
@@ -75,11 +75,11 @@ export default async function AdminAnalyticsPage({
         </div>
 
         <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">Page views periode ini</p>
             <p className="mt-2 text-3xl font-semibold text-foreground">{formatCompactNumber(totalPageViews)}</p>
           </div>
-          <div className="rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="rounded-xl border border-line bg-background p-4">
             <p className="text-sm text-muted">WhatsApp clicks periode ini</p>
             <p className="mt-2 text-3xl font-semibold text-foreground">
               {formatCompactNumber(totalWhatsappClicks)}
@@ -89,7 +89,7 @@ export default async function AdminAnalyticsPage({
       </Card>
 
       <section className="grid gap-4 xl:grid-cols-2">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Page views per hari</p>
@@ -116,7 +116,7 @@ export default async function AdminAnalyticsPage({
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">WhatsApp clicks per hari</p>
@@ -145,7 +145,7 @@ export default async function AdminAnalyticsPage({
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Top referrer</p>
@@ -161,7 +161,7 @@ export default async function AdminAnalyticsPage({
               analytics.topReferrers.map((item) => (
                 <div
                   key={item.referrer}
-                  className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-line bg-background p-4"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-line bg-background p-4"
                 >
                   <p className="min-w-0 truncate text-sm font-medium text-foreground">{item.referrer}</p>
                   <Badge tone="neutral">{item.count}</Badge>
@@ -172,7 +172,7 @@ export default async function AdminAnalyticsPage({
         </Card>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <Card className="rounded-[2rem] p-6">
+          <Card className="rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-lg font-semibold text-foreground">Top katalog</p>
@@ -182,7 +182,7 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className="mt-5 space-y-3">
               {analytics.topCatalogs.map((item) => (
-                <div key={item.userId} className="rounded-[1.5rem] border border-line bg-background p-4">
+                <div key={item.userId} className="rounded-xl border border-line bg-background p-4">
                   <p className="font-semibold text-foreground">{item.name}</p>
                   <p className="mt-1 text-sm text-muted">@{item.username}</p>
                   <div className="mt-3 flex items-center justify-between gap-2">
@@ -196,7 +196,7 @@ export default async function AdminAnalyticsPage({
             </div>
           </Card>
 
-          <Card className="rounded-[2rem] p-6">
+          <Card className="rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-lg font-semibold text-foreground">Top produk</p>
@@ -206,7 +206,7 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className="mt-5 space-y-3">
               {analytics.topProducts.map((item) => (
-                <div key={item.productId} className="rounded-[1.5rem] border border-line bg-background p-4">
+                <div key={item.productId} className="rounded-xl border border-line bg-background p-4">
                   <p className="font-semibold text-foreground">{item.title}</p>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <Badge tone="success">{item.count} klik</Badge>
@@ -219,7 +219,7 @@ export default async function AdminAnalyticsPage({
         </div>
       </section>
 
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-lg font-semibold text-foreground">Recent events table</p>
@@ -235,7 +235,7 @@ export default async function AdminAnalyticsPage({
             analytics.recentEvents.map((event) => (
               <div
                 key={event.id}
-                className="grid gap-3 rounded-[1.5rem] border border-line bg-background p-4 lg:grid-cols-[150px_180px_minmax(0,1fr)_160px]"
+                className="grid gap-3 rounded-xl border border-line bg-background p-4 lg:grid-cols-[150px_180px_minmax(0,1fr)_160px]"
               >
                 <div>
                   <Badge tone="neutral">{event.eventType}</Badge>

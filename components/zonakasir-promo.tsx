@@ -25,7 +25,7 @@ function CodeChip() {
   );
 }
 
-const badge = "rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-600";
+const badge = "rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange-700";
 
 // Tampil setiap halaman dibuka; ✕ cuma menyembunyikan sampai reload.
 export function ZonaKasirPromo({
@@ -55,7 +55,7 @@ export function ZonaKasirPromo({
 
   if (compact) {
     return (
-      <div className={`${className} bg-gradient-to-r from-amber-500 to-orange-600 text-white`}>
+      <div className={`${className} bg-orange-700 text-white`}>
         <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 text-xs sm:px-6 sm:text-sm lg:px-8">
           <a href={URL + medium} target="_blank" rel="noopener" className="flex min-w-0 flex-1 items-center gap-2 hover:underline">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white/20">
@@ -74,8 +74,8 @@ export function ZonaKasirPromo({
   }
 
   return (
-    <section className={`${className} relative flex flex-col gap-4 rounded-[2rem] bg-gradient-to-r from-amber-500 to-orange-600 p-5 pr-14 text-white shadow-card sm:flex-row sm:items-center`}>
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20">
+    <section className={`${className} relative flex flex-col gap-4 rounded-2xl bg-orange-700 p-5 pr-14 text-white shadow-card sm:flex-row sm:items-center`}>
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20">
         <StoreIcon className="h-6 w-6" />
       </div>
       <div className="min-w-0 flex-1">
@@ -91,7 +91,7 @@ export function ZonaKasirPromo({
         href={URL + medium}
         target="_blank"
         rel="noopener"
-        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
+        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
       >
         Coba ZonaKasir
         <ArrowRightIcon className="h-4 w-4" />

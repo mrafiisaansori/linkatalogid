@@ -3,6 +3,7 @@ import { CatalogPreviewMock } from "@/components/catalog-preview-mock";
 import {
   ArrowRightIcon,
   BoltIcon,
+  BoxIcon,
   CartIcon,
   CheckIcon,
   ClockIcon,
@@ -10,7 +11,6 @@ import {
   EyeIcon,
   GlobeIcon,
   ShieldIcon,
-  SparkIcon,
   StoreIcon,
   UsersIcon,
   WhatsAppIcon
@@ -78,7 +78,7 @@ const features = [
     desc: "Satukan seluruh produk dan jasa kamu di satu halaman elegan yang siap dibagikan ke mana saja."
   },
   {
-    icon: SparkIcon,
+    icon: BoxIcon,
     title: "Fleksibel: produk & jasa",
     desc: "Jual barang fisik atau tawarkan layanan dengan harga 'mulai dari' maupun custom — satu sistem untuk keduanya."
   },
@@ -140,7 +140,7 @@ const benefits = [
     desc: "Pelanggan bebas memilih sendiri, jadi lebih yakin menyelesaikan pesanan."
   },
   {
-    icon: SparkIcon,
+    icon: ShieldIcon,
     title: "Toko tampil profesional",
     desc: "Katalog yang rapi bikin usaha kamu terlihat meyakinkan, sekalipun skala rumahan."
   }
@@ -232,22 +232,19 @@ export default function HomePage() {
       <main>
         {/* Hero */}
         <section className="relative mx-auto max-w-7xl overflow-hidden px-4 pb-16 pt-8 sm:px-6 lg:px-8 lg:pb-24">
-          <div className="pointer-events-none absolute left-0 top-0 h-56 w-56 rounded-full bg-brand/12 blur-3xl" />
-          <div className="pointer-events-none absolute right-0 top-16 h-52 w-52 rounded-full bg-sky-500/10 blur-3xl" />
 
           <div className="relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:pt-8">
             <div className="space-y-7">
-              <div className="landing-reveal inline-flex items-center gap-2 rounded-full border border-brand/15 bg-surface/90 px-4 py-2 text-sm text-muted shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur">
-                <SparkIcon className="h-4 w-4 text-brand" />
+              <p className="landing-reveal text-sm font-semibold text-brand">
                 Etalase online untuk produk &amp; jasa
-              </div>
+              </p>
 
               <div className="landing-reveal landing-reveal-delay-1 space-y-5">
                 <h1 className="max-w-3xl text-4xl font-semibold leading-[1.3] text-foreground sm:text-5xl lg:text-[3.4rem]">
                   Link katalog gratis untuk ubah followers jadi pesanan
                   <span className="relative inline-block">
                     {" "}via WhatsApp
-                    <span className="absolute inset-x-1 bottom-1 -z-10 h-4 rounded-full bg-brand/15 blur-md sm:bottom-2 sm:h-5" />
+                    <span className="absolute inset-x-1 bottom-1 -z-10 h-4 rounded-sm bg-brand/15 sm:bottom-2 sm:h-5" />
                   </span>
                 </h1>
                 <p className="max-w-xl text-lg leading-8 text-muted sm:text-xl">
@@ -288,25 +285,23 @@ export default function HomePage() {
 
             {/* Mobile catalog preview */}
             <div className="landing-reveal landing-reveal-delay-2 relative flex justify-center lg:justify-end">
-              <div className="landing-orb landing-orb-slow absolute left-1/2 top-8 h-44 w-44 -translate-x-[90%] rounded-full bg-brand/18 blur-3xl" />
-              <div className="landing-orb absolute bottom-10 right-4 h-52 w-52 rounded-full bg-sky-500/12 blur-3xl" />
 
               <div className="relative w-full max-w-[400px]">
                 <div className="absolute -left-4 top-28 z-10 hidden sm:block">
-                  <div className="landing-float-card rounded-2xl border border-line/80 bg-surface/95 px-3.5 py-2.5 shadow-soft backdrop-blur">
+                  <div className="landing-float-card rounded-xl border border-line/80 bg-surface/95 px-3.5 py-2.5 shadow-soft backdrop-blur">
                     <div className="flex items-center gap-1.5 text-success">
                       <WhatsAppIcon className="h-3.5 w-3.5" />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.16em]">Checkout WA</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-wider">Checkout WA</span>
                     </div>
                     <p className="mt-1 text-lg font-semibold text-foreground">Otomatis</p>
                   </div>
                 </div>
 
                 <div className="absolute -right-5 bottom-24 z-10 hidden sm:block">
-                  <div className="landing-float-card landing-float-card-delay rounded-2xl border border-line/80 bg-surface/95 px-3.5 py-2.5 shadow-soft backdrop-blur">
+                  <div className="landing-float-card landing-float-card-delay rounded-xl border border-line/80 bg-surface/95 px-3.5 py-2.5 shadow-soft backdrop-blur">
                     <div className="flex items-center gap-1.5 text-brand">
                       <CartIcon className="h-3.5 w-3.5" />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.16em]">Keranjang</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-wider">Keranjang</span>
                     </div>
                     <p className="mt-1 text-lg font-semibold text-foreground">Multi-item</p>
                   </div>
@@ -321,10 +316,10 @@ export default function HomePage() {
         </section>
         {/* Apa itu link katalog */}
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <Card className="rounded-[2rem] border-line/80 p-6 sm:p-8">
+          <Card className="rounded-2xl border-line/80 p-6 sm:p-8">
             <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Link katalog</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-brand">Link katalog</p>
                 <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                   Satu link untuk semua produk dan jasa
                 </h2>
@@ -349,7 +344,7 @@ export default function HomePage() {
         {/* Problem / Solution */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Kenapa Linkatalog</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Kenapa Linkatalog</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Ubah jualan yang berantakan jadi rapi dan terarah
             </h2>
@@ -360,7 +355,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <Card className="rounded-[1.75rem] border-line/80 p-6 sm:p-7">
+            <Card className="rounded-2xl border-line/80 p-6 sm:p-7">
               <div className="inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1.5 text-sm font-semibold text-warning">
                 <CloseIcon className="h-4 w-4" />
                 Tanpa katalog
@@ -377,7 +372,7 @@ export default function HomePage() {
               </ul>
             </Card>
 
-            <Card className="rounded-[1.75rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-6 sm:p-7">
+            <Card className="rounded-2xl border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-6 sm:p-7">
               <div className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1.5 text-sm font-semibold text-success">
                 <CheckIcon className="h-4 w-4" />
                 Dengan Linkatalog
@@ -398,7 +393,7 @@ export default function HomePage() {
         {/* Fitur */}
         <section id="fitur" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Fitur utama</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Fitur utama</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Semua kebutuhan jualan online kamu, dalam satu link
             </h2>
@@ -414,10 +409,10 @@ export default function HomePage() {
               return (
                 <Card
                   key={feature.title}
-                  className="landing-reveal rounded-[1.75rem] border-line/80 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
+                  className="landing-reveal rounded-2xl border-line/80 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
                   style={{ animationDelay: `${140 + index * 90}ms` }}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 text-lg font-semibold text-foreground">{feature.title}</h3>
@@ -430,7 +425,7 @@ export default function HomePage() {
         {/* Cara kerja */}
         <section id="cara-kerja" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Cara kerja</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Cara kerja</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Empat langkah, dari produk sampai order masuk
             </h2>
@@ -443,10 +438,10 @@ export default function HomePage() {
             {steps.map((step, index) => (
               <Card
                 key={step.title}
-                className="landing-reveal rounded-[2rem] p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
+                className="landing-reveal rounded-2xl p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
                 style={{ animationDelay: `${160 + index * 110}ms` }}
               >
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface-soft text-lg font-semibold text-brand">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-surface-soft text-lg font-semibold text-brand">
                   {index + 1}
                 </div>
                 <h3 className="mt-6 text-lg font-semibold text-foreground">{step.title}</h3>
@@ -459,7 +454,7 @@ export default function HomePage() {
         <section id="preview" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
             <div className="space-y-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Preview katalog</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-brand">Preview katalog</p>
               <h2 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 Inilah tampilan katalog di mata pelanggan
               </h2>
@@ -488,7 +483,6 @@ export default function HomePage() {
             </div>
 
             <div className="relative flex justify-center lg:justify-end">
-              <div className="landing-orb absolute left-10 top-6 h-44 w-44 rounded-full bg-brand/14 blur-3xl" />
               <CatalogPreviewMock />
             </div>
           </div>
@@ -496,7 +490,7 @@ export default function HomePage() {
         {/* Benefit untuk seller */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Manfaat untuk seller</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Manfaat untuk seller</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Bukan sekadar etalase - bikin jualan lebih efisien
             </h2>
@@ -511,10 +505,10 @@ export default function HomePage() {
               return (
                 <Card
                   key={benefit.title}
-                  className="landing-reveal rounded-[1.75rem] border-line/80 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
+                  className="landing-reveal rounded-2xl border-line/80 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card"
                   style={{ animationDelay: `${140 + index * 90}ms` }}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 text-lg font-semibold text-foreground">{benefit.title}</h3>
@@ -526,9 +520,9 @@ export default function HomePage() {
         </section>
         {/* Gratis penuh */}
         <section id="gratis" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
-          <Card className="rounded-[2rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
+          <Card className="rounded-2xl border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
             <div className="mx-auto max-w-2xl space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Gratis sepenuhnya</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-brand">Gratis sepenuhnya</p>
               <h2 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 Bangun katalog tanpa biaya berlangganan
               </h2>
@@ -551,7 +545,7 @@ export default function HomePage() {
         {/* FAQ */}
         <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">FAQ</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">FAQ</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Pertanyaan yang sering ditanyakan
             </h2>
@@ -561,7 +555,7 @@ export default function HomePage() {
             {faqItems.map((item) => (
               <details
                 key={item.question}
-                className="group rounded-[1.5rem] border border-line/80 bg-surface/95 p-5 shadow-soft backdrop-blur transition open:shadow-card"
+                className="group rounded-xl border border-line bg-surface p-5 shadow-soft transition open:shadow-card"
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold text-foreground marker:content-['']">
                   {item.question}
@@ -574,10 +568,10 @@ export default function HomePage() {
         </section>
         {/* CTA akhir */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <Card className="landing-reveal rounded-[2rem] bg-hero-mesh p-7 sm:p-10">
+          <Card className="landing-reveal rounded-2xl bg-hero-mesh p-7 sm:p-10">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Mulai hari ini</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-brand">Mulai hari ini</p>
                 <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                   Jadikan setiap link sebagai mesin pesanan kamu
                 </h2>

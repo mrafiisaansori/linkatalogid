@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 export default function NotFound() {
   return (
     <main className="page-shell flex min-h-screen items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-xl rounded-[2rem] p-8 text-center">
+      <Card className="w-full max-w-xl rounded-2xl p-8 text-center">
         <h1 className="text-2xl font-semibold text-foreground">Halaman tidak ditemukan</h1>
         <p className="mt-3 text-sm leading-6 text-muted">
           Link yang kamu buka belum tersedia atau sudah dipindahkan.

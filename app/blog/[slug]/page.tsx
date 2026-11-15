@@ -89,7 +89,7 @@ function Block({ block }: { block: BlogBlock }) {
       );
     case "callout":
       return (
-        <div className="mt-6 rounded-2xl border border-brand/20 bg-brand/[0.07] p-5">
+        <div className="mt-6 rounded-xl border border-brand/20 bg-brand/[0.07] p-5">
           <div className="flex items-center gap-2 text-brand">
             <SparkIcon className="h-4 w-4" />
             {block.title ? <p className="text-sm font-semibold">{block.title}</p> : null}
@@ -200,7 +200,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </h1>
           <p className="mt-4 text-base leading-7 text-muted">{post.description}</p>
 
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-[1.75rem] border border-line/70 shadow-soft">
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl border border-line/70 shadow-soft">
             <Image
               src={post.coverImage}
               alt={post.coverAlt}
@@ -224,7 +224,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 {post.faq.map((item) => (
                   <div
                     key={item.question}
-                    className="rounded-2xl border border-line/80 bg-surface/95 p-5 shadow-soft backdrop-blur-xl"
+                    className="rounded-xl border border-line bg-surface p-5 shadow-soft"
                   >
                     <h3 className="text-base font-semibold text-foreground">{item.question}</h3>
                     <p className="mt-2 text-[15px] leading-7 text-muted">{item.answer}</p>
@@ -237,7 +237,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         <BlogShareButtons title={post.title} url={url} />
 
-        <section className="mt-12 overflow-hidden rounded-[2rem] border border-brand/20 bg-gradient-to-br from-brand/15 via-brand/8 to-sky-500/10 p-8 text-center">
+        <section className="mt-12 overflow-hidden rounded-2xl border border-brand/20 bg-brand/[0.07] p-8 text-center">
           <h2 className="text-xl font-semibold text-foreground sm:text-2xl">Mulai bikin katalog onlinemu gratis</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-muted">
             Susun produk, bagikan satu link, terima order rapi via WhatsApp. Tanpa biaya, tanpa coding.
@@ -265,7 +265,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <Link
                   key={item.slug}
                   href={`/blog/${item.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-line/80 bg-surface/95 shadow-soft backdrop-blur-xl transition hover:shadow-card"
+                  className="group flex flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-soft transition hover:shadow-card"
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image

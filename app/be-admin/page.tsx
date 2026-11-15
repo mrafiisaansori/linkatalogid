@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
 
         <div className="flex flex-1 items-center py-8 lg:py-12">
           <div className="grid w-full gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-            <Card className="overflow-hidden rounded-[2rem] border-brand/15 bg-hero-mesh p-0">
+            <Card className="overflow-hidden rounded-2xl border-brand/15 bg-hero-mesh p-0">
               <div className="h-full p-6 sm:p-8">
                 <Badge className="w-fit" tone="success">
                   Private Admin Panel
@@ -63,10 +63,10 @@ export default function AdminLoginPage() {
                     return (
                       <div
                         key={item.title}
-                        className="rounded-[1.5rem] border border-line/70 bg-surface/90 p-5 shadow-soft"
+                        className="rounded-xl border border-line/70 bg-surface/90 p-5 shadow-soft"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
                             <Icon className="h-5 w-5" />
                           </div>
                           <div>
@@ -81,7 +81,7 @@ export default function AdminLoginPage() {
               </div>
             </Card>
 
-            <Card className="rounded-[2rem] p-6 sm:p-8">
+            <Card className="rounded-2xl p-6 sm:p-8">
               <Badge className="w-fit" tone="brand">
                 Login admin
               </Badge>
@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
                 <AdminLoginForm />
               </div>
 
-              <div className="mt-6 rounded-[1.5rem] border border-line bg-surface-soft p-4">
+              <div className="mt-6 rounded-xl border border-line bg-surface-soft p-4">
                 <p className="text-sm font-semibold text-foreground">Catatan akses</p>
                 <p className="mt-2 text-sm leading-6 text-muted">
                   Kredensial admin tersimpan dalam database dengan password yang sudah di-hash, bukan di file publik.

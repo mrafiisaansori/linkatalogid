@@ -301,7 +301,7 @@ function CartDrawer({
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 py-12 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-surface-soft text-muted">
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-surface-soft text-muted">
                 <CartIcon className="h-8 w-8" />
               </div>
               <p className="font-semibold text-foreground">Keranjang kosong</p>
@@ -320,12 +320,12 @@ function CartDrawer({
               {items.map((item) => (
                 <div
                   key={item.productId}
-                  className="flex gap-3 rounded-[1.5rem] border border-line bg-background p-3"
+                  className="flex gap-3 rounded-xl border border-line bg-background p-3"
                 >
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    className="h-20 w-20 flex-shrink-0 rounded-2xl object-cover"
+                    className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
                   />
                   <div className="min-w-0 flex-1 space-y-2">
                     <div>
@@ -377,7 +377,7 @@ function CartDrawer({
         {/* Footer — ringkasan & tombol checkout */}
         {items.length > 0 && (
           <div className="border-t border-line bg-background px-5 pb-6 pt-4 space-y-3">
-            <div className="rounded-2xl bg-slate-50 dark:bg-slate-900/50 px-4 py-3 space-y-1.5">
+            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/50 px-4 py-3 space-y-1.5">
               {items.map((item) => (
                 <div key={item.productId} className="flex items-center justify-between gap-2 text-sm">
                   <span className="truncate text-slate-600 dark:text-slate-400">
@@ -471,7 +471,7 @@ function ProductDetailSheet({
           // Mobile: full-width bottom sheet
           "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-[2rem]",
           // Desktop: centered modal
-          "sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-full sm:max-w-md sm:-translate-x-1/2 sm:rounded-2xl",
+          "sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-full sm:max-w-md sm:-translate-x-1/2 sm:rounded-xl",
           open
             ? "translate-y-0 opacity-100 sm:-translate-y-1/2"
             : "translate-y-full opacity-0 pointer-events-none sm:translate-y-[-48%]"
@@ -515,7 +515,6 @@ function ProductDetailSheet({
             {/* Category + title */}
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: accentPrimary }} />
                 <p className="text-xs font-medium text-muted">{product.category}</p>
               </div>
               <h3 className="mt-1.5 text-xl font-bold leading-snug text-foreground">{product.title}</h3>
@@ -660,7 +659,7 @@ function CatalogProductCard({
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onOpenDetail(product); }}
         className="block h-full w-full cursor-pointer transition-transform duration-150 active:scale-[0.97]"
       >
-        <Card className="group flex h-full overflow-hidden rounded-2xl p-0 transition-all duration-300 hover:shadow-lg hover:ring-2 sm:rounded-[1.75rem]"
+        <Card className="group flex h-full overflow-hidden rounded-xl p-0 transition-all duration-300 hover:shadow-lg hover:ring-2 sm:rounded-2xl"
           style={{ ["--tw-ring-color" as string]: `${accentPrimary}40` }}
         >
           <div className="flex h-full w-full flex-row sm:flex-col">
@@ -702,7 +701,6 @@ function CatalogProductCard({
                   {product.title}
                 </p>
                 <p className="flex items-center gap-1 text-xs text-muted">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: accentPrimary }} />
                   {product.category}
                 </p>
                 {product.badge && (
@@ -902,7 +900,7 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
   if (!user && !draftResolved) {
     return (
       <main className="page-shell flex min-h-screen items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-xl rounded-[2rem] p-8 text-center">
+        <Card className="w-full max-w-xl rounded-2xl p-8 text-center">
           <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-brand border-t-transparent" />
           <p className="mt-4 text-sm text-muted">Menyiapkan preview katalog...</p>
         </Card>
@@ -913,8 +911,8 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
   if (!user) {
     return (
       <main className="page-shell flex min-h-screen items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-xl rounded-[2rem] p-8 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+        <Card className="w-full max-w-xl rounded-2xl p-8 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-brand/10 text-brand">
             <UserIcon className="h-7 w-7" />
           </div>
           <h1 className="mt-5 text-2xl font-semibold text-foreground">Halaman tidak ditemukan</h1>
@@ -976,15 +974,11 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
 
       <section className="mx-auto max-w-6xl px-4 pb-36 pt-5 sm:px-6 sm:pt-6 lg:px-8 lg:pb-24">
         {/* ── Hero card seller ──────────────────────────────────────────────── */}
-        <Card className="overflow-hidden rounded-2xl p-0 sm:rounded-[2rem]">
+        <Card className="overflow-hidden rounded-xl p-0 sm:rounded-2xl">
           <div
             className="relative overflow-hidden px-4 py-5 sm:px-8 sm:py-8"
             style={{ background: `linear-gradient(150deg, ${accent.soft} 0%, rgba(255,255,255,0.25) 100%)` }}
           >
-            {/* Decorative blobs */}
-            <div className="absolute -left-8 -top-8 h-48 w-48 rounded-full blur-3xl" style={{ backgroundColor: `${accent.primary}18` }} />
-            <div className="absolute -bottom-8 -right-8 h-56 w-56 rounded-full blur-3xl" style={{ backgroundColor: `${accent.secondary}14` }} />
-
             <div className="relative space-y-4">
               {/* Draft badge */}
               {isDraftPreview && (
@@ -1000,10 +994,10 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
                   <img
                     src={user.profileImage}
                     alt={user.name}
-                    className="h-[72px] w-[72px] flex-shrink-0 rounded-2xl object-cover shadow-md ring-2 ring-white/80 sm:h-24 sm:w-24 sm:rounded-[1.5rem]"
+                    className="h-[72px] w-[72px] flex-shrink-0 rounded-xl object-cover shadow-md ring-2 ring-white/80 sm:h-24 sm:w-24 sm:rounded-xl"
                   />
                 ) : (
-                  <div className="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-2xl bg-white/80 text-slate-600 shadow-md ring-2 ring-white/80 sm:h-24 sm:w-24 sm:rounded-[1.5rem]">
+                  <div className="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-xl bg-white/80 text-slate-600 shadow-md ring-2 ring-white/80 sm:h-24 sm:w-24 sm:rounded-xl">
                     <UserIcon className="h-7 w-7 sm:h-9 sm:w-9" />
                   </div>
                 )}
@@ -1049,6 +1043,17 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
                   <EyeIcon className="h-4 w-4" />
                   Lihat katalog
                 </a>
+                {/^https:\/\//i.test(user.mapsUrl ?? "") && (
+                  <a
+                    href={user.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 active:scale-95"
+                  >
+                    <LocationIcon className="h-4 w-4" />
+                    Lihat lokasi di Maps
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -1070,7 +1075,7 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
         <section id="catalog" className="mt-5 space-y-3">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-brand">Katalog</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand">Katalog</p>
               <h2 className="mt-1 text-xl font-bold text-foreground sm:text-2xl">Produk &amp; Jasa</h2>
             </div>
             {products.length > 0 && (
@@ -1092,7 +1097,7 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
                   value={query}
                   onChange={(e) => startTransition(() => setQuery(e.target.value))}
                   placeholder="Cari nama produk, deskripsi, kategori…"
-                  className="h-11 w-full rounded-2xl border border-line bg-background pl-11 pr-10 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
+                  className="h-11 w-full rounded-xl border border-line bg-background pl-11 pr-10 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
                 />
                 {query && (
                   <button
@@ -1195,15 +1200,12 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
 
         {/* ── CTA bikin katalog ─────────────────────────────────────────────── */}
         <section className="mt-8">
-          <div className="overflow-hidden rounded-2xl sm:rounded-[2rem]" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)" }}>
+          <div className="overflow-hidden rounded-xl sm:rounded-2xl" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)" }}>
             <div className="relative px-5 py-7 sm:px-8 sm:py-9">
-              {/* Decorative */}
-              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-white/5 blur-3xl" />
-              <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-white/5 blur-2xl" />
 
               <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-lg">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Linkatalog.id</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Linkatalog.id</p>
                   <h2 className="mt-2 text-xl font-bold text-white sm:text-2xl lg:text-3xl">Bikin katalog jualan kamu sendiri — gratis!</h2>
                   <p className="mt-2.5 text-sm leading-6 text-slate-400">Satu link untuk semua produk. Kelola lewat dashboard, terima order via WhatsApp.</p>
                 </div>

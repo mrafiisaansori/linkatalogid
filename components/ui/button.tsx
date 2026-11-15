@@ -11,7 +11,7 @@ const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
     "bg-brand text-white shadow-card hover:bg-brand-strong focus-visible:ring-brand/40",
   secondary:
-    "bg-surface text-foreground shadow-soft ring-1 ring-line hover:bg-surface-soft focus-visible:ring-brand/20",
+    "bg-surface text-foreground ring-1 ring-line hover:bg-surface-soft focus-visible:ring-brand/20",
   ghost:
     "bg-transparent text-foreground hover:bg-surface-soft focus-visible:ring-brand/20",
   outline:

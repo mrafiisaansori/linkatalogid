@@ -46,7 +46,7 @@ export function LegalPageShell({ eyebrow, title, description, updatedAt, childre
         </nav>
 
         <div className="mt-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">{eyebrow}</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand">{eyebrow}</p>
           <h1 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">{title}</h1>
           <p className="mt-4 text-base leading-7 text-muted">{description}</p>
           {updatedAt ? (
@@ -81,7 +81,7 @@ export function LegalPageShell({ eyebrow, title, description, updatedAt, childre
 /** Kartu section konten untuk halaman legal/bantuan. */
 export function LegalSection({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-[1.75rem] border border-line/80 bg-surface/95 p-6 shadow-soft backdrop-blur-xl sm:p-7">
+    <section className="rounded-2xl border border-line bg-surface p-6 shadow-soft sm:p-7">
       <h2 className="text-lg font-semibold text-foreground sm:text-xl">{title}</h2>
       <div className="mt-3 space-y-3 text-sm leading-7 text-muted">{children}</div>
     </section>

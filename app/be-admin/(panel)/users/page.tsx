@@ -26,7 +26,7 @@ export default async function AdminUsersPage({
 
   return (
     <div className="space-y-6">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <Badge className="w-fit" tone="brand">
@@ -39,15 +39,15 @@ export default async function AdminUsersPage({
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.5rem] border border-line bg-background px-4 py-3">
+            <div className="rounded-xl border border-line bg-background px-4 py-3">
               <p className="text-sm text-muted">Total hasil</p>
               <p className="mt-1 text-2xl font-semibold text-foreground">{formatCompactNumber(users.length)}</p>
             </div>
-            <div className="rounded-[1.5rem] border border-line bg-background px-4 py-3">
+            <div className="rounded-xl border border-line bg-background px-4 py-3">
               <p className="text-sm text-muted">Akun aktif</p>
               <p className="mt-1 text-2xl font-semibold text-foreground">{formatCompactNumber(activeUsers)}</p>
             </div>
-            <div className="rounded-[1.5rem] border border-line bg-background px-4 py-3">
+            <div className="rounded-xl border border-line bg-background px-4 py-3">
               <p className="text-sm text-muted">Akun nonaktif</p>
               <p className="mt-1 text-2xl font-semibold text-foreground">
                 {formatCompactNumber(users.length - activeUsers)}
@@ -69,7 +69,7 @@ export default async function AdminUsersPage({
           <select
             name="status"
             defaultValue={status}
-            className="h-12 w-full rounded-2xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
+            className="h-12 w-full rounded-xl border border-line bg-background px-4 text-sm text-foreground outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10"
           >
             <option value="all">Semua status</option>
             <option value="active">Aktif</option>
@@ -97,7 +97,7 @@ export default async function AdminUsersPage({
       ) : (
         <div className="space-y-4">
           {users.map((user) => (
-            <Card key={user.id} className="rounded-[2rem] p-5">
+            <Card key={user.id} className="rounded-2xl p-5">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                 <div className="min-w-0 space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
@@ -114,15 +114,15 @@ export default async function AdminUsersPage({
                   </div>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">Produk</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">Produk</p>
                       <p className="mt-2 text-xl font-semibold text-foreground">{user.productCount}</p>
                     </div>
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">Views</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">Views</p>
                       <p className="mt-2 text-xl font-semibold text-foreground">{user.views}</p>
                     </div>
                     <div className="rounded-[1.25rem] border border-line bg-background px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">WA clicks</p>
+                      <p className="text-xs uppercase tracking-wider text-muted">WA clicks</p>
                       <p className="mt-2 flex items-center gap-2 text-xl font-semibold text-foreground">
                         <WhatsAppIcon className="h-4 w-4 text-success" />
                         {user.whatsappClicks}

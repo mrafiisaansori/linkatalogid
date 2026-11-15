@@ -10,7 +10,6 @@ import {
   CopyIcon,
   EyeIcon,
   PencilIcon,
-  SparkIcon,
   WhatsAppIcon
 } from "@/components/icons";
 import { ProductModal } from "@/components/product-modal";
@@ -99,11 +98,8 @@ export default function DashboardPage() {
 
       {/* Hero + public link */}
       <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="relative overflow-hidden rounded-[2rem] bg-hero-mesh p-6 sm:p-7">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand">
-            <SparkIcon className="h-4 w-4" />
-            Halo, {currentUser.name}
-          </span>
+        <Card className="relative overflow-hidden rounded-2xl bg-hero-mesh p-6 sm:p-7">
+          <p className="text-sm font-medium text-brand">Halo, {currentUser.name}</p>
           <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
             Semua yang kamu butuhkan untuk bagikan katalog dalam satu link sudah siap.
           </h2>
@@ -122,7 +118,7 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="flex flex-col rounded-[2rem] p-6">
+        <Card className="flex flex-col rounded-2xl p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-foreground">Link publik kamu</p>
@@ -133,7 +129,7 @@ export default function DashboardPage() {
               Live
             </Badge>
           </div>
-          <div className="mt-5 flex items-center gap-3 rounded-[1.5rem] border border-line bg-background p-4">
+          <div className="mt-5 flex items-center gap-3 rounded-xl border border-line bg-background p-4">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
               <EyeIcon className="h-5 w-5" />
             </span>
@@ -158,11 +154,11 @@ export default function DashboardPage() {
       </section>
 
       <section>
-        <Card className="rounded-[2rem] p-5">
+        <Card className="rounded-2xl p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
+                <p className="text-sm font-semibold uppercase tracking-wider text-brand">
                   Akses {productQuota.definition.name}
                 </p>
                 <Badge tone={productQuota.isAtLimit ? "warning" : "success"}>
@@ -200,7 +196,7 @@ export default function DashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className="rounded-[2rem] p-5 transition hover:shadow-card">
+            <Card key={stat.label} className="rounded-2xl p-5 transition hover:shadow-card">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted">{stat.label}</p>
                 <span
@@ -223,7 +219,7 @@ export default function DashboardPage() {
       {/* Progress + latest products */}
       <section className={`grid gap-4 ${profileCompletion.percentage < 100 ? "xl:grid-cols-[0.85fr_1.15fr]" : ""}`}>
         {profileCompletion.percentage < 100 && (
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Progress profil</p>
@@ -240,7 +236,7 @@ export default function DashboardPage() {
           >
             <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${profileCompletion.percentage}%` }} />
           </div>
-          <div className="mt-6 rounded-[1.5rem] border border-line bg-surface-soft p-4">
+          <div className="mt-6 rounded-xl border border-line bg-surface-soft p-4">
             <p className="text-sm font-medium text-foreground">
               {profileCompletion.completed} dari {profileCompletion.total} bagian sudah lengkap
             </p>
@@ -255,14 +251,14 @@ export default function DashboardPage() {
           </div>
 
           {hasAnalytics ? (
-            <div className="mt-5 rounded-[1.5rem] border border-line bg-background p-4">
+            <div className="mt-5 rounded-xl border border-line bg-background p-4">
               <p className="text-sm font-semibold text-foreground">Performa terbaru</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-surface-soft p-4">
+                <div className="rounded-xl bg-surface-soft p-4">
                   <p className="text-sm text-muted">Pengunjung minggu ini</p>
                   <p className="mt-2 text-2xl font-semibold text-foreground">{currentAnalytics.views}</p>
                 </div>
-                <div className="rounded-2xl bg-surface-soft p-4">
+                <div className="rounded-xl bg-surface-soft p-4">
                   <p className="text-sm text-muted">Klik WhatsApp</p>
                   <p className="mt-2 text-2xl font-semibold text-foreground">{currentAnalytics.whatsappClicks}</p>
                 </div>
@@ -271,7 +267,7 @@ export default function DashboardPage() {
           ) : (
             <div className="mt-5">
               <EmptyState
-                icon={<SparkIcon className="h-6 w-6" />}
+                icon={<ChartIcon className="h-6 w-6" />}
                 title="Belum ada analytics"
                 description="Setelah link katalog mulai dibuka dan CTA WhatsApp diklik, statistik akan tampil di sini."
                 action={
@@ -287,7 +283,7 @@ export default function DashboardPage() {
         </Card>
         )}
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-lg font-semibold text-foreground">Produk & jasa terbaru</p>
@@ -312,9 +308,9 @@ export default function DashboardPage() {
               currentProducts.slice(0, 4).map((product) => (
                 <div
                   key={product.id}
-                  className="flex flex-col gap-4 rounded-[1.5rem] border border-line bg-background p-4 transition hover:border-brand/40 sm:flex-row sm:items-center"
+                  className="flex flex-col gap-4 rounded-xl border border-line bg-background p-4 transition hover:border-brand/40 sm:flex-row sm:items-center"
                 >
-                  <img src={product.imageUrl} alt={product.title} className="h-24 w-full rounded-2xl object-cover sm:h-20 sm:w-20" />
+                  <img src={product.imageUrl} alt={product.title} className="h-24 w-full rounded-xl object-cover sm:h-20 sm:w-20" />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-semibold text-foreground">{product.title}</p>

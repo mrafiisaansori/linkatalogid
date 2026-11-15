@@ -221,13 +221,13 @@ export default function LinkKatalogPage() {
             </ul>
           </div>
 
-          <Card className="rounded-[2rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-6 shadow-soft sm:p-8">
+          <Card className="rounded-2xl border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-6 shadow-soft sm:p-8">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
                 <SparkIcon className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Contoh katalog</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-brand">Contoh katalog</p>
                 <h2 className="text-xl font-semibold text-foreground">Alat Kopi Malang</h2>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function LinkKatalogPage() {
             <div className="mt-6 grid gap-3">
               {["Profil toko terlihat jelas", "Produk mudah dipindai", "Link siap dibagikan", "Order diarahkan ke WhatsApp"].map(
                 (item) => (
-                  <div key={item} className="flex items-center gap-3 rounded-2xl border border-line/80 bg-background/70 p-3">
+                  <div key={item} className="flex items-center gap-3 rounded-xl border border-line/80 bg-background/70 p-3">
                     <CheckIcon className="h-4 w-4 text-success" />
                     <span className="text-sm font-medium text-foreground">{item}</span>
                   </div>
@@ -257,7 +257,7 @@ export default function LinkKatalogPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Definisi</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Definisi</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Apa itu link katalog?
             </h2>
@@ -271,7 +271,7 @@ export default function LinkKatalogPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Cara membuat</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Cara membuat</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Dari produk pertama sampai order masuk
             </h2>
@@ -281,9 +281,9 @@ export default function LinkKatalogPage() {
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <Card key={step.title} className="rounded-[1.75rem] border-line/80 p-6">
+                <Card key={step.title} className="rounded-2xl border-line/80 p-6">
                   <div className="flex items-center justify-between gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
                       <Icon className="h-6 w-6" />
                     </div>
                     <span className="text-sm font-semibold text-muted">0{index + 1}</span>
@@ -299,7 +299,7 @@ export default function LinkKatalogPage() {
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Perbandingan</p>
+              <p className="text-sm font-semibold uppercase tracking-wider text-brand">Perbandingan</p>
               <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 Kenapa pakai link katalog, bukan chat manual?
               </h2>
@@ -311,7 +311,7 @@ export default function LinkKatalogPage() {
 
             <div className="grid gap-4">
               {comparisons.map((item) => (
-                <Card key={item.label} className="rounded-[1.5rem] border-line/80 p-5">
+                <Card key={item.label} className="rounded-xl border-line/80 p-5">
                   <h3 className="text-base font-semibold text-foreground">{item.label}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">{item.pain}</p>
                   <p className="mt-3 text-sm font-medium leading-6 text-foreground">{item.gain}</p>
@@ -323,14 +323,14 @@ export default function LinkKatalogPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Cocok untuk</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">Cocok untuk</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Dipakai seller kecil sampai toko lokal
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {useCases.map((item) => (
-              <Card key={item} className="rounded-[1.5rem] border-line/80 p-5">
+              <Card key={item} className="rounded-xl border-line/80 p-5">
                 <div className="flex gap-3 text-sm leading-7 text-foreground">
                   <CheckIcon className="mt-1 h-4 w-4 text-success" />
                   <span>{item}</span>
@@ -342,7 +342,7 @@ export default function LinkKatalogPage() {
 
         <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">FAQ</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand">FAQ</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
               Pertanyaan tentang link katalog
             </h2>
@@ -350,7 +350,7 @@ export default function LinkKatalogPage() {
 
           <div className="space-y-3">
             {faqItems.map((item) => (
-              <details key={item.question} className="group rounded-[1.5rem] border border-line/80 bg-surface p-5">
+              <details key={item.question} className="group rounded-xl border border-line/80 bg-surface p-5">
                 <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold text-foreground marker:content-['']">
                   {item.question}
                   <ArrowRightIcon className="h-4 w-4 shrink-0 text-muted transition group-open:rotate-90" />
@@ -362,7 +362,7 @@ export default function LinkKatalogPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <Card className="rounded-[2rem] border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
+          <Card className="rounded-2xl border-brand/20 bg-gradient-to-br from-surface via-surface to-brand/5 p-7 text-center sm:p-10">
             <div className="mx-auto max-w-2xl">
               <ClockIcon className="mx-auto h-8 w-8 text-brand" />
               <h2 className="mt-4 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">

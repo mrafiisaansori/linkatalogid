@@ -30,10 +30,10 @@ function MetricCard({
   const Icon = icon;
 
   return (
-    <Card className="rounded-[2rem] p-5">
+    <Card className="rounded-2xl p-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted">{label}</p>
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-brand">
           <Icon className="h-5 w-5" />
         </div>
       </div>
@@ -82,7 +82,7 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">User terbaru</p>
@@ -97,7 +97,7 @@ export default async function AdminDashboardPage() {
             {dashboard.recentUsers.map((user) => (
               <div
                 key={user.id}
-                className="flex flex-col gap-3 rounded-[1.5rem] border border-line bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 rounded-xl border border-line bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
@@ -131,7 +131,7 @@ export default async function AdminDashboardPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Produk terbaru</p>
@@ -146,7 +146,7 @@ export default async function AdminDashboardPage() {
             {dashboard.recentProducts.map((product) => (
               <div
                 key={product.id}
-                className="flex flex-col gap-3 rounded-[1.5rem] border border-line bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 rounded-xl border border-line bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -168,7 +168,7 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1fr_1fr_0.9fr]">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Top katalog</p>
@@ -184,7 +184,7 @@ export default async function AdminDashboardPage() {
               dashboard.topCatalogs.map((item, index) => (
                 <div
                   key={item.user.id}
-                  className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-line bg-background p-4"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-line bg-background p-4"
                 >
                   <div className="min-w-0">
                     <p className="font-semibold text-foreground">
@@ -199,7 +199,7 @@ export default async function AdminDashboardPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Top produk</p>
@@ -215,7 +215,7 @@ export default async function AdminDashboardPage() {
               dashboard.topProducts.map((item, index) => (
                 <div
                   key={item.product.id}
-                  className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-line bg-background p-4"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-line bg-background p-4"
                 >
                   <div className="min-w-0">
                     <p className="font-semibold text-foreground">
@@ -230,7 +230,7 @@ export default async function AdminDashboardPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Audit log terbaru</p>
@@ -241,7 +241,7 @@ export default async function AdminDashboardPage() {
 
           <div className="mt-5 space-y-3">
             {auditLogs.map((item) => (
-              <div key={item.id} className="rounded-[1.5rem] border border-line bg-background p-4">
+              <div key={item.id} className="rounded-xl border border-line bg-background p-4">
                 <div className="flex items-center gap-2">
                   <Badge tone="neutral">{item.adminUsername ?? "admin"}</Badge>
                   <p className="text-sm font-medium text-foreground">{item.action}</p>

@@ -92,7 +92,7 @@ export default function DashboardProductsPage() {
   return (
     <>
       <section className="space-y-4">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -148,10 +148,10 @@ export default function DashboardProductsPage() {
         ) : (
           <div className="grid gap-4 xl:grid-cols-2">
             {filteredProducts.map((product) => (
-              <Card key={product.id} className="rounded-[2rem] p-4 transition hover:shadow-card">
+              <Card key={product.id} className="rounded-2xl p-4 transition hover:shadow-card">
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <div className="relative">
-                    <img src={product.imageUrl} alt={product.title} className="h-44 w-full rounded-[1.5rem] object-cover sm:h-36 sm:w-36" />
+                    <img src={product.imageUrl} alt={product.title} className="h-44 w-full rounded-xl object-cover sm:h-36 sm:w-36" />
                     <span className="absolute left-3 top-3 sm:hidden">
                       <Badge tone={product.isActive ? "success" : "warning"} className="gap-1.5">
                         <span className={cn("h-1.5 w-1.5 rounded-full", product.isActive ? "bg-success" : "bg-warning")} />

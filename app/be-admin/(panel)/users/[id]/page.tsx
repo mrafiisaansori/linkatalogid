@@ -46,17 +46,17 @@ export default async function AdminUserDetailPage({
 
   return (
     <div className="space-y-6">
-      <Card className="rounded-[2rem] p-6">
+      <Card className="rounded-2xl p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
           <div className="flex items-start gap-4">
             {detail.user.profileImage ? (
               <img
                 src={detail.user.profileImage}
                 alt={detail.user.name}
-                className="h-20 w-20 rounded-[1.5rem] object-cover"
+                className="h-20 w-20 rounded-xl object-cover"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-brand/10 text-brand">
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-brand/10 text-brand">
                 <UserIcon className="h-8 w-8" />
               </div>
             )}
@@ -97,26 +97,26 @@ export default async function AdminUserDetailPage({
       </Card>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <Card className="rounded-[2rem] p-5">
+        <Card className="rounded-2xl p-5">
           <p className="text-sm text-muted">Page views</p>
           <p className="mt-4 text-3xl font-semibold text-foreground">{detail.totals.views}</p>
         </Card>
-        <Card className="rounded-[2rem] p-5">
+        <Card className="rounded-2xl p-5">
           <p className="text-sm text-muted">WhatsApp clicks</p>
           <p className="mt-4 text-3xl font-semibold text-foreground">{detail.totals.whatsappClicks}</p>
         </Card>
-        <Card className="rounded-[2rem] p-5">
+        <Card className="rounded-2xl p-5">
           <p className="text-sm text-muted">Product views</p>
           <p className="mt-4 text-3xl font-semibold text-foreground">{detail.totals.productViews}</p>
         </Card>
-        <Card className="rounded-[2rem] p-5">
+        <Card className="rounded-2xl p-5">
           <p className="text-sm text-muted">Total produk</p>
           <p className="mt-4 text-3xl font-semibold text-foreground">{detail.products.length}</p>
         </Card>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
-        <Card className="rounded-[2rem] p-6">
+        <Card className="rounded-2xl p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-foreground">Daftar produk dan jasa</p>
@@ -132,12 +132,12 @@ export default async function AdminUserDetailPage({
               detail.products.map((product) => (
                 <div
                   key={product.id}
-                  className="flex flex-col gap-4 rounded-[1.5rem] border border-line bg-background p-4 sm:flex-row"
+                  className="flex flex-col gap-4 rounded-xl border border-line bg-background p-4 sm:flex-row"
                 >
                   <img
                     src={product.imageUrl}
                     alt={product.title}
-                    className="h-24 w-full rounded-2xl object-cover sm:w-28"
+                    className="h-24 w-full rounded-xl object-cover sm:w-28"
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
@@ -158,7 +158,7 @@ export default async function AdminUserDetailPage({
         </Card>
 
         <div className="space-y-4">
-          <Card className="rounded-[2rem] p-6">
+          <Card className="rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-lg font-semibold text-foreground">Traffic 7 hari terakhir</p>
@@ -172,22 +172,22 @@ export default async function AdminUserDetailPage({
                 <p className="text-sm text-muted">Belum ada data traffic.</p>
               ) : (
                 dailyRows.map(([day, stats]) => (
-                  <div key={day} className="rounded-[1.5rem] border border-line bg-background p-4">
+                  <div key={day} className="rounded-xl border border-line bg-background p-4">
                     <div className="flex items-center justify-between gap-3">
                       <p className="font-semibold text-foreground">{formatDateLabel(day)}</p>
                       <p className="text-xs text-muted">{day}</p>
                     </div>
                     <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-2xl bg-surface-soft p-3">
-                        <p className="text-xs uppercase tracking-[0.16em] text-muted">Views</p>
+                      <div className="rounded-xl bg-surface-soft p-3">
+                        <p className="text-xs uppercase tracking-wider text-muted">Views</p>
                         <p className="mt-2 text-xl font-semibold text-foreground">{stats.views}</p>
                       </div>
-                      <div className="rounded-2xl bg-surface-soft p-3">
-                        <p className="text-xs uppercase tracking-[0.16em] text-muted">Product</p>
+                      <div className="rounded-xl bg-surface-soft p-3">
+                        <p className="text-xs uppercase tracking-wider text-muted">Product</p>
                         <p className="mt-2 text-xl font-semibold text-foreground">{stats.productViews}</p>
                       </div>
-                      <div className="rounded-2xl bg-surface-soft p-3">
-                        <p className="text-xs uppercase tracking-[0.16em] text-muted">WA</p>
+                      <div className="rounded-xl bg-surface-soft p-3">
+                        <p className="text-xs uppercase tracking-wider text-muted">WA</p>
                         <p className="mt-2 text-xl font-semibold text-foreground">{stats.whatsappClicks}</p>
                       </div>
                     </div>
@@ -197,7 +197,7 @@ export default async function AdminUserDetailPage({
             </div>
           </Card>
 
-          <Card className="rounded-[2rem] p-6">
+          <Card className="rounded-2xl p-6">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-lg font-semibold text-foreground">Recent events</p>
@@ -211,7 +211,7 @@ export default async function AdminUserDetailPage({
                 <p className="text-sm text-muted">Belum ada event analytics.</p>
               ) : (
                 detail.recentEvents.map((event) => (
-                  <div key={event.id} className="rounded-[1.5rem] border border-line bg-background p-4">
+                  <div key={event.id} className="rounded-xl border border-line bg-background p-4">
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge tone="neutral">{event.eventType}</Badge>
                       {event.productId ? <Badge tone="brand">produk</Badge> : null}

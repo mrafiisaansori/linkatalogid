@@ -322,7 +322,7 @@ function CartDrawer({
                   key={item.productId}
                   className="flex gap-3 rounded-xl border border-line bg-background p-3"
                 >
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={item.imageUrl}
                     alt={item.title}
                     className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
@@ -666,7 +666,7 @@ function CatalogProductCard({
 
             {/* Gambar */}
             <div className="relative w-[130px] flex-shrink-0 overflow-hidden bg-surface-soft sm:w-full sm:aspect-[4/3]">
-              <img
+              <img loading="lazy" decoding="async"
                 src={product.imageUrl}
                 alt={product.title}
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

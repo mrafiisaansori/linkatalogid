@@ -34,6 +34,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { DEMO_DRAFT_STORAGE_KEY, parseDemoDraft, toPublicCatalogPayload } from "@/lib/demo-draft";
 import { PublicCatalogPayload, Product, User } from "@/lib/types";
+import { ZonaKasirPromo } from "@/components/zonakasir-promo";
 import {
   cn,
   formatCurrency,
@@ -937,6 +938,7 @@ export function PublicCatalogPage({ username, initialCatalog }: PublicCatalogPag
     <main className="page-shell min-h-screen">
       {/* ── Header ────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-30 border-b border-line/60 bg-background/80 backdrop-blur-xl">
+        <ZonaKasirPromo medium="catalog" compact />
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="min-w-0">
             <BrandLockup titleClassName="text-sm" taglineClassName="hidden text-sm sm:block" />

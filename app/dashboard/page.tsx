@@ -14,6 +14,7 @@ import {
   WhatsAppIcon
 } from "@/components/icons";
 import { ProductModal } from "@/components/product-modal";
+import { ZonaKasirPromo } from "@/components/zonakasir-promo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -94,6 +95,8 @@ export default function DashboardPage() {
 
   return (
     <>
+      <ZonaKasirPromo />
+
       {/* Hero + public link */}
       <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
         <Card className="relative overflow-hidden rounded-[2rem] bg-hero-mesh p-6 sm:p-7">
